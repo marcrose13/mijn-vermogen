@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mijn Vermogen</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f5f6f8;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            margin-top: 6px;
+            color: #6b7280;
+        }
+
+        .total-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .total-label {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .total-value {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .section {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .account {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .account:last-child {
+            border-bottom: none;
+        }
+
+        .account-name {
+            font-weight: 600;
+        }
+
+        .account-type {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 3px;
+        }
+
+        .account-value {
+            font-weight: 600;
+        }
+
+        .empty-message {
+            color: #6b7280;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #111827;
+            color: white;
+        }
+
+        button:hover {
+            background: #374151;
+        }
+
+        footer {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 13px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Mijn Vermogen</h1>
+            <div class="subtitle">
+                Overzicht van je spaargeld en beleggingen
+            </div>
+        </header>
+
+
+        <!-- Totaal vermogen -->
+        <section class="total-card">
+            <div class="total-label">
+                Totaal vermogen
+            </div>
+
+            <div class="total-value" id="total-vermogen">
+                € 0,00
+            </div>
+        </section>
+
+
+        <!-- Rekeningen -->
+        <section class="section">
+
+            <h2>Mijn rekeningen</h2>
+
+            <div id="rekeningen">
+
+                <div class="empty-message">
+                    Nog geen rekeningen toegevoegd.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Tijdelijke knop voor later -->
+        <section class="section">
+
+            <h2>Vermogen toevoegen</h2>
+
+            <button onclick="rekeningToevoegen()">
+                + Rekening toevoegen
+            </button>
+
+        </section>
+
+
+        <footer>
+            Mijn Vermogen
+        </footer>
+
+    </div>
+
+
+    <script>
+
+        /*
+         * ==========================================
+         * DATA
+         * ==========================================
+         *
+         * Hier gaan we later de gegevens van de
+         * verschillende banken en beleggingsapps
+         * bewaren.
+         */
+
+        let rekeningen = [];
+
+
+        /*
+         * ==========================================
+         * TOTAAL BEREKENEN
+         * ==========================================
+         */
+
+        function berekenTotaal() {
+
+            let totaal = 0;
+
+            rekeningen.forEach(function(rekening) {
+                totaal += rekening.bedrag;
+            });
+
+            document.getElementById("total-vermogen").textContent =
+                formatteerBedrag(totaal);
+        }
+
+
+        /*
+         * ==========================================
+         * REKENINGEN WEERGEVEN
+         * ==========================================
+         */
+
+        function toonRekeningen() {
+
+            const container = document.getElementById("rekeningen");
+
+            container.innerHTML = "";
+
+            if (rekeningen.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty-message">
+                        Nog geen rekeningen toegevoegd.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            rekeningen.forEach(function(rekening) {
+
+                const element = document.createElement("div");
+
+                element.className = "account";
+
+                element.innerHTML = `
+                    <div>
+                        <div class="account-name">
+                            ${rekening.naam}
+                        </div>
+
+                        <div class="account-type">
+                            ${rekening.type}
+                        </div>
+                    </div>
+
+                    <div class="account-value">
+                        ${formatteerBedrag(rekening.bedrag)}
+                    </div>
+                `;
+
+                container.appendChild(element);
+
+            });
+
+        }
+
+
+        /*
+         * ==========================================
+         * BEDRAG FORMATTEREN
+         * ==========================================
+         */
+
+        function formatteerBedrag(bedrag) {
+
+            return new Intl.NumberFormat("nl-NL", {
+                style: "currency",
+                currency: "EUR"
+            }).format(bedrag);
+
+        }
+
+
+        /*
+         * ==========================================
+         * REKENING TOEVOEGEN
+         * ==========================================
+         */
+
+        function rekeningToevoegen() {
+
+            const naam = prompt(
+                "Naam van de rekening, bijvoorbeeld: ING Spaarrekening"
+            );
+
+            if (!naam) {
+                return;
+            }
+
+
+            const type = prompt(
+                "Type, bijvoorbeeld: Sparen of Beleggen"
+            );
+
+            if (!type) {
+                return;
+            }
+
+
+            const bedragInput = prompt(
+                "Huidig bedrag in euro's:"
+            );
+
+            if (!bedragInput) {
+                return;
+            }
+
+
+            const bedrag = parseFloat(
+                bedragInput.replace(",", ".")
+            );
+
+
+            if (isNaN(bedrag)) {
+
+                alert("Vul een geldig bedrag in.");
+
+                return;
+            }
+
+
+            const nieuweRekening = {
+
+                id: Date.now(),
+
+                naam: naam,
+
+                type: type,
+
+                bedrag: bedrag
+
+            };
+
+
+            rekeningen.push(nieuweRekening);
+
+
+            toonRekeningen();
+
+            berekenTotaal();
+
+        }
+
+
+        /*
+         * ==========================================
+         * APP STARTEN
+         * ==========================================
+         */
+
+        toonRekeningen();
+
+        berekenTotaal();
+
+    </script>
+
+</body>
+</html>
