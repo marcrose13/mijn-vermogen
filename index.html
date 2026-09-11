@@ -282,12 +282,6 @@
     + Vermogen bijwerken
 </button>
         
-        <button
-            class="primary-button"
-            onclick="vermogensMomentOpslaan()"
-        >
-            + Vermogen bijwerken
-        </button>
 
     </section>
 
@@ -924,7 +918,64 @@
 
     }
 
+let huidigePeriode = "alles";
 
+function zetPeriode(periode) {
+    huidigePeriode = periode;
+
+    document
+        .querySelectorAll(".period-buttons button")
+        .forEach(function(button) {
+            button.classList.remove("active");
+        });
+
+    const actieveKnop =
+        document.getElementById("btn-" + periode);
+
+    if (actieveKnop) {
+        actieveKnop.classList.add("active");
+    }
+
+    tekenGrafiek();
+}
+
+function updateGroeiInfo(gegevens) {
+    const element =
+        document.getElementById("groeiInfo");
+
+    if (!gegevens || gegevens.length < 2) {
+        element.textContent =
+            "Nog niet genoeg historische gegevens";
+        return;
+    }
+
+    const eerste =
+        gegevens[0].bedrag;
+
+    const laatste =
+        gegevens[gegevens.length - 1].bedrag;
+
+    const verschil =
+        laatste - eerste;
+
+    const percentage =
+        eerste === 0
+            ? 0
+            : (verschil / eerste) * 100;
+
+    const teken =
+        verschil >= 0 ? "+" : "";
+
+    element.textContent =
+        teken +
+        formatteerBedrag(verschil) +
+        " (" +
+        teken +
+        percentage.toFixed(1) +
+        "%) sinds " +
+        formatteerDatum(gegevens[0].datum);
+}
+    
     /*
      * ==========================================
      * GRAFIEK TEKENEN
@@ -1269,133 +1320,7 @@
 }
 
         /*
-         * Waarden bepalen
-         */
-
-        const waardes =
-            historie.map(function(moment) {
-                return moment.bedrag;
-            });
-
-
-        const minWaarde =
-            Math.min(...waardes);
-
-        const maxWaarde =
-            Math.max(...waardes);
-
-
-        const marge = 30;
-
-        const grafiekBreedte =
-            width - (marge * 2);
-
-        const grafiekHoogte =
-            height - (marge * 2);
-
-
-        /*
-         * Als alle waarden gelijk zijn
-         */
-
-        const bereik =
-            maxWaarde === minWaarde
-                ? 1
-                : maxWaarde - minWaarde;
-
-
-        /*
-         * Lijn tekenen
-         */
-
-        ctx.beginPath();
-
-
-        historie.forEach(function(moment, index) {
-
-            const x =
-                marge +
-                (
-                    index /
-                    (historie.length - 1)
-                ) *
-                grafiekBreedte;
-
-
-            const y =
-                marge +
-                grafiekHoogte -
-                (
-                    (moment.bedrag - minWaarde) /
-                    bereik
-                ) *
-                grafiekHoogte;
-
-
-            if (index === 0) {
-
-                ctx.moveTo(x, y);
-
-            } else {
-
-                ctx.lineTo(x, y);
-
-            }
-
-        });
-
-
-        ctx.strokeStyle = "#111827";
-
-        ctx.lineWidth = 3;
-
-        ctx.stroke();
-
-
-        /*
-         * Punten tekenen
-         */
-
-        historie.forEach(function(moment, index) {
-
-            const x =
-                marge +
-                (
-                    index /
-                    (historie.length - 1)
-                ) *
-                grafiekBreedte;
-
-
-            const y =
-                marge +
-                grafiekHoogte -
-                (
-                    (moment.bedrag - minWaarde) /
-                    bereik
-                ) *
-                grafiekHoogte;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x,
-                y,
-                5,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fillStyle = "#111827";
-
-            ctx.fill();
-
-        });
-
-    }
-
+ 
 
     /*
      * ==========================================
@@ -1409,7 +1334,7 @@
 
     toonHistorie();
 
-    tekenGrafiek();
+    zetPeriode("alles");
 
 
     /*
