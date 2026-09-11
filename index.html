@@ -129,248 +129,296 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <header>
-            <h1>Mijn Vermogen</h1>
-            <div class="subtitle">
-                Overzicht van je spaargeld en beleggingen
-            </div>
-        </header>
+    <header>
+        <h1>Mijn Vermogen</h1>
 
-
-        <!-- Totaal vermogen -->
-        <section class="total-card">
-            <div class="total-label">
-                Totaal vermogen
-            </div>
-
-            <div class="total-value" id="total-vermogen">
-                € 0,00
-            </div>
-        </section>
+        <div class="subtitle">
+            Overzicht van je spaargeld en beleggingen
+        </div>
+    </header>
 
 
-        <!-- Rekeningen -->
-        <section class="section">
+    <!-- Totaal vermogen -->
 
-            <h2>Mijn rekeningen</h2>
+    <section class="total-card">
 
-            <div id="rekeningen">
+        <div class="total-label">
+            Totaal vermogen
+        </div>
 
+        <div class="total-value" id="total-vermogen">
+            € 0,00
+        </div>
+
+    </section>
+
+
+    <!-- Rekeningen -->
+
+    <section class="section">
+
+        <h2>Mijn rekeningen</h2>
+
+        <div id="rekeningen"></div>
+
+    </section>
+
+
+    <!-- Rekening toevoegen -->
+
+    <section class="section">
+
+        <h2>Vermogen toevoegen</h2>
+
+        <button onclick="rekeningToevoegen()">
+            + Rekening toevoegen
+        </button>
+
+    </section>
+
+
+    <footer>
+        Mijn Vermogen
+    </footer>
+
+</div>
+
+
+<script>
+
+    /*
+     * ==========================================
+     * GEGEVENS LADEN
+     * ==========================================
+     *
+     * We proberen eerst opgeslagen gegevens
+     * uit de browser te halen.
+     */
+
+    let rekeningen = JSON.parse(
+        localStorage.getItem("mijnVermogenRekeningen")
+    ) || [];
+
+
+    /*
+     * ==========================================
+     * GEGEVENS OPSLAAN
+     * ==========================================
+     */
+
+    function slaGegevensOp() {
+
+        localStorage.setItem(
+            "mijnVermogenRekeningen",
+            JSON.stringify(rekeningen)
+        );
+
+    }
+
+
+    /*
+     * ==========================================
+     * TOTAAL BEREKENEN
+     * ==========================================
+     */
+
+    function berekenTotaal() {
+
+        let totaal = 0;
+
+        rekeningen.forEach(function(rekening) {
+
+            totaal += rekening.bedrag;
+
+        });
+
+
+        document.getElementById(
+            "total-vermogen"
+        ).textContent = formatteerBedrag(totaal);
+
+    }
+
+
+    /*
+     * ==========================================
+     * REKENINGEN WEERGEVEN
+     * ==========================================
+     */
+
+    function toonRekeningen() {
+
+        const container =
+            document.getElementById("rekeningen");
+
+        container.innerHTML = "";
+
+
+        if (rekeningen.length === 0) {
+
+            container.innerHTML = `
                 <div class="empty-message">
                     Nog geen rekeningen toegevoegd.
                 </div>
+            `;
 
-            </div>
-
-        </section>
-
-
-        <!-- Tijdelijke knop voor later -->
-        <section class="section">
-
-            <h2>Vermogen toevoegen</h2>
-
-            <button onclick="rekeningToevoegen()">
-                + Rekening toevoegen
-            </button>
-
-        </section>
-
-
-        <footer>
-            Mijn Vermogen
-        </footer>
-
-    </div>
-
-
-    <script>
-
-        /*
-         * ==========================================
-         * DATA
-         * ==========================================
-         *
-         * Hier gaan we later de gegevens van de
-         * verschillende banken en beleggingsapps
-         * bewaren.
-         */
-
-        let rekeningen = [];
-
-
-        /*
-         * ==========================================
-         * TOTAAL BEREKENEN
-         * ==========================================
-         */
-
-        function berekenTotaal() {
-
-            let totaal = 0;
-
-            rekeningen.forEach(function(rekening) {
-                totaal += rekening.bedrag;
-            });
-
-            document.getElementById("total-vermogen").textContent =
-                formatteerBedrag(totaal);
+            return;
         }
 
 
-        /*
-         * ==========================================
-         * REKENINGEN WEERGEVEN
-         * ==========================================
-         */
+        rekeningen.forEach(function(rekening) {
 
-        function toonRekeningen() {
+            const element =
+                document.createElement("div");
 
-            const container = document.getElementById("rekeningen");
-
-            container.innerHTML = "";
-
-            if (rekeningen.length === 0) {
-
-                container.innerHTML = `
-                    <div class="empty-message">
-                        Nog geen rekeningen toegevoegd.
-                    </div>
-                `;
-
-                return;
-            }
+            element.className = "account";
 
 
-            rekeningen.forEach(function(rekening) {
-
-                const element = document.createElement("div");
-
-                element.className = "account";
-
-                element.innerHTML = `
-                    <div>
-                        <div class="account-name">
-                            ${rekening.naam}
-                        </div>
-
-                        <div class="account-type">
-                            ${rekening.type}
-                        </div>
+            element.innerHTML = `
+                <div>
+                    <div class="account-name">
+                        ${rekening.naam}
                     </div>
 
-                    <div class="account-value">
-                        ${formatteerBedrag(rekening.bedrag)}
+                    <div class="account-type">
+                        ${rekening.type}
                     </div>
-                `;
+                </div>
 
-                container.appendChild(element);
+                <div class="account-value">
+                    ${formatteerBedrag(rekening.bedrag)}
+                </div>
+            `;
 
-            });
 
+            container.appendChild(element);
+
+        });
+
+    }
+
+
+    /*
+     * ==========================================
+     * BEDRAG FORMATTEREN
+     * ==========================================
+     */
+
+    function formatteerBedrag(bedrag) {
+
+        return new Intl.NumberFormat("nl-NL", {
+
+            style: "currency",
+
+            currency: "EUR"
+
+        }).format(bedrag);
+
+    }
+
+
+    /*
+     * ==========================================
+     * REKENING TOEVOEGEN
+     * ==========================================
+     */
+
+    function rekeningToevoegen() {
+
+        const naam = prompt(
+            "Naam van de rekening, bijvoorbeeld: ING Spaarrekening"
+        );
+
+
+        if (!naam) {
+            return;
         }
 
 
+        const type = prompt(
+            "Type, bijvoorbeeld: Sparen of Beleggen"
+        );
+
+
+        if (!type) {
+            return;
+        }
+
+
+        const bedragInput = prompt(
+            "Huidig bedrag in euro's:"
+        );
+
+
+        if (!bedragInput) {
+            return;
+        }
+
+
+        const bedrag = parseFloat(
+            bedragInput.replace(",", ".")
+        );
+
+
+        if (isNaN(bedrag)) {
+
+            alert(
+                "Vul een geldig bedrag in."
+            );
+
+            return;
+        }
+
+
+        const nieuweRekening = {
+
+            id: Date.now(),
+
+            naam: naam,
+
+            type: type,
+
+            bedrag: bedrag
+
+        };
+
+
+        rekeningen.push(
+            nieuweRekening
+        );
+
+
         /*
-         * ==========================================
-         * BEDRAG FORMATTEREN
-         * ==========================================
+         * Nieuwe gegevens opslaan
          */
 
-        function formatteerBedrag(bedrag) {
-
-            return new Intl.NumberFormat("nl-NL", {
-                style: "currency",
-                currency: "EUR"
-            }).format(bedrag);
-
-        }
+        slaGegevensOp();
 
 
         /*
-         * ==========================================
-         * REKENING TOEVOEGEN
-         * ==========================================
-         */
-
-        function rekeningToevoegen() {
-
-            const naam = prompt(
-                "Naam van de rekening, bijvoorbeeld: ING Spaarrekening"
-            );
-
-            if (!naam) {
-                return;
-            }
-
-
-            const type = prompt(
-                "Type, bijvoorbeeld: Sparen of Beleggen"
-            );
-
-            if (!type) {
-                return;
-            }
-
-
-            const bedragInput = prompt(
-                "Huidig bedrag in euro's:"
-            );
-
-            if (!bedragInput) {
-                return;
-            }
-
-
-            const bedrag = parseFloat(
-                bedragInput.replace(",", ".")
-            );
-
-
-            if (isNaN(bedrag)) {
-
-                alert("Vul een geldig bedrag in.");
-
-                return;
-            }
-
-
-            const nieuweRekening = {
-
-                id: Date.now(),
-
-                naam: naam,
-
-                type: type,
-
-                bedrag: bedrag
-
-            };
-
-
-            rekeningen.push(nieuweRekening);
-
-
-            toonRekeningen();
-
-            berekenTotaal();
-
-        }
-
-
-        /*
-         * ==========================================
-         * APP STARTEN
-         * ==========================================
+         * Scherm vernieuwen
          */
 
         toonRekeningen();
 
         berekenTotaal();
 
-    </script>
+    }
+
+
+    /*
+     * ==========================================
+     * APP STARTEN
+     * ==========================================
+     */
+
+    toonRekeningen();
+
+    berekenTotaal();
+
+</script>
 
 </body>
 </html>
