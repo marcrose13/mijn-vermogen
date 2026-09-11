@@ -15,7 +15,7 @@
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                          Roboto, Arial, sans-serif;
-            background: #f5f6f8;
+            background: #C5DEDE;
             color: #1f2937;
         }
 
@@ -253,10 +253,35 @@
 
         <h2>Vermogensontwikkeling</h2>
 
-        <div class="chart-container">
-            <canvas id="vermogenGrafiek"></canvas>
-        </div>
+<div class="period-buttons">
+    <button onclick="zetPeriode('3m')" id="btn-3m">
+        3 maanden
+    </button>
 
+    <button onclick="zetPeriode('1j')" id="btn-1j">
+        1 jaar
+    </button>
+
+    <button onclick="zetPeriode('alles')" id="btn-alles">
+        Alles
+    </button>
+</div>
+
+<div class="growth-info" id="groeiInfo">
+    Nog geen historische gegevens
+</div>
+
+<div class="chart-container">
+    <canvas id="vermogenGrafiek"></canvas>
+</div>
+
+<button
+    class="primary-button"
+    onclick="vermogensMomentOpslaan()"
+>
+    + Vermogen bijwerken
+</button>
+        
         <button
             class="primary-button"
             onclick="vermogensMomentOpslaan()"
@@ -908,54 +933,340 @@
 
     function tekenGrafiek() {
 
-        const canvas =
-            document.getElementById(
-                "vermogenGrafiek"
-            );
+    const canvas = document.getElementById("vermogenGrafiek");
+    const ctx = canvas.getContext("2d");
 
-        const ctx = canvas.getContext("2d");
+    const width = canvas.parentElement.clientWidth;
+    const height = 280;
 
+    canvas.width = width;
+    canvas.height = height;
 
-        /*
-         * Canvas grootte aanpassen aan scherm
-         */
-
-        const width =
-            canvas.parentElement.clientWidth;
-
-        const height = 280;
+    ctx.clearRect(0, 0, width, height);
 
 
-        canvas.width = width;
+    /*
+     * Alleen de geselecteerde periode gebruiken
+     */
 
-        canvas.height = height;
+    const nu = new Date();
+
+    let startDatum = null;
+
+    if (huidigePeriode === "3m") {
+
+        startDatum = new Date();
+        startDatum.setMonth(
+            startDatum.getMonth() - 3
+        );
+
+    } else if (huidigePeriode === "1j") {
+
+        startDatum = new Date();
+        startDatum.setFullYear(
+            startDatum.getFullYear() - 1
+        );
+
+    }
 
 
-        ctx.clearRect(
+    let gegevens = historie.filter(function(moment) {
+
+        if (!startDatum) {
+            return true;
+        }
+
+        return new Date(moment.datum) >= startDatum;
+
+    });
+
+
+    /*
+     * Geen of te weinig gegevens
+     */
+
+    if (gegevens.length < 2) {
+
+        ctx.fillStyle = "#9ca3af";
+
+        ctx.font = "14px Arial";
+
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            "Nog niet genoeg gegevens voor een grafiek",
+            width / 2,
+            height / 2
+        );
+
+        updateGroeiInfo(gegevens);
+
+        return;
+    }
+
+
+    /*
+     * Waarden bepalen
+     */
+
+    const waardes = gegevens.map(function(moment) {
+        return moment.bedrag;
+    });
+
+
+    let minWaarde = Math.min(...waardes);
+    let maxWaarde = Math.max(...waardes);
+
+
+    /*
+     * Een beetje ruimte boven en onder
+     */
+
+    const verschil = maxWaarde - minWaarde;
+
+    if (verschil === 0) {
+
+        minWaarde -= 1000;
+        maxWaarde += 1000;
+
+    } else {
+
+        minWaarde -= verschil * 0.1;
+        maxWaarde += verschil * 0.1;
+
+    }
+
+
+    const margeLinks = 15;
+    const margeRechts = 15;
+    const margeBoven = 20;
+    const margeOnder = 35;
+
+    const grafiekBreedte =
+        width - margeLinks - margeRechts;
+
+    const grafiekHoogte =
+        height - margeBoven - margeOnder;
+
+
+    /*
+     * Horizontale hulplijnen
+     */
+
+    ctx.strokeStyle = "#eeeeee";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 3; i++) {
+
+        const y =
+            margeBoven +
+            (grafiekHoogte / 3) * i;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            margeLinks,
+            y
+        );
+
+        ctx.lineTo(
+            width - margeRechts,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /*
+     * Waarden omzetten naar coördinaten
+     */
+
+    function berekenY(waarde) {
+
+        return (
+            margeBoven +
+            grafiekHoogte -
+            (
+                (waarde - minWaarde) /
+                (maxWaarde - minWaarde)
+            ) *
+            grafiekHoogte
+        );
+
+    }
+
+
+    /*
+     * Gebied onder de lijn
+     */
+
+    ctx.beginPath();
+
+    gegevens.forEach(function(moment, index) {
+
+        const x =
+            margeLinks +
+            (
+                index /
+                (gegevens.length - 1)
+            ) *
+            grafiekBreedte;
+
+        const y = berekenY(moment.bedrag);
+
+
+        if (index === 0) {
+
+            ctx.moveTo(x, y);
+
+        } else {
+
+            ctx.lineTo(x, y);
+
+        }
+
+    });
+
+
+    const laatsteX =
+        width - margeRechts;
+
+    const eersteX =
+        margeLinks;
+
+    ctx.lineTo(
+        laatsteX,
+        height - margeOnder
+    );
+
+    ctx.lineTo(
+        eersteX,
+        height - margeOnder
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle = "rgba(17, 24, 39, 0.08)";
+
+    ctx.fill();
+
+
+    /*
+     * Vermogenslijn
+     */
+
+    ctx.beginPath();
+
+    gegevens.forEach(function(moment, index) {
+
+        const x =
+            margeLinks +
+            (
+                index /
+                (gegevens.length - 1)
+            ) *
+            grafiekBreedte;
+
+        const y = berekenY(moment.bedrag);
+
+
+        if (index === 0) {
+
+            ctx.moveTo(x, y);
+
+        } else {
+
+            ctx.lineTo(x, y);
+
+        }
+
+    });
+
+
+    ctx.strokeStyle = "#111827";
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+
+
+    /*
+     * Punten tekenen
+     */
+
+    gegevens.forEach(function(moment, index) {
+
+        const x =
+            margeLinks +
+            (
+                index /
+                (gegevens.length - 1)
+            ) *
+            grafiekBreedte;
+
+        const y = berekenY(moment.bedrag);
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            4,
             0,
-            0,
-            width,
-            height
+            Math.PI * 2
+        );
+
+        ctx.fillStyle = "#111827";
+
+        ctx.fill();
+
+    });
+
+
+    /*
+     * Datumlabels
+     */
+
+    ctx.fillStyle = "#9ca3af";
+
+    ctx.font = "11px Arial";
+
+    ctx.textAlign = "center";
+
+
+    const eersteDatum =
+        formatteerDatum(gegevens[0].datum);
+
+    const laatsteDatum =
+        formatteerDatum(
+            gegevens[gegevens.length - 1].datum
         );
 
 
-        if (historie.length < 2) {
+    ctx.fillText(
+        eersteDatum,
+        margeLinks + 25,
+        height - 10
+    );
 
-            ctx.fillStyle = "#9ca3af";
 
-            ctx.font = "14px Arial";
+    ctx.fillText(
+        laatsteDatum,
+        width - margeRechts - 25,
+        height - 10
+    );
 
-            ctx.textAlign = "center";
 
-            ctx.fillText(
-                "Voeg minimaal twee meetmomenten toe",
-                width / 2,
-                height / 2
-            );
+    /*
+     * Groei-info bijwerken
+     */
 
-            return;
-        }
+    updateGroeiInfo(gegevens);
 
+}
 
         /*
          * Waarden bepalen
