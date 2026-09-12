@@ -681,71 +681,78 @@
      * ==========================================
      */
 
-    function rekeningToevoegen() {
+function rekeningToevoegen() {
 
-        const naam = prompt(
-            "Naam van de rekening, bijvoorbeeld: ING Spaarrekening"
-        );
+    const naam = prompt(
+        "Naam van de rekening, bijvoorbeeld: ING Spaarrekening"
+    );
 
-
-        if (!naam) {
-            return;
-        }
-
-
-        const type = prompt(
-            "Type, bijvoorbeeld: Sparen of Beleggen"
-        );
-
-
-        if (!type) {
-            return;
-        }
-
-
-        const bedragInput = prompt(
-            "Huidig bedrag in euro's:"
-        );
-
-
-        if (!bedragInput) {
-            return;
-        }
-
-
-        const bedrag = parseFloat(
-            bedragInput.replace(",", ".")
-        );
-
-
-        if (isNaN(bedrag)) {
-
-            alert("Vul een geldig bedrag in.");
-
-            return;
-        }
-
-
-        rekeningen.push({
-
-            id: Date.now(),
-
-            naam: naam,
-
-            type: type,
-
-            bedrag: bedrag
-
-        });
-
-
-        slaRekeningenOp();
-
-        toonRekeningen();
-
-        berekenTotaal();
-
+    if (!naam) {
+        return;
     }
+
+    const type = prompt(
+        "Type rekening:\n\n" +
+        "1 = Sparen\n" +
+        "2 = Beleggen\n" +
+        "3 = Betaalrekening\n" +
+        "4 = Overig"
+    );
+
+    if (!type) {
+        return;
+    }
+
+    let typeNaam;
+
+    if (type === "1") {
+        typeNaam = "Sparen";
+    } else if (type === "2") {
+        typeNaam = "Beleggen";
+    } else if (type === "3") {
+        typeNaam = "Betaalrekening";
+    } else if (type === "4") {
+        typeNaam = "Overig";
+    } else {
+        alert("Kies 1, 2, 3 of 4.");
+        return;
+    }
+
+    const bedragInput = prompt(
+        "Huidig bedrag in euro's:"
+    );
+
+    if (!bedragInput) {
+        return;
+    }
+
+    const bedrag = parseFloat(
+        bedragInput.replace(",", ".")
+    );
+
+    if (isNaN(bedrag)) {
+        alert("Vul een geldig bedrag in.");
+        return;
+    }
+
+    rekeningen.push({
+
+        id: Date.now(),
+
+        naam: naam,
+
+        type: typeNaam,
+
+        bedrag: bedrag
+
+    });
+
+    slaRekeningenOp();
+
+    toonRekeningen();
+
+    berekenTotaal();
+}
 
 
     /*
