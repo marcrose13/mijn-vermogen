@@ -950,64 +950,6 @@
         tekenGrafiek();
 
     }
-
-let huidigePeriode = "alles";
-
-function zetPeriode(periode) {
-    huidigePeriode = periode;
-
-    document
-        .querySelectorAll(".period-buttons button")
-        .forEach(function(button) {
-            button.classList.remove("active");
-        });
-
-    const actieveKnop =
-        document.getElementById("btn-" + periode);
-
-    if (actieveKnop) {
-        actieveKnop.classList.add("active");
-    }
-
-    tekenGrafiek();
-}
-
-function updateGroeiInfo(gegevens) {
-    const element =
-        document.getElementById("groeiInfo");
-
-    if (!gegevens || gegevens.length < 2) {
-        element.textContent =
-            "Nog niet genoeg historische gegevens";
-        return;
-    }
-
-    const eerste =
-        gegevens[0].bedrag;
-
-    const laatste =
-        gegevens[gegevens.length - 1].bedrag;
-
-    const verschil =
-        laatste - eerste;
-
-    const percentage =
-        eerste === 0
-            ? 0
-            : (verschil / eerste) * 100;
-
-    const teken =
-        verschil >= 0 ? "+" : "";
-
-    element.textContent =
-        teken +
-        formatteerBedrag(verschil) +
-        " (" +
-        teken +
-        percentage.toFixed(1) +
-        "%) sinds " +
-        formatteerDatum(gegevens[0].datum);
-}
     
     /*
      * ==========================================
@@ -1396,37 +1338,34 @@ function updateGroeiInfo(gegevens) {
      * Groei-info bijwerken
      */
 
-    updateGroeiInfo(gegevens);
+        updateGroeiInfo(gegevens);
 
 }
 
-        /*
- 
+/*
+ * ==========================================
+ * APP STARTEN
+ * ==========================================
+ */
 
-    /*
-     * ==========================================
-     * APP STARTEN
-     * ==========================================
-     */
+toonRekeningen();
 
-    toonRekeningen();
+berekenTotaal();
 
-    berekenTotaal();
+toonHistorie();
 
-    toonHistorie();
-
-    zetPeriode("alles");
+zetPeriode("alles");
 
 
-    /*
-     * Grafiek opnieuw tekenen wanneer
-     * schermgrootte verandert.
-     */
+/*
+ * Grafiek opnieuw tekenen wanneer
+ * schermgrootte verandert.
+ */
 
-    window.addEventListener(
-        "resize",
-        tekenGrafiek
-    );
+window.addEventListener(
+    "resize",
+    tekenGrafiek
+);
 
 </script>
 
