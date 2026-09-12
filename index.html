@@ -982,6 +982,54 @@ function updateGroeiInfo(gegevens) {
      * ==========================================
      */
 
+    let huidigePeriode = "alles";
+
+function zetPeriode(periode) {
+    huidigePeriode = periode;
+
+    document.querySelectorAll(".period-buttons button").forEach(function(knop) {
+        knop.classList.remove("active");
+    });
+
+    const actieveKnop = document.getElementById("btn-" + periode);
+    if (actieveKnop) {
+        actieveKnop.classList.add("active");
+    }
+
+    tekenGrafiek();
+}
+
+function updateGroeiInfo(gegevens) {
+    const element = document.getElementById("groeiInfo");
+
+    if (!element) return;
+
+    if (gegevens.length < 2) {
+        element.textContent = "Nog niet genoeg gegevens om groei te berekenen";
+        return;
+    }
+
+    const eersteBedrag = gegevens[0].bedrag;
+    const laatsteBedrag = gegevens[gegevens.length - 1].bedrag;
+    const verschil = laatsteBedrag - eersteBedrag;
+
+    const percentage = eersteBedrag !== 0
+        ? (verschil / eersteBedrag) * 100
+        : null;
+
+    const euro = new Intl.NumberFormat("nl-NL", {
+        style: "currency",
+        currency: "EUR"
+    });
+
+    const teken = verschil > 0 ? "+" : "";
+
+    element.textContent = percentage === null
+        ? teken + euro.format(verschil) + " sinds eerste meting"
+        : teken + euro.format(verschil) + " (" + teken +
+          percentage.toFixed(1).replace(".", ",") + "%) sinds eerste meting";
+}
+    
     function tekenGrafiek() {
 
     const canvas = document.getElementById("vermogenGrafiek");
