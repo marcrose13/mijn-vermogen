@@ -691,6 +691,113 @@ function rekeningToevoegen() {
         return;
     }
 
+    const typeKeuze = document.createElement("select");
+
+    typeKeuze.innerHTML = `
+        <option value="">Kies type rekening</option>
+        <option value="Sparen">🏦 Sparen</option>
+        <option value="Beleggen">📈 Beleggen</option>
+        <option value="Betaalrekening">💳 Betaalrekening</option>
+        <option value="Overig">📦 Overig</option>
+    `;
+
+    typeKeuze.style.width = "100%";
+    typeKeuze.style.padding = "12px";
+    typeKeuze.style.fontSize = "16px";
+    typeKeuze.style.borderRadius = "10px";
+    typeKeuze.style.border = "1px solid #d1d5db";
+    typeKeuze.style.marginBottom = "10px";
+
+    const keuzeContainer = document.createElement("div");
+
+    keuzeContainer.style.position = "fixed";
+    keuzeContainer.style.left = "50%";
+    keuzeContainer.style.top = "50%";
+    keuzeContainer.style.transform = "translate(-50%, -50%)";
+    keuzeContainer.style.background = "white";
+    keuzeContainer.style.padding = "20px";
+    keuzeContainer.style.borderRadius = "18px";
+    keuzeContainer.style.width = "90%";
+    keuzeContainer.style.maxWidth = "400px";
+    keuzeContainer.style.boxShadow =
+        "0 10px 40px rgba(0,0,0,0.2)";
+    keuzeContainer.style.zIndex = "9999";
+
+    const titel = document.createElement("div");
+
+    titel.textContent = "Type rekening";
+
+    titel.style.fontSize = "18px";
+    titel.style.fontWeight = "600";
+    titel.style.marginBottom = "12px";
+
+    const bevestigButton = document.createElement("button");
+
+    bevestigButton.textContent = "Doorgaan";
+
+    bevestigButton.style.width = "100%";
+    bevestigButton.style.padding = "12px";
+    bevestigButton.style.border = "none";
+    bevestigButton.style.borderRadius = "10px";
+    bevestigButton.style.background = "#111827";
+    bevestigButton.style.color = "white";
+    bevestigButton.style.fontSize = "16px";
+    bevestigButton.style.fontWeight = "600";
+
+    keuzeContainer.appendChild(titel);
+    keuzeContainer.appendChild(typeKeuze);
+    keuzeContainer.appendChild(bevestigButton);
+
+    document.body.appendChild(keuzeContainer);
+
+    bevestigButton.onclick = function () {
+
+        const typeNaam = typeKeuze.value;
+
+        if (!typeNaam) {
+            alert("Kies eerst een type rekening.");
+            return;
+        }
+
+        keuzeContainer.remove();
+
+        const bedragInput = prompt(
+            "Huidig bedrag in euro's:"
+        );
+
+        if (!bedragInput) {
+            return;
+        }
+
+        const bedrag = parseFloat(
+            bedragInput.replace(",", ".")
+        );
+
+        if (isNaN(bedrag)) {
+            alert("Vul een geldig bedrag in.");
+            return;
+        }
+
+        rekeningen.push({
+
+            id: Date.now(),
+
+            naam: naam,
+
+            type: typeNaam,
+
+            bedrag: bedrag
+
+        });
+
+        slaRekeningenOp();
+
+        toonRekeningen();
+
+        berekenTotaal();
+    };
+}
+
     const type = prompt(
     "Kies het type rekening:\n\n" +
     "Sparen\n" +
