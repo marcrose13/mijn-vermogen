@@ -692,32 +692,36 @@ function rekeningToevoegen() {
     }
 
     const type = prompt(
-        "Type rekening:\n\n" +
-        "1 = Sparen\n" +
-        "2 = Beleggen\n" +
-        "3 = Betaalrekening\n" +
-        "4 = Overig"
+    "Kies het type rekening:\n\n" +
+    "Sparen\n" +
+    "Beleggen\n" +
+    "Betaalrekening\n" +
+    "Overig\n\n" +
+    "Typ precies één van bovenstaande opties:"
+);
+
+if (!type) {
+    return;
+}
+
+const mogelijkeTypes = [
+    "Sparen",
+    "Beleggen",
+    "Betaalrekening",
+    "Overig"
+];
+
+const typeNaam = mogelijkeTypes.find(
+    optie => optie.toLowerCase() === type.toLowerCase()
+);
+
+if (!typeNaam) {
+    alert(
+        "Ongeldige keuze. Kies Sparen, Beleggen, Betaalrekening of Overig."
     );
-
-    if (!type) {
-        return;
-    }
-
-    let typeNaam;
-
-    if (type === "1") {
-        typeNaam = "Sparen";
-    } else if (type === "2") {
-        typeNaam = "Beleggen";
-    } else if (type === "3") {
-        typeNaam = "Betaalrekening";
-    } else if (type === "4") {
-        typeNaam = "Overig";
-    } else {
-        alert("Kies 1, 2, 3 of 4.");
-        return;
-    }
-
+    return;
+}
+    
     const bedragInput = prompt(
         "Huidig bedrag in euro's:"
     );
