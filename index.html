@@ -1090,6 +1090,24 @@ function historischMomentToevoegen() {
 
     }
 
+    /*
+ * Controleren dat de datum niet in de toekomst ligt.
+ */
+
+const vandaag = new Date();
+
+vandaag.setHours(0, 0, 0, 0);
+
+if (datum > vandaag) {
+
+    alert(
+        "Je kunt geen historisch vermogensmoment in de toekomst toevoegen."
+    );
+
+    return;
+
+}
+
 
     const bedragInput = prompt(
         "Totaal vermogen op deze datum in euro's:"
