@@ -1779,14 +1779,42 @@ function historischMomentToevoegen() {
             }
 
 
-            /*
-             * Datum omzetten
-             */
+         /*
+ * Datum omzetten
+ */
 
-            const datum =
-                new Date(
-                    datumWaarde + "T12:00:00"
-                );
+const datum =
+    new Date(
+        datumWaarde + "T12:00:00"
+    );
+
+
+/*
+ * Controleren of datum niet in de toekomst ligt
+ */
+
+const vandaag =
+    new Date();
+
+vandaag.setHours(
+    23,
+    59,
+    59,
+    999
+);
+
+
+if (datum > vandaag) {
+
+    alert(
+        "Oeps, deze datum ligt in de toekomst!"
+    );
+
+    datumInput.focus();
+
+    return;
+
+}
 
 
             /*
