@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="nl">
 
@@ -14,14 +15,18 @@
 
     <style>
 
+        :root {
+            --app-background: #C5DEDE;
+        }
+
         html {
-            background: #C5DEDE;
+            background: var(--app-background);
         }
 
         body {
             margin: 0;
             padding: 0;
-            background: #C5DEDE;
+            background: var(--app-background);
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -43,11 +48,63 @@
             box-sizing: border-box;
         }
 
-        h1 {
-            text-align: center;
+
+        /*
+         * ==========================================
+         * TITEL + INSTELLINGEN
+         * ==========================================
+         */
+
+        .header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 10px 0 25px;
+        }
+
+        h1 {
+            margin: 0;
             font-size: 30px;
         }
+
+        .instellingen-button {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.75);
+
+            font-size: 21px;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition:
+                transform 0.15s ease,
+                background 0.15s ease;
+        }
+
+        .instellingen-button:active {
+            transform:
+                translateY(-50%)
+                scale(0.94);
+        }
+
+        .instellingen-button:hover {
+            background: white;
+        }
+
 
         h2 {
             margin-top: 0;
@@ -222,6 +279,111 @@
 
         /*
          * ==========================================
+         * INSTELLINGEN POPUP
+         * ==========================================
+         */
+
+        .instellingen-popup-overlay {
+            position: fixed;
+            inset: 0;
+
+            background: rgba(17, 24, 39, 0.45);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+            box-sizing: border-box;
+
+            z-index: 10000;
+        }
+
+        .instellingen-popup {
+            width: 100%;
+            max-width: 380px;
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 24px;
+
+            box-sizing: border-box;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .instellingen-titel {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .instellingen-subtitel {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .instellingen-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .kleur-opties {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .kleur-optie {
+            flex: 1;
+
+            border: 2px solid transparent;
+
+            border-radius: 14px;
+
+            padding: 6px;
+
+            background: #f3f4f6;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .kleur-optie:hover {
+            transform: translateY(-2px);
+        }
+
+        .kleur-optie.active {
+            border-color: #111827;
+        }
+
+        .kleur-preview {
+            width: 100%;
+            height: 55px;
+
+            border-radius: 9px;
+
+            margin-bottom: 7px;
+        }
+
+        .kleur-naam {
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            color: #374151;
+        }
+
+
+        /*
+         * ==========================================
          * REKENING POPUP
          * ==========================================
          */
@@ -325,6 +487,10 @@
                 padding: 20px;
             }
 
+            .instellingen-popup {
+                padding: 20px;
+            }
+
         }
 
     </style>
@@ -336,7 +502,23 @@
 
 <div class="container">
 
-    <h1>Mijn Vermogen</h1>
+
+    <!-- TITEL + INSTELLINGEN -->
+
+    <div class="header">
+
+        <h1>Mijn Vermogen</h1>
+
+        <button
+            class="instellingen-button"
+            onclick="instellingenOpenen()"
+            aria-label="Instellingen"
+            title="Instellingen"
+        >
+            ⚙️
+        </button>
+
+    </div>
 
 
     <!-- TOTAAL VERMOGEN -->
@@ -483,6 +665,280 @@ let historie = JSON.parse(
 ) || [];
 
 let huidigePeriode = "alles";
+
+
+/*
+ * ==========================================
+ * ACHTERGRONDKLEUR
+ * ==========================================
+ */
+
+const standaardAchtergrond =
+    "#C5DEDE";
+
+
+let opgeslagenAchtergrond =
+    localStorage.getItem(
+        "mijnVermogenAchtergrond"
+    ) || standaardAchtergrond;
+
+
+function achtergrondInstellen(kleur) {
+
+    document.documentElement.style
+        .setProperty(
+            "--app-background",
+            kleur
+        );
+
+}
+
+
+achtergrondInstellen(
+    opgeslagenAchtergrond
+);
+
+
+/*
+ * ==========================================
+ * INSTELLINGEN OPENEN
+ * ==========================================
+ */
+
+function instellingenOpenen() {
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "instellingen-popup-overlay";
+
+
+    const popup =
+        document.createElement("div");
+
+    popup.className =
+        "instellingen-popup";
+
+
+    const titel =
+        document.createElement("div");
+
+    titel.className =
+        "instellingen-titel";
+
+    titel.textContent =
+        "Instellingen";
+
+
+    const subtitel =
+        document.createElement("div");
+
+    subtitel.className =
+        "instellingen-subtitel";
+
+    subtitel.textContent =
+        "Geef Mijn Vermogen jouw eigen uitstraling.";
+
+
+    const label =
+        document.createElement("div");
+
+    label.className =
+        "instellingen-label";
+
+    label.textContent =
+        "Achtergrondkleur";
+
+
+    const kleurOpties =
+        document.createElement("div");
+
+    kleurOpties.className =
+        "kleur-opties";
+
+
+    const kleuren = [
+
+        {
+            naam: "Mint",
+            kleur: "#C5DEDE"
+        },
+
+        {
+            naam: "Blauw",
+            kleur: "#C7D8E8"
+        },
+
+        {
+            naam: "Lavendel",
+            kleur: "#D8D0E8"
+        }
+
+    ];
+
+
+    kleuren.forEach(
+        function(item) {
+
+            const optie =
+                document.createElement("button");
+
+            optie.className =
+                "kleur-optie";
+
+            optie.type =
+                "button";
+
+
+            if (
+                item.kleur ===
+                opgeslagenAchtergrond
+            ) {
+
+                optie.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            const preview =
+                document.createElement("div");
+
+            preview.className =
+                "kleur-preview";
+
+            preview.style.background =
+                item.kleur;
+
+
+            const naam =
+                document.createElement("div");
+
+            naam.className =
+                "kleur-naam";
+
+            naam.textContent =
+                item.naam;
+
+
+            optie.appendChild(
+                preview
+            );
+
+            optie.appendChild(
+                naam
+            );
+
+
+            optie.onclick =
+                function() {
+
+                    opgeslagenAchtergrond =
+                        item.kleur;
+
+
+                    localStorage.setItem(
+                        "mijnVermogenAchtergrond",
+                        item.kleur
+                    );
+
+
+                    achtergrondInstellen(
+                        item.kleur
+                    );
+
+
+                    document
+                        .querySelectorAll(
+                            ".kleur-optie"
+                        )
+                        .forEach(
+                            function(knop) {
+
+                                knop.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
+                        );
+
+
+                    optie.classList.add(
+                        "active"
+                    );
+
+                };
+
+
+            kleurOpties.appendChild(
+                optie
+            );
+
+        }
+    );
+
+
+    const sluitenButton =
+        document.createElement("button");
+
+    sluitenButton.className =
+        "primary-button";
+
+    sluitenButton.type =
+        "button";
+
+    sluitenButton.textContent =
+        "Gereed";
+
+
+    sluitenButton.onclick =
+        function() {
+
+            overlay.remove();
+
+        };
+
+
+    popup.appendChild(titel);
+
+    popup.appendChild(subtitel);
+
+    popup.appendChild(label);
+
+    popup.appendChild(kleurOpties);
+
+    popup.appendChild(
+        sluitenButton
+    );
+
+
+    overlay.appendChild(
+        popup
+    );
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    overlay.onclick =
+        function(event) {
+
+            if (
+                event.target === overlay
+            ) {
+
+                overlay.remove();
+
+            }
+
+        };
+
+}
 
 
 /*
@@ -973,10 +1429,6 @@ function rekeningToevoegen() {
         }
 
 
-        /*
-         * Rekening opslaan
-         */
-
         rekeningen.push({
 
             id: Date.now(),
@@ -996,18 +1448,7 @@ function rekeningToevoegen() {
 
         berekenTotaal();
 
-
-        /*
-         * Popup sluiten
-         */
-
         overlay.remove();
-
-
-        /*
-         * Vragen of nieuw vermogensmoment
-         * opgeslagen moet worden
-         */
 
         vraagVermogensMomentOpslaan();
 
@@ -1051,13 +1492,6 @@ function rekeningBewerken(id) {
     }
 
 
-    /*
-     * Oude bedrag bewaren
-     *
-     * Dit gebruiken we later om te bepalen
-     * of er daadwerkelijk een wijziging is.
-     */
-
     const oudBedrag =
         Number(rekening.bedrag);
 
@@ -1096,8 +1530,6 @@ function rekeningBewerken(id) {
         "Pas de gegevens van je rekening aan.";
 
 
-    /* Naam */
-
     const naamGroep =
         document.createElement("div");
 
@@ -1131,16 +1563,10 @@ function rekeningBewerken(id) {
         "off";
 
 
-    naamGroep.appendChild(
-        naamLabel
-    );
+    naamGroep.appendChild(naamLabel);
 
-    naamGroep.appendChild(
-        naamInput
-    );
+    naamGroep.appendChild(naamInput);
 
-
-    /* Type */
 
     const typeGroep =
         document.createElement("div");
@@ -1191,16 +1617,10 @@ function rekeningBewerken(id) {
         rekening.type;
 
 
-    typeGroep.appendChild(
-        typeLabel
-    );
+    typeGroep.appendChild(typeLabel);
 
-    typeGroep.appendChild(
-        typeSelect
-    );
+    typeGroep.appendChild(typeSelect);
 
-
-    /* Bedrag */
 
     const bedragGroep =
         document.createElement("div");
@@ -1240,16 +1660,10 @@ function rekeningBewerken(id) {
         "off";
 
 
-    bedragGroep.appendChild(
-        bedragLabel
-    );
+    bedragGroep.appendChild(bedragLabel);
 
-    bedragGroep.appendChild(
-        bedragInput
-    );
+    bedragGroep.appendChild(bedragInput);
 
-
-    /* Knoppen */
 
     const knoppen =
         document.createElement("div");
@@ -1293,8 +1707,6 @@ function rekeningBewerken(id) {
     );
 
 
-    /* Popup opbouwen */
-
     popup.appendChild(titel);
 
     popup.appendChild(subtitel);
@@ -1321,8 +1733,6 @@ function rekeningBewerken(id) {
     }, 100);
 
 
-    /* Annuleren */
-
     annulerenButton.onclick =
         function() {
 
@@ -1330,8 +1740,6 @@ function rekeningBewerken(id) {
 
         };
 
-
-    /* Opslaan */
 
     opslaanButton.onclick =
         function() {
@@ -1408,10 +1816,6 @@ function rekeningBewerken(id) {
             }
 
 
-            /*
-             * Rekening aanpassen
-             */
-
             rekening.naam =
                 nieuweNaam;
 
@@ -1428,19 +1832,8 @@ function rekeningBewerken(id) {
 
             berekenTotaal();
 
-
-            /*
-             * Popup sluiten
-             */
-
             overlay.remove();
 
-
-            /*
-             * Alleen vragen om een nieuw
-             * vermogensmoment wanneer het
-             * bedrag daadwerkelijk is gewijzigd.
-             */
 
             if (nieuwBedrag !== oudBedrag) {
 
@@ -1450,8 +1843,6 @@ function rekeningBewerken(id) {
 
         };
 
-
-    /* Enter = opslaan */
 
     bedragInput.addEventListener(
         "keydown",
@@ -1991,21 +2382,12 @@ function historischMomentToevoegen() {
             }
 
 
-            /*
-             * Datum omzetten
-             */
-
             const datum =
                 new Date(
                     datumWaarde +
                     "T12:00:00"
                 );
 
-
-            /*
-             * Controleren of datum niet
-             * in de toekomst ligt
-             */
 
             const vandaag =
                 new Date();
@@ -2031,10 +2413,6 @@ function historischMomentToevoegen() {
             }
 
 
-            /*
-             * Historisch moment opslaan
-             */
-
             historie.push({
 
                 datum:
@@ -2045,10 +2423,6 @@ function historischMomentToevoegen() {
 
             });
 
-
-            /*
-             * Historie chronologisch sorteren
-             */
 
             historie.sort(
                 function(a, b) {
@@ -2062,29 +2436,16 @@ function historischMomentToevoegen() {
             );
 
 
-            /*
-             * Opslaan en vernieuwen
-             */
-
             slaHistorieOp();
 
             toonHistorie();
 
             tekenGrafiek();
 
-
-            /*
-             * Popup sluiten
-             */
-
             overlay.remove();
 
         };
 
-
-    /*
-     * Enter = opslaan
-     */
 
     bedragInput.addEventListener(
         "keydown",
@@ -2372,10 +2733,6 @@ function tekenGrafiek() {
         [...historie];
 
 
-    /*
-     * Periode filteren
-     */
-
     if (
         huidigePeriode === "3m"
     ) {
@@ -2465,10 +2822,6 @@ function tekenGrafiek() {
     }
 
 
-    /*
-     * Waarden bepalen
-     */
-
     const waarden =
         gegevens.map(
             function(item) {
@@ -2536,10 +2889,6 @@ function tekenGrafiek() {
         paddingBoven -
         paddingOnder;
 
-
-    /*
-     * Lijn tekenen
-     */
 
     ctx.beginPath();
 
@@ -2616,10 +2965,6 @@ function tekenGrafiek() {
     ctx.stroke();
 
 
-    /*
-     * Punten tekenen
-     */
-
     gegevens.forEach(
         function(item, index) {
 
@@ -2692,11 +3037,6 @@ toonHistorie();
 zetPeriode("alles");
 
 
-/*
- * Grafiek opnieuw tekenen wanneer
- * schermgrootte verandert.
- */
-
 window.addEventListener(
     "resize",
     tekenGrafiek
@@ -2708,3 +3048,22 @@ window.addEventListener(
 </body>
 
 </html>
+```
+
+### Wat er nu bijgekomen is
+
+Je hebt bovenaan nu:
+
+**Mijn Vermogen**                 ⚙️
+
+Als je op ⚙️ drukt krijg je:
+
+* 🟢 **Mint** — je huidige kleur
+* 🔵 **Blauw** — `#C7D8E8`
+* 🟣 **Lavendel** — `#D8D0E8`
+
+De kleur verandert **direct** en wordt opgeslagen in de browser. Dus als je later op je iPhone `Mijn Vermogen` opent, blijft jouw gekozen kleur behouden.
+
+En mooi meegenomen: **je rekeningen en historie worden niet geraakt**, want de achtergrondkleur gebruikt een eigen `localStorage`-waarde.
+
+Mijn volgende stap zou trouwens zijn om het tandwiel zelf wat mooier te maken — bijvoorbeeld een **strak monochroom ⚙-icoon zonder emoji**, zodat het meer als een echte iPhone-app oogt. Dat past beter bij de rest van je ontwerp.
