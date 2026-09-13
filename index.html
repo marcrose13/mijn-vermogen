@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="nl">
 
@@ -198,6 +199,8 @@
         .historie-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: 10px;
             padding: 12px 0;
             border-bottom: 1px solid #e5e7eb;
         }
@@ -208,12 +211,96 @@
 
         .historie-datum {
             color: #6b7280;
+            flex: 1;
         }
 
         .leeg {
             color: #6b7280;
             text-align: center;
             padding: 10px 0;
+        }
+
+
+        /*
+         * ==========================================
+         * REKENING POPUP
+         * ==========================================
+         */
+
+        .rekening-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+
+        .rekening-popup {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-radius: 22px;
+            padding: 24px;
+            box-sizing: border-box;
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .rekening-popup-titel {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .rekening-popup-subtitel {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 22px;
+        }
+
+        .formulier-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .formulier-groep {
+            margin-bottom: 17px;
+        }
+
+        .formulier-input,
+        .formulier-select {
+            width: 100%;
+            min-height: 48px;
+            padding: 0 13px;
+            box-sizing: border-box;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            background: white;
+            color: #111827;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .formulier-input:focus,
+        .formulier-select:focus {
+            border-color: #111827;
+        }
+
+        .popup-knoppen {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .popup-knoppen button {
+            flex: 1;
         }
 
         @media (max-width: 380px) {
@@ -233,6 +320,10 @@
 
             .rekening-acties button {
                 padding: 7px 8px;
+            }
+
+            .rekening-popup {
+                padding: 20px;
             }
 
         }
@@ -348,27 +439,27 @@
 
     <section class="section">
 
-<h2>Historie</h2>
+        <h2>Historie</h2>
 
-<div id="historie"></div>
+        <div id="historie"></div>
 
-<br>
+        <br>
 
-<button
-    class="primary-button"
-    onclick="historischMomentToevoegen()"
->
-    + Historisch vermogensmoment
-</button>
+        <button
+            class="primary-button"
+            onclick="historischMomentToevoegen()"
+        >
+            + Historisch vermogensmoment
+        </button>
 
-<br><br>
+        <br><br>
 
-<button
-    class="danger-button"
-    onclick="historieWissen()"
->
-    Historie wissen
-</button>
+        <button
+            class="danger-button"
+            onclick="historieWissen()"
+        >
+            Historie wissen
+        </button>
 
     </section>
 
@@ -569,28 +660,130 @@ function toonRekeningen() {
 
 function rekeningToevoegen() {
 
-    const naam = prompt(
-        "Naam van de rekening, bijvoorbeeld: ING Spaarrekening"
-    );
+    /*
+     * Overlay maken
+     */
 
+    const overlay =
+        document.createElement("div");
 
-    if (!naam) {
-        return;
-    }
+    overlay.className =
+        "rekening-popup-overlay";
 
 
     /*
-     * Type kiezen via een echt keuzemenu
+     * Popup maken
      */
 
-    const typeKeuze =
+    const popup =
+        document.createElement("div");
+
+    popup.className =
+        "rekening-popup";
+
+
+    /*
+     * Titel
+     */
+
+    const titel =
+        document.createElement("div");
+
+    titel.className =
+        "rekening-popup-titel";
+
+    titel.textContent =
+        "Rekening toevoegen";
+
+
+    /*
+     * Subtitel
+     */
+
+    const subtitel =
+        document.createElement("div");
+
+    subtitel.className =
+        "rekening-popup-subtitel";
+
+    subtitel.textContent =
+        "Vul de gegevens van je rekening in.";
+
+
+    /*
+     * Naam
+     */
+
+    const naamGroep =
+        document.createElement("div");
+
+    naamGroep.className =
+        "formulier-groep";
+
+
+    const naamLabel =
+        document.createElement("label");
+
+    naamLabel.className =
+        "formulier-label";
+
+    naamLabel.textContent =
+        "Naam rekening";
+
+
+    const naamInput =
+        document.createElement("input");
+
+    naamInput.className =
+        "formulier-input";
+
+    naamInput.type =
+        "text";
+
+    naamInput.placeholder =
+        "Bijvoorbeeld ING Spaarrekening";
+
+    naamInput.autocomplete =
+        "off";
+
+
+    naamGroep.appendChild(naamLabel);
+
+    naamGroep.appendChild(naamInput);
+
+
+    /*
+     * Type
+     */
+
+    const typeGroep =
+        document.createElement("div");
+
+    typeGroep.className =
+        "formulier-groep";
+
+
+    const typeLabel =
+        document.createElement("label");
+
+    typeLabel.className =
+        "formulier-label";
+
+    typeLabel.textContent =
+        "Type rekening";
+
+
+    const typeSelect =
         document.createElement("select");
 
+    typeSelect.className =
+        "formulier-select";
 
-    typeKeuze.innerHTML = `
+
+    typeSelect.innerHTML = `
 
         <option value="">
-            Kies type rekening
+            Kies een type
         </option>
 
         <option value="Sparen">
@@ -612,143 +805,220 @@ function rekeningToevoegen() {
     `;
 
 
-    /*
-     * Styling keuzemenu
-     */
+    typeGroep.appendChild(typeLabel);
 
-    typeKeuze.style.width = "100%";
-    typeKeuze.style.padding = "12px";
-    typeKeuze.style.fontSize = "16px";
-    typeKeuze.style.borderRadius = "10px";
-    typeKeuze.style.border =
-        "1px solid #d1d5db";
-    typeKeuze.style.marginBottom = "10px";
-    typeKeuze.style.boxSizing = "border-box";
+    typeGroep.appendChild(typeSelect);
 
 
     /*
-     * Container voor het menu
+     * Bedrag
      */
 
-    const keuzeContainer =
+    const bedragGroep =
         document.createElement("div");
 
+    bedragGroep.className =
+        "formulier-groep";
 
-    keuzeContainer.style.position = "fixed";
-    keuzeContainer.style.left = "50%";
-    keuzeContainer.style.top = "50%";
-    keuzeContainer.style.transform =
-        "translate(-50%, -50%)";
-    keuzeContainer.style.background = "white";
-    keuzeContainer.style.padding = "20px";
-    keuzeContainer.style.borderRadius = "18px";
-    keuzeContainer.style.width = "90%";
-    keuzeContainer.style.maxWidth = "400px";
-    keuzeContainer.style.boxShadow =
-        "0 10px 40px rgba(0,0,0,0.2)";
-    keuzeContainer.style.zIndex = "9999";
-    keuzeContainer.style.boxSizing = "border-box";
+
+    const bedragLabel =
+        document.createElement("label");
+
+    bedragLabel.className =
+        "formulier-label";
+
+    bedragLabel.textContent =
+        "Huidig bedrag";
+
+
+    const bedragInput =
+        document.createElement("input");
+
+    bedragInput.className =
+        "formulier-input";
+
+    bedragInput.type =
+        "text";
+
+    bedragInput.inputMode =
+        "decimal";
+
+    bedragInput.placeholder =
+        "Bijvoorbeeld 12500,50";
+
+    bedragInput.autocomplete =
+        "off";
+
+
+    bedragGroep.appendChild(bedragLabel);
+
+    bedragGroep.appendChild(bedragInput);
 
 
     /*
-     * Titel
+     * Knoppen
      */
 
-    const titel =
+    const knoppen =
         document.createElement("div");
 
-    titel.textContent =
-        "Type rekening";
-
-    titel.style.fontSize = "18px";
-    titel.style.fontWeight = "600";
-    titel.style.marginBottom = "12px";
+    knoppen.className =
+        "popup-knoppen";
 
 
-    /*
-     * Doorgaan-knop
-     */
-
-    const bevestigButton =
+    const annulerenButton =
         document.createElement("button");
 
-    bevestigButton.textContent =
-        "Doorgaan";
+    annulerenButton.className =
+        "secondary-button";
 
-    bevestigButton.style.width = "100%";
-    bevestigButton.style.padding = "12px";
-    bevestigButton.style.border = "none";
-    bevestigButton.style.borderRadius = "10px";
-    bevestigButton.style.background = "#111827";
-    bevestigButton.style.color = "white";
-    bevestigButton.style.fontSize = "16px";
-    bevestigButton.style.fontWeight = "600";
-    bevestigButton.style.cursor = "pointer";
+    annulerenButton.type =
+        "button";
+
+    annulerenButton.textContent =
+        "Annuleren";
 
 
-    /*
-     * Alles toevoegen aan het venster
-     */
+    const opslaanButton =
+        document.createElement("button");
 
-    keuzeContainer.appendChild(titel);
+    opslaanButton.className =
+        "primary-button";
 
-    keuzeContainer.appendChild(typeKeuze);
+    opslaanButton.type =
+        "button";
 
-    keuzeContainer.appendChild(
-        bevestigButton
+    opslaanButton.textContent =
+        "Opslaan";
+
+
+    knoppen.appendChild(
+        annulerenButton
+    );
+
+    knoppen.appendChild(
+        opslaanButton
     );
 
 
-    document.body.appendChild(
-        keuzeContainer
-    );
+    /*
+     * Alles samenvoegen
+     */
+
+    popup.appendChild(titel);
+
+    popup.appendChild(subtitel);
+
+    popup.appendChild(naamGroep);
+
+    popup.appendChild(typeGroep);
+
+    popup.appendChild(bedragGroep);
+
+    popup.appendChild(knoppen);
+
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
 
 
     /*
-     * Doorgaan
+     * Focus op naam
      */
 
-    bevestigButton.onclick = function() {
+    setTimeout(function() {
 
-        const typeNaam =
-            typeKeuze.value;
+        naamInput.focus();
+
+    }, 100);
 
 
-        if (!typeNaam) {
+    /*
+     * Annuleren
+     */
+
+    annulerenButton.onclick = function() {
+
+        overlay.remove();
+
+    };
+
+
+    /*
+     * Opslaan
+     */
+
+    opslaanButton.onclick = function() {
+
+        const naam =
+            naamInput.value.trim();
+
+        const type =
+            typeSelect.value;
+
+        const bedragInputWaarde =
+            bedragInput.value.trim();
+
+
+        /*
+         * Naam controleren
+         */
+
+        if (!naam) {
+
+            alert(
+                "Vul een naam voor de rekening in."
+            );
+
+            naamInput.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Type controleren
+         */
+
+        if (!type) {
 
             alert(
                 "Kies eerst een type rekening."
             );
 
+            typeSelect.focus();
+
             return;
 
         }
 
 
         /*
-         * Keuzemenu verwijderen
+         * Bedrag controleren
          */
 
-        keuzeContainer.remove();
+        if (!bedragInputWaarde) {
 
+            alert(
+                "Vul een bedrag in."
+            );
 
-        /*
-         * Bedrag vragen
-         */
+            bedragInput.focus();
 
-        const bedragInput = prompt(
-            "Huidig bedrag in euro's:"
-        );
-
-
-        if (!bedragInput) {
             return;
+
         }
 
 
-        const bedrag = parseFloat(
-            bedragInput.replace(",", ".")
-        );
+        const bedrag =
+            parseFloat(
+                bedragInputWaarde
+                    .replace("€", "")
+                    .replace(/\s/g, "")
+                    .replace(/\./g, "")
+                    .replace(",", ".")
+            );
 
 
         if (isNaN(bedrag)) {
@@ -757,13 +1027,15 @@ function rekeningToevoegen() {
                 "Vul een geldig bedrag in."
             );
 
+            bedragInput.focus();
+
             return;
 
         }
 
 
         /*
-         * Rekening toevoegen
+         * Rekening opslaan
          */
 
         rekeningen.push({
@@ -772,16 +1044,12 @@ function rekeningToevoegen() {
 
             naam: naam,
 
-            type: typeNaam,
+            type: type,
 
             bedrag: bedrag
 
         });
 
-
-        /*
-         * Opslaan en scherm vernieuwen
-         */
 
         slaRekeningenOp();
 
@@ -789,7 +1057,32 @@ function rekeningToevoegen() {
 
         berekenTotaal();
 
+
+        /*
+         * Popup sluiten
+         */
+
+        overlay.remove();
+
     };
+
+
+    /*
+     * Enter = opslaan
+     */
+
+    bedragInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                opslaanButton.click();
+
+            }
+
+        }
+    );
 
 }
 
@@ -864,11 +1157,14 @@ function rekeningBewerken(id) {
     }
 
 
-    rekening.naam = nieuweNaam;
+    rekening.naam =
+        nieuweNaam;
 
-    rekening.type = nieuwType;
+    rekening.type =
+        nieuwType;
 
-    rekening.bedrag = nieuwBedrag;
+    rekening.bedrag =
+        nieuwBedrag;
 
 
     slaRekeningenOp();
@@ -965,7 +1261,8 @@ function vermogensMomentOpslaan() {
 
 }
 
-    /*
+
+/*
  * ==========================================
  * HISTORIE TONEN
  * ==========================================
@@ -973,56 +1270,109 @@ function vermogensMomentOpslaan() {
 
 function toonHistorie() {
 
-    const container = document.getElementById("historie");
+    const container =
+        document.getElementById("historie");
 
     container.innerHTML = "";
 
+
     if (historie.length === 0) {
+
         container.innerHTML =
             '<div class="leeg">Nog geen vermogensmomenten opgeslagen.</div>';
+
         return;
+
     }
+
 
     historie.forEach(function(moment, index) {
 
-        const div = document.createElement("div");
-        div.className = "historie-item";
+        const div =
+            document.createElement("div");
 
-        const datum = document.createElement("div");
-        datum.className = "historie-datum";
-        datum.textContent = formatteerDatum(moment.datum);
+        div.className =
+            "historie-item";
 
-        const bedrag = document.createElement("div");
-        bedrag.textContent = formatteerBedrag(moment.bedrag);
 
-        const verwijderButton = document.createElement("button");
-        verwijderButton.type = "button";
-        verwijderButton.textContent = "🗑️";
-        verwijderButton.title = "Dit vermogensmoment verwijderen";
+        const datum =
+            document.createElement("div");
+
+        datum.className =
+            "historie-datum";
+
+        datum.textContent =
+            formatteerDatum(moment.datum);
+
+
+        const bedrag =
+            document.createElement("div");
+
+        bedrag.textContent =
+            formatteerBedrag(moment.bedrag);
+
+
+        const verwijderButton =
+            document.createElement("button");
+
+        verwijderButton.type =
+            "button";
+
+        verwijderButton.textContent =
+            "🗑️";
+
+        verwijderButton.title =
+            "Dit vermogensmoment verwijderen";
+
         verwijderButton.setAttribute(
             "aria-label",
-            "Vermogensmoment van " + formatteerDatum(moment.datum) + " verwijderen"
+            "Vermogensmoment van " +
+            formatteerDatum(moment.datum) +
+            " verwijderen"
         );
 
-        verwijderButton.style.border = "none";
-        verwijderButton.style.borderRadius = "8px";
-        verwijderButton.style.padding = "6px 10px";
-        verwijderButton.style.background = "#f3f4f6";
-        verwijderButton.style.cursor = "pointer";
+        verwijderButton.style.border =
+            "none";
 
-        verwijderButton.onclick = function() {
-            historischMomentVerwijderen(index);
-        };
+        verwijderButton.style.borderRadius =
+            "8px";
+
+        verwijderButton.style.padding =
+            "6px 10px";
+
+        verwijderButton.style.background =
+            "#f3f4f6";
+
+        verwijderButton.style.cursor =
+            "pointer";
+
+
+        verwijderButton.onclick =
+            function() {
+
+                historischMomentVerwijderen(
+                    index
+                );
+
+            };
+
 
         div.appendChild(datum);
+
         div.appendChild(bedrag);
-        div.appendChild(verwijderButton);
+
+        div.appendChild(
+            verwijderButton
+        );
 
         container.appendChild(div);
+
     });
+
 }
-    
-    /*
+
+
+/*
  * ==========================================
  * HISTORISCH VERMOGENSMOMENT TOEVOEGEN
  * ==========================================
@@ -1034,17 +1384,14 @@ function historischMomentToevoegen() {
         "Datum (bijvoorbeeld 01-01-2025):"
     );
 
+
     if (!datumInput) {
         return;
     }
 
 
-    /*
-     * Nederlandse datum omzetten
-     * naar een datum die JavaScript begrijpt.
-     */
-
-    const delen = datumInput.split("-");
+    const delen =
+        datumInput.split("-");
 
 
     if (delen.length !== 3) {
@@ -1058,23 +1405,23 @@ function historischMomentToevoegen() {
     }
 
 
-    const dag = parseInt(delen[0]);
+    const dag =
+        parseInt(delen[0]);
 
-    const maand = parseInt(delen[1]);
+    const maand =
+        parseInt(delen[1]);
 
-    const jaar = parseInt(delen[2]);
-
-
-    const datum = new Date(
-        jaar,
-        maand - 1,
-        dag
-    );
+    const jaar =
+        parseInt(delen[2]);
 
 
-    /*
-     * Controleren of de datum geldig is.
-     */
+    const datum =
+        new Date(
+            jaar,
+            maand - 1,
+            dag
+        );
+
 
     if (
         datum.getFullYear() !== jaar ||
@@ -1090,28 +1437,37 @@ function historischMomentToevoegen() {
 
     }
 
+
     /*
- * Controleren dat de datum niet in de toekomst ligt.
- */
+     * Controleren dat de datum niet in de toekomst ligt.
+     */
 
-const vandaag = new Date();
+    const vandaag =
+        new Date();
 
-vandaag.setHours(0, 0, 0, 0);
-
-if (datum > vandaag) {
-
-    alert(
-        "Oeps, deze datum ligt in de toekomst!"
+    vandaag.setHours(
+        0,
+        0,
+        0,
+        0
     );
 
-    return;
 
-}
+    if (datum > vandaag) {
+
+        alert(
+            "Oeps, deze datum ligt in de toekomst!"
+        );
+
+        return;
+
+    }
 
 
-    const bedragInput = prompt(
-        "Totaal vermogen op deze datum in euro's:"
-    );
+    const bedragInput =
+        prompt(
+            "Totaal vermogen op deze datum in euro's:"
+        );
 
 
     if (!bedragInput) {
@@ -1119,13 +1475,14 @@ if (datum > vandaag) {
     }
 
 
-    const bedrag = parseFloat(
-        bedragInput
-            .replace("€", "")
-            .replace(/\./g, "")
-            .replace(",", ".")
-            .trim()
-    );
+    const bedrag =
+        parseFloat(
+            bedragInput
+                .replace("€", "")
+                .replace(/\./g, "")
+                .replace(",", ".")
+                .trim()
+        );
 
 
     if (isNaN(bedrag)) {
@@ -1148,15 +1505,16 @@ if (datum > vandaag) {
     });
 
 
-    /*
-     * Historie chronologisch sorteren.
-     */
+    historie.sort(
+        function(a, b) {
 
-    historie.sort(function(a, b) {
+            return (
+                new Date(a.datum) -
+                new Date(b.datum)
+            );
 
-        return new Date(a.datum) - new Date(b.datum);
-
-    });
+        }
+    );
 
 
     slaHistorieOp();
@@ -1166,6 +1524,7 @@ if (datum > vandaag) {
     tekenGrafiek();
 
 }
+
 
 /*
  * ==========================================
@@ -1175,31 +1534,45 @@ if (datum > vandaag) {
 
 function historischMomentVerwijderen(index) {
 
-    const moment = historie[index];
+    const moment =
+        historie[index];
+
 
     if (!moment) {
         return;
     }
 
-    const bevestigen = confirm(
-        "Wil je het vermogensmoment van " +
-        formatteerDatum(moment.datum) +
-        " (" +
-        formatteerBedrag(moment.bedrag) +
-        ") verwijderen?"
-    );
+
+    const bevestigen =
+        confirm(
+            "Wil je het vermogensmoment van " +
+            formatteerDatum(moment.datum) +
+            " (" +
+            formatteerBedrag(moment.bedrag) +
+            ") verwijderen?"
+        );
+
 
     if (!bevestigen) {
         return;
     }
 
-    historie.splice(index, 1);
+
+    historie.splice(
+        index,
+        1
+    );
+
 
     slaHistorieOp();
+
     toonHistorie();
+
     tekenGrafiek();
+
 }
-    
+
+
 /*
  * ==========================================
  * HISTORIE WISSEN
@@ -1213,9 +1586,10 @@ function historieWissen() {
     }
 
 
-    const bevestigen = confirm(
-        "Weet je zeker dat je alle historie wilt wissen?"
-    );
+    const bevestigen =
+        confirm(
+            "Weet je zeker dat je alle historie wilt wissen?"
+        );
 
 
     if (!bevestigen) {
@@ -1245,16 +1619,19 @@ function historieWissen() {
 
 function zetPeriode(periode) {
 
-    huidigePeriode = periode;
+    huidigePeriode =
+        periode;
 
 
     document
         .getElementById("btn-3m")
         .classList.remove("active");
 
+
     document
         .getElementById("btn-1j")
         .classList.remove("active");
+
 
     document
         .getElementById("btn-alles")
@@ -1302,10 +1679,15 @@ function zetPeriode(periode) {
 function updateGroeiInfo(gegevens) {
 
     const element =
-        document.getElementById("groeiInfo");
+        document.getElementById(
+            "groeiInfo"
+        );
 
 
-    if (!gegevens || gegevens.length < 2) {
+    if (
+        !gegevens ||
+        gegevens.length < 2
+    ) {
 
         element.textContent =
             "Nog onvoldoende gegevens voor groei.";
@@ -1318,8 +1700,11 @@ function updateGroeiInfo(gegevens) {
     const eerste =
         gegevens[0].bedrag;
 
+
     const laatste =
-        gegevens[gegevens.length - 1].bedrag;
+        gegevens[
+            gegevens.length - 1
+        ].bedrag;
 
 
     const verschil =
@@ -1333,7 +1718,9 @@ function updateGroeiInfo(gegevens) {
 
 
     const teken =
-        verschil >= 0 ? "+" : "";
+        verschil >= 0
+            ? "+"
+            : "";
 
 
     element.textContent =
@@ -1375,7 +1762,8 @@ function tekenGrafiek() {
         canvas.clientWidth;
 
 
-    const hoogte = 250;
+    const hoogte =
+        250;
 
 
     const dpr =
@@ -1385,11 +1773,15 @@ function tekenGrafiek() {
     canvas.width =
         breedte * dpr;
 
+
     canvas.height =
         hoogte * dpr;
 
 
-    ctx.scale(dpr, dpr);
+    ctx.scale(
+        dpr,
+        dpr
+    );
 
 
     ctx.clearRect(
@@ -1408,10 +1800,13 @@ function tekenGrafiek() {
      * Periode filteren
      */
 
-    if (huidigePeriode === "3m") {
+    if (
+        huidigePeriode === "3m"
+    ) {
 
         const grens =
             new Date();
+
 
         grens.setMonth(
             grens.getMonth() - 3
@@ -1419,19 +1814,27 @@ function tekenGrafiek() {
 
 
         gegevens =
-            gegevens.filter(function(item) {
+            gegevens.filter(
+                function(item) {
 
-                return new Date(item.datum) >= grens;
+                    return (
+                        new Date(item.datum) >=
+                        grens
+                    );
 
-            });
+                }
+            );
 
     }
 
 
-    if (huidigePeriode === "1j") {
+    if (
+        huidigePeriode === "1j"
+    ) {
 
         const grens =
             new Date();
+
 
         grens.setFullYear(
             grens.getFullYear() - 1
@@ -1439,31 +1842,47 @@ function tekenGrafiek() {
 
 
         gegevens =
-            gegevens.filter(function(item) {
+            gegevens.filter(
+                function(item) {
 
-                return new Date(item.datum) >= grens;
+                    return (
+                        new Date(item.datum) >=
+                        grens
+                    );
 
-            });
+                }
+            );
 
     }
 
 
-    updateGroeiInfo(gegevens);
+    updateGroeiInfo(
+        gegevens
+    );
 
 
-    if (gegevens.length === 0) {
+    if (
+        gegevens.length === 0
+    ) {
 
-        ctx.fillStyle = "#6b7280";
+        ctx.fillStyle =
+            "#6b7280";
 
-        ctx.font = "14px sans-serif";
 
-        ctx.textAlign = "center";
+        ctx.font =
+            "14px sans-serif";
+
+
+        ctx.textAlign =
+            "center";
+
 
         ctx.fillText(
             "Nog geen gegevens",
             breedte / 2,
             hoogte / 2
         );
+
 
         return;
 
@@ -1475,40 +1894,59 @@ function tekenGrafiek() {
      */
 
     const waarden =
-        gegevens.map(function(item) {
+        gegevens.map(
+            function(item) {
 
-            return Number(item.bedrag);
+                return Number(
+                    item.bedrag
+                );
 
-        });
+            }
+        );
 
 
     const minimum =
-        Math.min(...waarden);
+        Math.min(
+            ...waarden
+        );
+
 
     const maximum =
-        Math.max(...waarden);
+        Math.max(
+            ...waarden
+        );
 
 
     const marge =
         maximum === minimum
             ? 100
-            : (maximum - minimum) * 0.15;
+            : (
+                maximum - minimum
+            ) * 0.15;
 
 
     const minWaarde =
         minimum - marge;
 
+
     const maxWaarde =
         maximum + marge;
 
 
-    const paddingLinks = 10;
+    const paddingLinks =
+        10;
 
-    const paddingRechts = 10;
 
-    const paddingBoven = 20;
+    const paddingRechts =
+        10;
 
-    const paddingOnder = 25;
+
+    const paddingBoven =
+        20;
+
+
+    const paddingOnder =
+        25;
 
 
     const grafiekBreedte =
@@ -1530,52 +1968,74 @@ function tekenGrafiek() {
     ctx.beginPath();
 
 
-    gegevens.forEach(function(item, index) {
+    gegevens.forEach(
+        function(item, index) {
 
-        const x =
-            paddingLinks +
-            (
-                index /
-                Math.max(
-                    gegevens.length - 1,
-                    1
-                )
-            ) *
-            grafiekBreedte;
-
-
-        const y =
-            paddingBoven +
-            (
-                1 -
+            const x =
+                paddingLinks +
                 (
-                    (item.bedrag - minWaarde) /
-                    (maxWaarde - minWaarde)
-                )
-            ) *
-            grafiekHoogte;
+                    index /
+                    Math.max(
+                        gegevens.length - 1,
+                        1
+                    )
+                ) *
+                grafiekBreedte;
 
 
-        if (index === 0) {
+            const y =
+                paddingBoven +
+                (
+                    1 -
+                    (
+                        (
+                            item.bedrag -
+                            minWaarde
+                        ) /
+                        (
+                            maxWaarde -
+                            minWaarde
+                        )
+                    )
+                ) *
+                grafiekHoogte;
 
-            ctx.moveTo(x, y);
 
-        } else {
+            if (index === 0) {
 
-            ctx.lineTo(x, y);
+                ctx.moveTo(
+                    x,
+                    y
+                );
+
+            } else {
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
 
         }
+    );
 
-    });
+
+    ctx.strokeStyle =
+        "#111827";
 
 
-    ctx.strokeStyle = "#111827";
+    ctx.lineWidth =
+        3;
 
-    ctx.lineWidth = 3;
 
-    ctx.lineJoin = "round";
+    ctx.lineJoin =
+        "round";
 
-    ctx.lineCap = "round";
+
+    ctx.lineCap =
+        "round";
+
 
     ctx.stroke();
 
@@ -1584,47 +2044,59 @@ function tekenGrafiek() {
      * Punten tekenen
      */
 
-    gegevens.forEach(function(item, index) {
+    gegevens.forEach(
+        function(item, index) {
 
-        const x =
-            paddingLinks +
-            (
-                index /
-                Math.max(
-                    gegevens.length - 1,
-                    1
-                )
-            ) *
-            grafiekBreedte;
-
-
-        const y =
-            paddingBoven +
-            (
-                1 -
+            const x =
+                paddingLinks +
                 (
-                    (item.bedrag - minWaarde) /
-                    (maxWaarde - minWaarde)
-                )
-            ) *
-            grafiekHoogte;
+                    index /
+                    Math.max(
+                        gegevens.length - 1,
+                        1
+                    )
+                ) *
+                grafiekBreedte;
 
 
-        ctx.beginPath();
+            const y =
+                paddingBoven +
+                (
+                    1 -
+                    (
+                        (
+                            item.bedrag -
+                            minWaarde
+                        ) /
+                        (
+                            maxWaarde -
+                            minWaarde
+                        )
+                    )
+                ) *
+                grafiekHoogte;
 
-        ctx.arc(
-            x,
-            y,
-            4,
-            0,
-            Math.PI * 2
-        );
 
-        ctx.fillStyle = "#111827";
+            ctx.beginPath();
 
-        ctx.fill();
 
-    });
+            ctx.arc(
+                x,
+                y,
+                4,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fillStyle =
+                "#111827";
+
+
+            ctx.fill();
+
+        }
+    );
 
 }
 
@@ -1660,4 +2132,4 @@ window.addEventListener(
 </body>
 
 </html>
-
+```
