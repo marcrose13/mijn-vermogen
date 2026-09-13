@@ -1094,85 +1094,179 @@ function rekeningToevoegen() {
  */
 
 function rekeningBewerken(id) {
-
-    const rekening =
-        rekeningen.find(function(item) {
-
-            return item.id === id;
-
-        });
-
+    const rekening = rekeningen.find(function(item) {
+        return item.id === id;
+    });
 
     if (!rekening) {
         return;
     }
 
+    const overlay = document.createElement("div");
+    overlay.className = "rekening-popup-overlay";
 
-    const nieuweNaam = prompt(
-        "Naam:",
-        rekening.naam
-    );
+    const popup = document.createElement("div");
+    popup.className = "rekening-popup";
 
+    const titel = document.createElement("div");
+    titel.className = "rekening-popup-titel";
+    titel.textContent = "Rekening bewerken";
 
-    if (!nieuweNaam) {
-        return;
-    }
+    const subtitel = document.createElement("div");
+    subtitel.className = "rekening-popup-subtitel";
+    subtitel.textContent = "Pas de gegevens van je rekening aan.";
 
+    /* Naam */
+    const naamGroep = document.createElement("div");
+    naamGroep.className = "formulier-groep";
 
-    const nieuwType = prompt(
-        "Type:",
-        rekening.type
-    );
+    const naamLabel = document.createElement("label");
+    naamLabel.className = "formulier-label";
+    naamLabel.textContent = "Naam rekening";
 
+    const naamInput = document.createElement("input");
+    naamInput.className = "formulier-input";
+    naamInput.type = "text";
+    naamInput.value = rekening.naam;
+    naamInput.autocomplete = "off";
 
-    if (!nieuwType) {
-        return;
-    }
+    naamGroep.appendChild(naamLabel);
+    naamGroep.appendChild(naamInput);
 
+    /* Type */
+    const typeGroep = document.createElement("div");
+    typeGroep.className = "formulier-groep";
 
-    const nieuwBedragInput = prompt(
-        "Bedrag:",
-        rekening.bedrag
-    );
+    const typeLabel = document.createElement("label");
+    typeLabel.className = "formulier-label";
+    typeLabel.textContent = "Type rekening";
 
+    const typeSelect = document.createElement("select");
+    typeSelect.className = "formulier-select";
 
-    if (!nieuwBedragInput) {
-        return;
-    }
+    typeSelect.innerHTML = `
+        <option value="Sparen">🏦 Sparen</option>
+        <option value="Beleggen">📈 Beleggen</option>
+        <option value="Betaalrekening">💳 Betaalrekening</option>
+        <option value="Overig">📦 Overig</option>
+    `;
 
+    typeSelect.value = rekening.type;
 
-    const nieuwBedrag = parseFloat(
-        nieuwBedragInput.replace(",", ".")
-    );
+    typeGroep.appendChild(typeLabel);
+    typeGroep.appendChild(typeSelect);
 
+    /* Bedrag */
+    const bedragGroep = document.createElement("div");
+    bedragGroep.className = "formulier-groep";
 
-    if (isNaN(nieuwBedrag)) {
+    const bedragLabel = document.createElement("label");
+    bedragLabel.className = "formulier-label";
+    bedragLabel.textContent = "Huidig bedrag";
 
-        alert(
-            "Vul een geldig bedrag in."
+    const bedragInput = document.createElement("input");
+    bedragInput.className = "formulier-input";
+    bedragInput.type = "text";
+    bedragInput.inputMode = "decimal";
+    bedragInput.value = rekening.bedrag.toString().replace(".", ",");
+    bedragInput.autocomplete = "off";
+
+    bedragGroep.appendChild(bedragLabel);
+    bedragGroep.appendChild(bedragInput);
+
+    /* Knoppen */
+    const knoppen = document.createElement("div");
+    knoppen.className = "popup-knoppen";
+
+    const annulerenButton = document.createElement("button");
+    annulerenButton.className = "secondary-button";
+    annulerenButton.type = "button";
+    annulerenButton.textContent = "Annuleren";
+
+    const opslaanButton = document.createElement("button");
+    opslaanButton.className = "primary-button";
+    opslaanButton.type = "button";
+    opslaanButton.textContent = "Opslaan";
+
+    knoppen.appendChild(annulerenButton);
+    knoppen.appendChild(opslaanButton);
+
+    /* Popup opbouwen */
+    popup.appendChild(titel);
+    popup.appendChild(subtitel);
+    popup.appendChild(naamGroep);
+    popup.appendChild(typeGroep);
+    popup.appendChild(bedragGroep);
+    popup.appendChild(knoppen);
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    setTimeout(function() {
+        naamInput.focus();
+        naamInput.select();
+    }, 100);
+
+    /* Annuleren */
+    annulerenButton.onclick = function() {
+        overlay.remove();
+    };
+
+    /* Opslaan */
+    opslaanButton.onclick = function() {
+        const nieuweNaam = naamInput.value.trim();
+        const nieuwType = typeSelect.value;
+        const nieuwBedragInput = bedragInput.value.trim();
+
+        if (!nieuweNaam) {
+            alert("Vul een naam voor de rekening in.");
+            naamInput.focus();
+            return;
+        }
+
+        if (!nieuwType) {
+            alert("Kies eerst een type rekening.");
+            typeSelect.focus();
+            return;
+        }
+
+        if (!nieuwBedragInput) {
+            alert("Vul een bedrag in.");
+            bedragInput.focus();
+            return;
+        }
+
+        const nieuwBedrag = parseFloat(
+            nieuwBedragInput
+                .replace("€", "")
+                .replace(/\s/g, "")
+                .replace(/\./g, "")
+                .replace(",", ".")
         );
 
-        return;
+        if (isNaN(nieuwBedrag)) {
+            alert("Vul een geldig bedrag in.");
+            bedragInput.focus();
+            return;
+        }
 
-    }
+        rekening.naam = nieuweNaam;
+        rekening.type = nieuwType;
+        rekening.bedrag = nieuwBedrag;
 
+        slaRekeningenOp();
+        toonRekeningen();
+        berekenTotaal();
 
-    rekening.naam =
-        nieuweNaam;
+        overlay.remove();
+    };
 
-    rekening.type =
-        nieuwType;
-
-    rekening.bedrag =
-        nieuwBedrag;
-
-
-    slaRekeningenOp();
-
-    toonRekeningen();
-
-    berekenTotaal();
-
+    /* Enter = opslaan */
+    bedragInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            opslaanButton.click();
+        }
+    });
 }
 
 
