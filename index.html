@@ -1051,6 +1051,17 @@ function rekeningBewerken(id) {
     }
 
 
+    /*
+     * Oude bedrag bewaren
+     *
+     * Dit gebruiken we later om te bepalen
+     * of er daadwerkelijk een wijziging is.
+     */
+
+    const oudBedrag =
+        Number(rekening.bedrag);
+
+
     const overlay =
         document.createElement("div");
 
@@ -1397,6 +1408,10 @@ function rekeningBewerken(id) {
             }
 
 
+            /*
+             * Rekening aanpassen
+             */
+
             rekening.naam =
                 nieuweNaam;
 
@@ -1414,7 +1429,24 @@ function rekeningBewerken(id) {
             berekenTotaal();
 
 
+            /*
+             * Popup sluiten
+             */
+
             overlay.remove();
+
+
+            /*
+             * Alleen vragen om een nieuw
+             * vermogensmoment wanneer het
+             * bedrag daadwerkelijk is gewijzigd.
+             */
+
+            if (nieuwBedrag !== oudBedrag) {
+
+                vraagVermogensMomentOpslaan();
+
+            }
 
         };
 
@@ -1489,13 +1521,6 @@ function rekeningVerwijderen(id) {
 
 /*
  * ==========================================
- * VERMOGENSMOMENT OPSLAAN
- * ==========================================
- */
-
-
-/*
- * ==========================================
  * VRAGEN OF VERMOGENSMOMENT OPGESLAGEN MOET WORDEN
  * ==========================================
  */
@@ -1559,6 +1584,12 @@ function vraagVermogensMomentOpslaan() {
 
 }
 
+
+/*
+ * ==========================================
+ * VERMOGENSMOMENT OPSLAAN
+ * ==========================================
+ */
 
 function vermogensMomentOpslaan() {
 
