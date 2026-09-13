@@ -1474,151 +1474,390 @@ function toonHistorie() {
 
 function historischMomentToevoegen() {
 
-    const datumInput = prompt(
-        "Datum (bijvoorbeeld 01-01-2025):"
-    );
+    /*
+     * Overlay maken
+     */
 
+    const overlay =
+        document.createElement("div");
 
-    if (!datumInput) {
-        return;
-    }
-
-
-    const delen =
-        datumInput.split("-");
-
-
-    if (delen.length !== 3) {
-
-        alert(
-            "Gebruik het formaat DD-MM-JJJJ, bijvoorbeeld 01-01-2025."
-        );
-
-        return;
-
-    }
-
-
-    const dag =
-        parseInt(delen[0]);
-
-    const maand =
-        parseInt(delen[1]);
-
-    const jaar =
-        parseInt(delen[2]);
-
-
-    const datum =
-        new Date(
-            jaar,
-            maand - 1,
-            dag
-        );
-
-
-    if (
-        datum.getFullYear() !== jaar ||
-        datum.getMonth() !== maand - 1 ||
-        datum.getDate() !== dag
-    ) {
-
-        alert(
-            "Vul een geldige datum in."
-        );
-
-        return;
-
-    }
+    overlay.className =
+        "rekening-popup-overlay";
 
 
     /*
-     * Controleren dat de datum niet in de toekomst ligt.
+     * Popup maken
      */
 
-    const vandaag =
-        new Date();
+    const popup =
+        document.createElement("div");
 
-    vandaag.setHours(
-        0,
-        0,
-        0,
-        0
+    popup.className =
+        "rekening-popup";
+
+
+    /*
+     * Titel
+     */
+
+    const titel =
+        document.createElement("div");
+
+    titel.className =
+        "rekening-popup-titel";
+
+    titel.textContent =
+        "Historisch vermogensmoment";
+
+
+    /*
+     * Subtitel
+     */
+
+    const subtitel =
+        document.createElement("div");
+
+    subtitel.className =
+        "rekening-popup-subtitel";
+
+    subtitel.textContent =
+        "Leg je vermogen op een eerdere datum vast.";
+
+
+    /*
+     * Datum
+     */
+
+    const datumGroep =
+        document.createElement("div");
+
+    datumGroep.className =
+        "formulier-groep";
+
+
+    const datumLabel =
+        document.createElement("label");
+
+    datumLabel.className =
+        "formulier-label";
+
+    datumLabel.textContent =
+        "Datum";
+
+
+    const datumInput =
+        document.createElement("input");
+
+    datumInput.className =
+        "formulier-input";
+
+    datumInput.type =
+        "date";
+
+    datumInput.max =
+        new Date().toISOString().split("T")[0];
+
+
+    datumGroep.appendChild(
+        datumLabel
+    );
+
+    datumGroep.appendChild(
+        datumInput
     );
 
 
-    if (datum > vandaag) {
+    /*
+     * Bedrag
+     */
 
-        alert(
-            "Oeps, deze datum ligt in de toekomst!"
-        );
+    const bedragGroep =
+        document.createElement("div");
 
-        return;
+    bedragGroep.className =
+        "formulier-groep";
 
-    }
+
+    const bedragLabel =
+        document.createElement("label");
+
+    bedragLabel.className =
+        "formulier-label";
+
+    bedragLabel.textContent =
+        "Totaal vermogen";
 
 
     const bedragInput =
-        prompt(
-            "Totaal vermogen op deze datum in euro's:"
-        );
+        document.createElement("input");
+
+    bedragInput.className =
+        "formulier-input";
+
+    bedragInput.type =
+        "text";
+
+    bedragInput.inputMode =
+        "decimal";
+
+    bedragInput.placeholder =
+        "Bijvoorbeeld 12500,50";
+
+    bedragInput.autocomplete =
+        "off";
 
 
-    if (!bedragInput) {
-        return;
-    }
+    bedragGroep.appendChild(
+        bedragLabel
+    );
+
+    bedragGroep.appendChild(
+        bedragInput
+    );
 
 
-    const bedrag =
-        parseFloat(
-            bedragInput
-                .replace("€", "")
-                .replace(/\./g, "")
-                .replace(",", ".")
-                .trim()
-        );
+    /*
+     * Knoppen
+     */
+
+    const knoppen =
+        document.createElement("div");
+
+    knoppen.className =
+        "popup-knoppen";
 
 
-    if (isNaN(bedrag)) {
+    const annulerenButton =
+        document.createElement("button");
 
-        alert(
-            "Vul een geldig bedrag in."
-        );
+    annulerenButton.className =
+        "secondary-button";
 
-        return;
+    annulerenButton.type =
+        "button";
 
-    }
-
-
-    historie.push({
-
-        datum: datum.toISOString(),
-
-        bedrag: bedrag
-
-    });
+    annulerenButton.textContent =
+        "Annuleren";
 
 
-    historie.sort(
-        function(a, b) {
+    const opslaanButton =
+        document.createElement("button");
 
-            return (
-                new Date(a.datum) -
-                new Date(b.datum)
+    opslaanButton.className =
+        "primary-button";
+
+    opslaanButton.type =
+        "button";
+
+    opslaanButton.textContent =
+        "Opslaan";
+
+
+    knoppen.appendChild(
+        annulerenButton
+    );
+
+    knoppen.appendChild(
+        opslaanButton
+    );
+
+
+    /*
+     * Popup opbouwen
+     */
+
+    popup.appendChild(titel);
+
+    popup.appendChild(subtitel);
+
+    popup.appendChild(datumGroep);
+
+    popup.appendChild(bedragGroep);
+
+    popup.appendChild(knoppen);
+
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
+
+
+    /*
+     * Focus op datum
+     */
+
+    setTimeout(function() {
+
+        datumInput.focus();
+
+    }, 100);
+
+
+    /*
+     * Annuleren
+     */
+
+    annulerenButton.onclick =
+        function() {
+
+            overlay.remove();
+
+        };
+
+
+    /*
+     * Opslaan
+     */
+
+    opslaanButton.onclick =
+        function() {
+
+            const datumWaarde =
+                datumInput.value;
+
+            const bedragInputWaarde =
+                bedragInput.value.trim();
+
+
+            /*
+             * Datum controleren
+             */
+
+            if (!datumWaarde) {
+
+                alert(
+                    "Kies een datum."
+                );
+
+                datumInput.focus();
+
+                return;
+
+            }
+
+
+            /*
+             * Bedrag controleren
+             */
+
+            if (!bedragInputWaarde) {
+
+                alert(
+                    "Vul het totale vermogen in."
+                );
+
+                bedragInput.focus();
+
+                return;
+
+            }
+
+
+            /*
+             * Bedrag omzetten
+             */
+
+            const bedrag =
+                parseFloat(
+                    bedragInputWaarde
+                        .replace("€", "")
+                        .replace(/\s/g, "")
+                        .replace(/\./g, "")
+                        .replace(",", ".")
+                );
+
+
+            if (isNaN(bedrag)) {
+
+                alert(
+                    "Vul een geldig bedrag in."
+                );
+
+                bedragInput.focus();
+
+                return;
+
+            }
+
+
+            /*
+             * Datum omzetten
+             */
+
+            const datum =
+                new Date(
+                    datumWaarde + "T12:00:00"
+                );
+
+
+            /*
+             * Historisch moment opslaan
+             */
+
+            historie.push({
+
+                datum:
+                    datum.toISOString(),
+
+                bedrag:
+                    bedrag
+
+            });
+
+
+            /*
+             * Historie chronologisch sorteren
+             */
+
+            historie.sort(
+                function(a, b) {
+
+                    return (
+                        new Date(a.datum) -
+                        new Date(b.datum)
+                    );
+
+                }
             );
+
+
+            /*
+             * Opslaan en vernieuwen
+             */
+
+            slaHistorieOp();
+
+            toonHistorie();
+
+            tekenGrafiek();
+
+
+            /*
+             * Popup sluiten
+             */
+
+            overlay.remove();
+
+        };
+
+
+    /*
+     * Enter = opslaan
+     */
+
+    bedragInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                opslaanButton.click();
+
+            }
 
         }
     );
 
-
-    slaHistorieOp();
-
-    toonHistorie();
-
-    tekenGrafiek();
-
 }
-
 
 /*
  * ==========================================
