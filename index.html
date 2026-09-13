@@ -965,8 +965,7 @@ function vermogensMomentOpslaan() {
 
 }
 
-
-/*
+    /*
  * ==========================================
  * HISTORIE TONEN
  * ==========================================
@@ -974,54 +973,55 @@ function vermogensMomentOpslaan() {
 
 function toonHistorie() {
 
-    const container =
-        document.getElementById("historie");
+    const container = document.getElementById("historie");
 
     container.innerHTML = "";
 
-
     if (historie.length === 0) {
-
         container.innerHTML =
             '<div class="leeg">Nog geen vermogensmomenten opgeslagen.</div>';
-
         return;
-
     }
 
+    historie.forEach(function(moment, index) {
 
-    const gesorteerd =
-        [...historie].reverse();
+        const div = document.createElement("div");
+        div.className = "historie-item";
 
+        const datum = document.createElement("div");
+        datum.className = "historie-datum";
+        datum.textContent = formatteerDatum(moment.datum);
 
-    gesorteerd.forEach(function(moment) {
+        const bedrag = document.createElement("div");
+        bedrag.textContent = formatteerBedrag(moment.bedrag);
 
-        const div =
-            document.createElement("div");
+        const verwijderButton = document.createElement("button");
+        verwijderButton.type = "button";
+        verwijderButton.textContent = "🗑️";
+        verwijderButton.title = "Dit vermogensmoment verwijderen";
+        verwijderButton.setAttribute(
+            "aria-label",
+            "Vermogensmoment van " + formatteerDatum(moment.datum) + " verwijderen"
+        );
 
-        div.className =
-            "historie-item";
+        verwijderButton.style.border = "none";
+        verwijderButton.style.borderRadius = "8px";
+        verwijderButton.style.padding = "6px 10px";
+        verwijderButton.style.background = "#f3f4f6";
+        verwijderButton.style.cursor = "pointer";
 
+        verwijderButton.onclick = function() {
+            historischMomentVerwijderen(index);
+        };
 
-        div.innerHTML = `
-
-            <div class="historie-datum">
-                ${formatteerDatum(moment.datum)}
-            </div>
-
-            <div>
-                ${formatteerBedrag(moment.bedrag)}
-            </div>
-
-        `;
-
+        div.appendChild(datum);
+        div.appendChild(bedrag);
+        div.appendChild(verwijderButton);
 
         container.appendChild(div);
-
     });
-
 }
-
+    
     /*
  * ==========================================
  * HISTORISCH VERMOGENSMOMENT TOEVOEGEN
@@ -1167,6 +1167,39 @@ if (datum > vandaag) {
 
 }
 
+/*
+ * ==========================================
+ * ÉÉN HISTORISCH VERMOGENSMOMENT VERWIJDEREN
+ * ==========================================
+ */
+
+function historischMomentVerwijderen(index) {
+
+    const moment = historie[index];
+
+    if (!moment) {
+        return;
+    }
+
+    const bevestigen = confirm(
+        "Wil je het vermogensmoment van " +
+        formatteerDatum(moment.datum) +
+        " (" +
+        formatteerBedrag(moment.bedrag) +
+        ") verwijderen?"
+    );
+
+    if (!bevestigen) {
+        return;
+    }
+
+    historie.splice(index, 1);
+
+    slaHistorieOp();
+    toonHistorie();
+    tekenGrafiek();
+}
+    
 /*
  * ==========================================
  * HISTORIE WISSEN
