@@ -1,805 +1,812 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 
 <head>
 
-```
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Mijn Vermogen</title>
+    <title>Mijn Vermogen</title>
 
-<style>
+    <style>
 
-    :root {
-        --app-background: #C5DEDE;
-    }
-
-    html {
-        background: var(--app-background);
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-        background: var(--app-background);
-        font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-        color: #111827;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
-        padding:
-            calc(20px + env(safe-area-inset-top))
-            16px
-            calc(30px + env(safe-area-inset-bottom))
-            16px;
-        box-sizing: border-box;
-    }
-
-    /*
-     * ==========================================
-     * TITEL + INSTELLINGEN
-     * ==========================================
-     */
-
-    .header {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px 0 25px;
-    }
-
-    h1 {
-        margin: 0;
-        font-size: 30px;
-    }
-
-    .instellingen-button {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-
-        width: 42px;
-        height: 42px;
-
-        border: none;
-        border-radius: 12px;
-
-        background: rgba(255, 255, 255, 0.75);
-
-        cursor: pointer;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition:
-            transform 0.15s ease,
-            background 0.15s ease;
-    }
-
-    .instellingen-button:active {
-        transform:
-            translateY(-50%)
-            scale(0.94);
-    }
-
-    .instellingen-button:hover {
-        background: white;
-    }
-
-    .instellingen-icoon {
-        width: 21px;
-        height: 21px;
-
-        fill: none;
-        stroke: #111827;
-        stroke-width: 1.8;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    h2 {
-        margin-top: 0;
-        font-size: 20px;
-    }
-
-    .section {
-        background: white;
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 18px;
-        box-shadow:
-            0 4px 15px rgba(0, 0, 0, 0.06);
-    }
-
-    .total-card {
-        text-align: center;
-        padding: 25px 20px;
-    }
-
-    .total-label {
-        font-size: 15px;
-        color: #6b7280;
-        margin-bottom: 8px;
-    }
-
-    #total-vermogen {
-        font-size: 36px;
-        font-weight: 700;
-    }
-
-    .groei-info {
-        margin-top: 8px;
-        font-size: 14px;
-        color: #6b7280;
-    }
-
-    /*
-     * ==========================================
-     * GRAFIEK STATISTIEKEN
-     * ==========================================
-     */
-
-    .grafiek-statistieken {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    .grafiek-statistiek {
-        background: #f9fafb;
-        border-radius: 12px;
-        padding: 11px 13px;
-    }
-
-    .grafiek-statistiek-label {
-        font-size: 12px;
-        color: #6b7280;
-        margin-bottom: 3px;
-    }
-
-    .grafiek-statistiek-waarde {
-        font-size: 15px;
-        font-weight: 700;
-        color: #111827;
-    }
-
-    .periode-buttons {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-
-    .periode-buttons button {
-        flex: 1;
-        min-height: 42px;
-        border: none;
-        border-radius: 10px;
-        background: #e5e7eb;
-        color: #374151;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .periode-buttons button.active {
-        background: #111827;
-        color: white;
-    }
-
-    .grafiek-container {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-    }
-
-    canvas {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    /*
-     * ==========================================
-     * REKENINGEN
-     * ==========================================
-     */
-
-    .rekening {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 15px 0;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .rekening:last-child {
-        border-bottom: none;
-    }
-
-    .rekening-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .rekening-naam {
-        font-weight: 600;
-        font-size: 16px;
-        margin-bottom: 4px;
-    }
-
-    .rekening-type {
-        font-size: 13px;
-        color: #6b7280;
-    }
-
-    .rekening-bedrag {
-        font-weight: 700;
-        white-space: nowrap;
-    }
-
-    .rekening-acties {
-        display: flex;
-        gap: 6px;
-    }
-
-    .rekening-acties button {
-        border: none;
-        border-radius: 8px;
-        padding: 8px 10px;
-        background: #f3f4f6;
-        cursor: pointer;
-    }
-
-    .primary-button {
-        width: 100%;
-        min-height: 50px;
-        border: none;
-        border-radius: 12px;
-        background: #111827;
-        color: white;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .secondary-button {
-        width: 100%;
-        min-height: 45px;
-        border: none;
-        border-radius: 12px;
-        background: #e5e7eb;
-        color: #111827;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .danger-button {
-        width: 100%;
-        min-height: 45px;
-        border: none;
-        border-radius: 12px;
-        background: #fee2e2;
-        color: #991b1b;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    /*
-     * ==========================================
-     * HISTORIE
-     * ==========================================
-     */
-
-    .historie-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 0;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .historie-item:last-child {
-        border-bottom: none;
-    }
-
-    .historie-datum {
-        color: #6b7280;
-        flex: 1;
-    }
-
-    .leeg {
-        color: #6b7280;
-        text-align: center;
-        padding: 10px 0;
-    }
-
-    /*
-     * ==========================================
-     * INSTELLINGEN POPUP
-     * ==========================================
-     */
-
-    .instellingen-popup-overlay {
-        position: fixed;
-        inset: 0;
-
-        background: rgba(17, 24, 39, 0.45);
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        padding: 20px;
-        box-sizing: border-box;
-
-        z-index: 10000;
-    }
-
-    .instellingen-popup {
-        width: 100%;
-        max-width: 380px;
-
-        background: white;
-
-        border-radius: 22px;
-
-        padding: 24px;
-
-        box-sizing: border-box;
-
-        box-shadow:
-            0 20px 50px rgba(0, 0, 0, 0.2);
-    }
-
-    .instellingen-titel {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .instellingen-subtitel {
-        font-size: 14px;
-        color: #6b7280;
-        margin-bottom: 24px;
-    }
-
-    .instellingen-label {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
-
-    .kleur-opties {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 24px;
-    }
-
-    .kleur-optie {
-        flex: 1;
-
-        border: 2px solid transparent;
-
-        border-radius: 14px;
-
-        padding: 6px;
-
-        background: #f3f4f6;
-
-        cursor: pointer;
-
-        transition:
-            border-color 0.15s ease,
-            transform 0.15s ease;
-    }
-
-    .kleur-optie:hover {
-        transform: translateY(-2px);
-    }
-
-    .kleur-optie.active {
-        border-color: #111827;
-    }
-
-    .kleur-preview {
-        width: 100%;
-        height: 55px;
-
-        border-radius: 9px;
-
-        margin-bottom: 7px;
-    }
-
-    .kleur-naam {
-        font-size: 12px;
-        font-weight: 600;
-        text-align: center;
-        color: #374151;
-    }
-
-    /*
-     * ==========================================
-     * REKENING POPUP
-     * ==========================================
-     */
-
-    .rekening-popup-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(17, 24, 39, 0.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
-        z-index: 9999;
-    }
-
-    .rekening-popup {
-        width: 100%;
-        max-width: 430px;
-        background: white;
-        border-radius: 22px;
-        padding: 24px;
-        box-sizing: border-box;
-        box-shadow:
-            0 20px 50px rgba(0, 0, 0, 0.2);
-    }
-
-    .rekening-popup-titel {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .rekening-popup-subtitel {
-        font-size: 14px;
-        color: #6b7280;
-        margin-bottom: 22px;
-    }
-
-    .formulier-label {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 7px;
-    }
-
-    .formulier-groep {
-        margin-bottom: 17px;
-    }
-
-    .formulier-input,
-    .formulier-select {
-        width: 100%;
-        min-height: 48px;
-        padding: 0 13px;
-        box-sizing: border-box;
-        border: 1px solid #d1d5db;
-        border-radius: 11px;
-        background: white;
-        color: #111827;
-        font-family: inherit;
-        font-size: 16px;
-        outline: none;
-    }
-
-    .formulier-input:focus,
-    .formulier-select:focus {
-        border-color: #111827;
-    }
-
-    .popup-knoppen {
-        display: flex;
-        gap: 10px;
-        margin-top: 22px;
-    }
-
-    .popup-knoppen button {
-        flex: 1;
-    }
-
-    @media (max-width: 380px) {
-
-        .container {
-            padding-left: 12px;
-            padding-right: 12px;
+        :root {
+            --app-background: #C5DEDE;
         }
 
-        #total-vermogen {
-            font-size: 32px;
+        html {
+            background: var(--app-background);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--app-background);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding:
+                calc(20px + env(safe-area-inset-top))
+                16px
+                calc(30px + env(safe-area-inset-bottom))
+                16px;
+            box-sizing: border-box;
+        }
+
+
+        /*
+         * ==========================================
+         * TITEL + INSTELLINGEN
+         * ==========================================
+         */
+
+        .header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0 25px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .instellingen-button {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.75);
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition:
+                transform 0.15s ease,
+                background 0.15s ease;
+        }
+
+        .instellingen-button:active {
+            transform:
+                translateY(-50%)
+                scale(0.94);
+        }
+
+        .instellingen-button:hover {
+            background: white;
+        }
+
+        .instellingen-icoon {
+            width: 21px;
+            height: 21px;
+
+            fill: none;
+            stroke: #111827;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
         }
 
         .section {
-            padding: 17px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .total-card {
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .total-label {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        #total-vermogen {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .groei-info {
+            margin-top: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .periode-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .periode-buttons button {
+            flex: 1;
+            min-height: 42px;
+            border: none;
+            border-radius: 10px;
+            background: #e5e7eb;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .periode-buttons button.active {
+            background: #111827;
+            color: white;
+        }
+
+
+        /*
+         * ==========================================
+         * GRAFIEK
+         * ==========================================
+         */
+
+        .grafiek-container {
+            position: relative;
+            width: 100%;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            touch-action: none;
+        }
+
+
+        /*
+         * ==========================================
+         * GRAFIEK TOOLTIP
+         * ==========================================
+         */
+
+        .grafiek-tooltip {
+            position: absolute;
+
+            min-width: 155px;
+            max-width: 210px;
+
+            padding: 12px 14px;
+
+            background: rgba(17, 24, 39, 0.96);
+            color: white;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.18);
+
+            pointer-events: none;
+
+            opacity: 0;
+
+            transform:
+                translate(-50%, -100%)
+                translateY(-12px);
+
+            transition:
+                opacity 0.12s ease;
+
+            z-index: 20;
+
+            box-sizing: border-box;
+        }
+
+        .grafiek-tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip-datum {
+            font-size: 12px;
+            color: #d1d5db;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-bedrag {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-verschil {
+            font-size: 12px;
+            color: #d1d5db;
+        }
+
+
+        /*
+         * ==========================================
+         * REKENINGEN
+         * ==========================================
+         */
+
+        .rekening {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .rekening:last-child {
+            border-bottom: none;
+        }
+
+        .rekening-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rekening-naam {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .rekening-type {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .rekening-bedrag {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .rekening-acties {
+            display: flex;
+            gap: 6px;
         }
 
         .rekening-acties button {
-            padding: 7px 8px;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: #f3f4f6;
+            cursor: pointer;
         }
 
-        .rekening-popup {
+
+        /*
+         * ==========================================
+         * KNOPPEN
+         * ==========================================
+         */
+
+        .primary-button {
+            width: 100%;
+            min-height: 50px;
+            border: none;
+            border-radius: 12px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .secondary-button {
+            width: 100%;
+            min-height: 45px;
+            border: none;
+            border-radius: 12px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .danger-button {
+            width: 100%;
+            min-height: 45px;
+            border: none;
+            border-radius: 12px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        /*
+         * ==========================================
+         * HISTORIE
+         * ==========================================
+         */
+
+        .historie-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .historie-item:last-child {
+            border-bottom: none;
+        }
+
+        .historie-datum {
+            color: #6b7280;
+            flex: 1;
+        }
+
+        .leeg {
+            color: #6b7280;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+
+        /*
+         * ==========================================
+         * INSTELLINGEN POPUP
+         * ==========================================
+         */
+
+        .instellingen-popup-overlay {
+            position: fixed;
+            inset: 0;
+
+            background: rgba(17, 24, 39, 0.45);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             padding: 20px;
+            box-sizing: border-box;
+
+            z-index: 10000;
         }
 
         .instellingen-popup {
-            padding: 20px;
+            width: 100%;
+            max-width: 380px;
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 24px;
+
+            box-sizing: border-box;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.2);
         }
 
-    }
+        .instellingen-titel {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
 
-</style>
-```
+        .instellingen-subtitel {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .instellingen-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .kleur-opties {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .kleur-optie {
+            flex: 1;
+
+            border: 2px solid transparent;
+
+            border-radius: 14px;
+
+            padding: 6px;
+
+            background: #f3f4f6;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .kleur-optie:hover {
+            transform: translateY(-2px);
+        }
+
+        .kleur-optie.active {
+            border-color: #111827;
+        }
+
+        .kleur-preview {
+            width: 100%;
+            height: 55px;
+
+            border-radius: 9px;
+
+            margin-bottom: 7px;
+        }
+
+        .kleur-naam {
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            color: #374151;
+        }
+
+
+        /*
+         * ==========================================
+         * REKENING POPUP
+         * ==========================================
+         */
+
+        .rekening-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 9999;
+        }
+
+        .rekening-popup {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-radius: 22px;
+            padding: 24px;
+            box-sizing: border-box;
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .rekening-popup-titel {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .rekening-popup-subtitel {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 22px;
+        }
+
+        .formulier-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .formulier-groep {
+            margin-bottom: 17px;
+        }
+
+        .formulier-input,
+        .formulier-select {
+            width: 100%;
+            min-height: 48px;
+            padding: 0 13px;
+            box-sizing: border-box;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            background: white;
+            color: #111827;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .formulier-input:focus,
+        .formulier-select:focus {
+            border-color: #111827;
+        }
+
+        .popup-knoppen {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .popup-knoppen button {
+            flex: 1;
+        }
+
+
+        /*
+         * ==========================================
+         * KLEINERE SCHERMEN
+         * ==========================================
+         */
+
+        @media (max-width: 380px) {
+
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            #total-vermogen {
+                font-size: 32px;
+            }
+
+            .section {
+                padding: 17px;
+            }
+
+            .rekening-acties button {
+                padding: 7px 8px;
+            }
+
+            .rekening-popup {
+                padding: 20px;
+            }
+
+            .instellingen-popup {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
 
 </head>
+
 
 <body>
 
 <div class="container">
 
-```
-<!-- TITEL + INSTELLINGEN -->
 
-<div class="header">
+    <!-- TITEL + INSTELLINGEN -->
 
-    <h1>Mijn Vermogen</h1>
+    <div class="header">
 
-    <button
-        class="instellingen-button"
-        onclick="instellingenOpenen()"
-        aria-label="Instellingen"
-        title="Instellingen"
-    >
+        <h1>Mijn Vermogen</h1>
 
-        <svg
-            class="instellingen-icoon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
+        <button
+            class="instellingen-button"
+            onclick="instellingenOpenen()"
+            aria-label="Instellingen"
+            title="Instellingen"
         >
 
-            <path
-                d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
-            />
+            <svg
+                class="instellingen-icoon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
 
-            <path
-                d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.46 15a1.7 1.7 0 0 0-1.56-1.03H6.7v-2.4h.2A1.7 1.7 0 0 0 8.46 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.73 5.2V5h2.4v.2a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03h.2v2.4h-.2A1.7 1.7 0 0 0 19.4 15Z"
-            />
+                <path
+                    d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
+                />
 
-        </svg>
+                <path
+                    d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.46 15a1.7 1.7 0 0 0-1.56-1.03H6.7v-2.4h.2A1.7 1.7 0 0 0 8.46 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.73 5.2V5h2.4v.2a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03h.2v2.4h-.2A1.7 1.7 0 0 0 19.4 15Z"
+                />
 
-    </button>
+            </svg>
+
+        </button>
+
+    </div>
+
+
+    <!-- TOTAAL VERMOGEN -->
+
+    <section class="section total-card">
+
+        <div class="total-label">
+            Totaal vermogen
+        </div>
+
+        <div id="total-vermogen">
+            € 0,00
+        </div>
+
+    </section>
+
+
+    <!-- HISTORIE / GRAFIEK -->
+
+    <section class="section">
+
+        <h2>Vermogensontwikkeling</h2>
+
+        <div class="periode-buttons">
+
+            <button
+                onclick="zetPeriode('3m')"
+                id="btn-3m"
+            >
+                3 maanden
+            </button>
+
+            <button
+                onclick="zetPeriode('1j')"
+                id="btn-1j"
+            >
+                1 jaar
+            </button>
+
+            <button
+                onclick="zetPeriode('alles')"
+                id="btn-alles"
+            >
+                Alles
+            </button>
+
+        </div>
+
+
+        <div
+            id="groeiInfo"
+            class="groei-info"
+        ></div>
+
+
+        <!-- GRAFIEK -->
+
+        <div class="grafiek-container">
+
+            <canvas
+                id="vermogenGrafiek"
+                height="250"
+            ></canvas>
+
+
+            <!-- TOOLTIP -->
+
+            <div
+                id="grafiekTooltip"
+                class="grafiek-tooltip"
+            >
+
+                <div
+                    id="tooltipDatum"
+                    class="tooltip-datum"
+                ></div>
+
+                <div
+                    id="tooltipBedrag"
+                    class="tooltip-bedrag"
+                ></div>
+
+                <div
+                    id="tooltipVerschil"
+                    class="tooltip-verschil"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <br>
+
+        <button
+            class="primary-button"
+            onclick="vermogensMomentOpslaan()"
+        >
+            Vermogensmoment opslaan
+        </button>
+
+    </section>
+
+
+    <!-- REKENINGEN -->
+
+    <section class="section">
+
+        <h2>Mijn rekeningen</h2>
+
+        <div id="rekeningen"></div>
+
+    </section>
+
+
+    <!-- REKENING TOEVOEGEN -->
+
+    <section class="section">
+
+        <h2>Vermogen toevoegen</h2>
+
+        <button
+            class="primary-button"
+            onclick="rekeningToevoegen()"
+        >
+            + Rekening toevoegen
+        </button>
+
+    </section>
+
+
+    <!-- HISTORIE -->
+
+    <section class="section">
+
+        <h2>Historie</h2>
+
+        <div id="historie"></div>
+
+        <br>
+
+        <button
+            class="primary-button"
+            onclick="historischMomentToevoegen()"
+        >
+            + Historisch vermogensmoment
+        </button>
+
+        <br><br>
+
+        <button
+            class="danger-button"
+            onclick="historieWissen()"
+        >
+            Historie wissen
+        </button>
+
+    </section>
 
 </div>
 
-
-<!-- TOTAAL VERMOGEN -->
-
-<section class="section total-card">
-
-    <div class="total-label">
-        Totaal vermogen
-    </div>
-
-    <div id="total-vermogen">
-        € 0,00
-    </div>
-
-</section>
-
-
-<!-- HISTORIE / GRAFIEK -->
-
-<section class="section">
-
-    <h2>Vermogensontwikkeling</h2>
-
-
-    <div class="periode-buttons">
-
-        <button
-            onclick="zetPeriode('3m')"
-            id="btn-3m"
-        >
-            3 maanden
-        </button>
-
-        <button
-            onclick="zetPeriode('1j')"
-            id="btn-1j"
-        >
-            1 jaar
-        </button>
-
-        <button
-            onclick="zetPeriode('alles')"
-            id="btn-alles"
-        >
-            Alles
-        </button>
-
-    </div>
-
-
-    <!-- NIEUW: STATISTIEKEN -->
-
-    <div
-        class="grafiek-statistieken"
-        id="grafiekStatistieken"
-    >
-
-        <div class="grafiek-statistiek">
-
-            <div class="grafiek-statistiek-label">
-                Beginvermogen
-            </div>
-
-            <div
-                class="grafiek-statistiek-waarde"
-                id="grafiekBegin"
-            >
-                —
-            </div>
-
-        </div>
-
-
-        <div class="grafiek-statistiek">
-
-            <div class="grafiek-statistiek-label">
-                Eindvermogen
-            </div>
-
-            <div
-                class="grafiek-statistiek-waarde"
-                id="grafiekEind"
-            >
-                —
-            </div>
-
-        </div>
-
-
-        <div class="grafiek-statistiek">
-
-            <div class="grafiek-statistiek-label">
-                Laagste
-            </div>
-
-            <div
-                class="grafiek-statistiek-waarde"
-                id="grafiekLaagste"
-            >
-                —
-            </div>
-
-        </div>
-
-
-        <div class="grafiek-statistiek">
-
-            <div class="grafiek-statistiek-label">
-                Hoogste
-            </div>
-
-            <div
-                class="grafiek-statistiek-waarde"
-                id="grafiekHoogste"
-            >
-                —
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="groeiInfo"
-        class="groei-info"
-    ></div>
-
-
-    <div class="grafiek-container">
-
-        <canvas
-            id="vermogenGrafiek"
-            height="250"
-        ></canvas>
-
-    </div>
-
-
-    <br>
-
-
-    <button
-        class="primary-button"
-        onclick="vermogensMomentOpslaan()"
-    >
-        Vermogensmoment opslaan
-    </button>
-
-</section>
-
-
-<!-- REKENINGEN -->
-
-<section class="section">
-
-    <h2>Mijn rekeningen</h2>
-
-    <div id="rekeningen"></div>
-
-</section>
-
-
-<!-- REKENING TOEVOEGEN -->
-
-<section class="section">
-
-    <h2>Vermogen toevoegen</h2>
-
-    <button
-        class="primary-button"
-        onclick="rekeningToevoegen()"
-    >
-        + Rekening toevoegen
-    </button>
-
-</section>
-
-
-<!-- HISTORIE -->
-
-<section class="section">
-
-    <h2>Historie</h2>
-
-    <div id="historie"></div>
-
-    <br>
-
-    <button
-        class="primary-button"
-        onclick="historischMomentToevoegen()"
-    >
-        + Historisch vermogensmoment
-    </button>
-
-    <br><br>
-
-    <button
-        class="danger-button"
-        onclick="historieWissen()"
-    >
-        Historie wissen
-    </button>
-
-</section>
-```
-
-</div>
 
 <script>
 
@@ -820,6 +827,10 @@ let historie = JSON.parse(
 
 let huidigePeriode = "alles";
 
+let grafiekGegevens = [];
+
+let grafiekPunten = [];
+
 
 /*
  * ==========================================
@@ -829,6 +840,7 @@ let huidigePeriode = "alles";
 
 const standaardAchtergrond =
     "#C5DEDE";
+
 
 let opgeslagenAchtergrond =
     localStorage.getItem(
@@ -1177,8 +1189,7 @@ function berekenTotaal() {
 
     document.getElementById(
         "total-vermogen"
-    ).textContent =
-        formatteerBedrag(totaal);
+    ).textContent = formatteerBedrag(totaal);
 
 }
 
@@ -2830,84 +2841,448 @@ function updateGroeiInfo(gegevens) {
 
 /*
  * ==========================================
- * GRAFIEK STATISTIEKEN BIJWERKEN
+ * TOOLTIP TONEN
  * ==========================================
  */
 
-function updateGrafiekStatistieken(gegevens) {
+function toonGrafiekTooltip(
+    puntIndex,
+    x,
+    y
+) {
 
-    const begin =
+    const tooltip =
         document.getElementById(
-            "grafiekBegin"
+            "grafiekTooltip"
         );
 
-    const eind =
+
+    const datumElement =
         document.getElementById(
-            "grafiekEind"
+            "tooltipDatum"
         );
 
-    const laagste =
+
+    const bedragElement =
         document.getElementById(
-            "grafiekLaagste"
+            "tooltipBedrag"
         );
 
-    const hoogste =
+
+    const verschilElement =
         document.getElementById(
-            "grafiekHoogste"
+            "tooltipVerschil"
         );
+
+
+    const punt =
+        grafiekGegevens[puntIndex];
+
+
+    if (!punt) {
+        return;
+    }
+
+
+    datumElement.textContent =
+        formatteerDatum(
+            punt.datum
+        );
+
+
+    bedragElement.textContent =
+        formatteerBedrag(
+            punt.bedrag
+        );
+
+
+    /*
+     * Verschil met vorige meetpunt
+     */
+
+    if (puntIndex === 0) {
+
+        verschilElement.textContent =
+            "Eerste vermogensmoment";
+
+    } else {
+
+        const vorige =
+            Number(
+                grafiekGegevens[
+                    puntIndex - 1
+                ].bedrag
+            );
+
+
+        const verschil =
+            Number(punt.bedrag) -
+            vorige;
+
+
+        const teken =
+            verschil >= 0
+                ? "+"
+                : "";
+
+
+        verschilElement.textContent =
+            "Sinds vorig moment: " +
+            teken +
+            formatteerBedrag(
+                verschil
+            );
+
+    }
+
+
+    /*
+     * Tooltip binnen de grafiek houden
+     */
+
+    const container =
+        document.querySelector(
+            ".grafiek-container"
+        );
+
+
+    const containerBreedte =
+        container.clientWidth;
+
+
+    const tooltipBreedte =
+        175;
+
+
+    let tooltipX =
+        x;
+
+
+    const halveTooltip =
+        tooltipBreedte / 2;
 
 
     if (
-        !gegevens ||
-        gegevens.length === 0
+        tooltipX - halveTooltip < 5
     ) {
 
-        begin.textContent = "—";
-        eind.textContent = "—";
-        laagste.textContent = "—";
-        hoogste.textContent = "—";
+        tooltipX =
+            halveTooltip + 5;
+
+    }
+
+
+    if (
+        tooltipX + halveTooltip >
+        containerBreedte - 5
+    ) {
+
+        tooltipX =
+            containerBreedte -
+            halveTooltip -
+            5;
+
+    }
+
+
+    /*
+     * Wanneer het punt bovenin zit,
+     * tonen we de tooltip eronder.
+     */
+
+    const bovenkant =
+        y < 85;
+
+
+    tooltip.style.left =
+        tooltipX + "px";
+
+
+    if (bovenkant) {
+
+        tooltip.style.top =
+            (y + 18) + "px";
+
+        tooltip.style.transform =
+            "translate(-50%, 0)";
+
+    } else {
+
+        tooltip.style.top =
+            y + "px";
+
+        tooltip.style.transform =
+            "translate(-50%, -100%) translateY(-12px)";
+
+    }
+
+
+    tooltip.classList.add(
+        "visible"
+    );
+
+}
+
+
+/*
+ * ==========================================
+ * TOOLTIP VERBERGEN
+ * ==========================================
+ */
+
+function verbergGrafiekTooltip() {
+
+    const tooltip =
+        document.getElementById(
+            "grafiekTooltip"
+        );
+
+
+    tooltip.classList.remove(
+        "visible"
+    );
+
+}
+
+
+/*
+ * ==========================================
+ * DICHTSTBIJZIJNDE GRAFIEKPUNT
+ * ==========================================
+ */
+
+function vindDichtstbijzijndePunt(
+    muisX,
+    muisY
+) {
+
+    if (
+        grafiekPunten.length === 0
+    ) {
+
+        return null;
+
+    }
+
+
+    let dichtstbijzijnde =
+        null;
+
+    let kleinsteAfstand =
+        Infinity;
+
+
+    grafiekPunten.forEach(
+        function(punt, index) {
+
+            const dx =
+                muisX - punt.x;
+
+            const dy =
+                muisY - punt.y;
+
+
+            const afstand =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+
+            if (
+                afstand <
+                kleinsteAfstand
+            ) {
+
+                kleinsteAfstand =
+                    afstand;
+
+                dichtstbijzijnde = {
+
+                    index: index,
+
+                    x: punt.x,
+
+                    y: punt.y
+
+                };
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Alleen reageren wanneer de gebruiker
+     * daadwerkelijk dicht bij een punt zit.
+     */
+
+    if (
+        kleinsteAfstand > 28
+    ) {
+
+        return null;
+
+    }
+
+
+    return dichtstbijzijnde;
+
+}
+
+
+/*
+ * ==========================================
+ * MOUSE HOVER
+ * ==========================================
+ */
+
+function grafiekMouseMove(event) {
+
+    const canvas =
+        document.getElementById(
+            "vermogenGrafiek"
+        );
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    const schaalX =
+        canvas.width /
+        (window.devicePixelRatio || 1) /
+        rect.width;
+
+
+    const schaalY =
+        canvas.height /
+        (window.devicePixelRatio || 1) /
+        rect.height;
+
+
+    const x =
+        (event.clientX - rect.left) *
+        schaalX;
+
+
+    const y =
+        (event.clientY - rect.top) *
+        schaalY;
+
+
+    const punt =
+        vindDichtstbijzijndePunt(
+            x,
+            y
+        );
+
+
+    if (!punt) {
+
+        verbergGrafiekTooltip();
 
         return;
 
     }
 
 
-    const waarden =
-        gegevens.map(
-            function(item) {
+    toonGrafiekTooltip(
+        punt.index,
+        punt.x,
+        punt.y
+    );
 
-                return Number(
-                    item.bedrag
-                ) || 0;
+}
 
-            }
+
+/*
+ * ==========================================
+ * MOUSE VERLATEN
+ * ==========================================
+ */
+
+function grafiekMouseLeave() {
+
+    verbergGrafiekTooltip();
+
+}
+
+
+/*
+ * ==========================================
+ * TIK OP GRAFIEK
+ * ==========================================
+ */
+
+function grafiekTouch(event) {
+
+    event.preventDefault();
+
+
+    const touch =
+        event.touches[0];
+
+
+    if (!touch) {
+        return;
+    }
+
+
+    const canvas =
+        document.getElementById(
+            "vermogenGrafiek"
         );
 
 
-    begin.textContent =
-        formatteerBedrag(
-            waarden[0]
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    const schaalX =
+        canvas.width /
+        (window.devicePixelRatio || 1) /
+        rect.width;
+
+
+    const schaalY =
+        canvas.height /
+        (window.devicePixelRatio || 1) /
+        rect.height;
+
+
+    const x =
+        (touch.clientX - rect.left) *
+        schaalX;
+
+
+    const y =
+        (touch.clientY - rect.top) *
+        schaalY;
+
+
+    const punt =
+        vindDichtstbijzijndePunt(
+            x,
+            y
         );
 
 
-    eind.textContent =
-        formatteerBedrag(
-            waarden[
-                waarden.length - 1
-            ]
-        );
+    if (!punt) {
+
+        verbergGrafiekTooltip();
+
+        return;
+
+    }
 
 
-    laagste.textContent =
-        formatteerBedrag(
-            Math.min(...waarden)
-        );
-
-
-    hoogste.textContent =
-        formatteerBedrag(
-            Math.max(...waarden)
-        );
+    toonGrafiekTooltip(
+        punt.index,
+        punt.x,
+        punt.y
+    );
 
 }
 
@@ -3033,6 +3408,11 @@ function tekenGrafiek() {
     }
 
 
+    /*
+     * Zorg dat de gegevens chronologisch
+     * geordend zijn.
+     */
+
     gegevens.sort(
         function(a, b) {
 
@@ -3045,12 +3425,15 @@ function tekenGrafiek() {
     );
 
 
+    grafiekGegevens =
+        gegevens;
+
+
+    grafiekPunten =
+        [];
+
+
     updateGroeiInfo(
-        gegevens
-    );
-
-
-    updateGrafiekStatistieken(
         gegevens
     );
 
@@ -3109,10 +3492,7 @@ function tekenGrafiek() {
 
     const marge =
         maximum === minimum
-            ? Math.max(
-                Math.abs(maximum) * 0.1,
-                100
-            )
+            ? 100
             : (
                 maximum - minimum
             ) * 0.15;
@@ -3126,26 +3506,20 @@ function tekenGrafiek() {
         maximum + marge;
 
 
-    /*
-     * Extra ruimte links/rechts zodat
-     * de eerste en laatste stip niet
-     * tegen de rand staan.
-     */
-
     const paddingLinks =
-        20;
+        10;
 
 
     const paddingRechts =
-        20;
+        10;
 
 
     const paddingBoven =
-        30;
+        20;
 
 
     const paddingOnder =
-        35;
+        25;
 
 
     const grafiekBreedte =
@@ -3161,104 +3535,8 @@ function tekenGrafiek() {
 
 
     /*
-     * Hulpfunctie voor X-positie.
-     */
-
-    function berekenX(index) {
-
-        return (
-            paddingLinks +
-            (
-                index /
-                Math.max(
-                    gegevens.length - 1,
-                    1
-                )
-            ) *
-            grafiekBreedte
-        );
-
-    }
-
-
-    /*
-     * Hulpfunctie voor Y-positie.
-     */
-
-    function berekenY(waarde) {
-
-        return (
-            paddingBoven +
-            (
-                1 -
-                (
-                    (
-                        waarde -
-                        minWaarde
-                    ) /
-                    (
-                        maxWaarde -
-                        minWaarde
-                    )
-                )
-            ) *
-            grafiekHoogte
-        );
-
-    }
-
-
-    /*
      * ==========================================
-     * SUBTIELE ACHTERGRONDLIJNEN
-     * ==========================================
-     */
-
-    ctx.strokeStyle =
-        "#e5e7eb";
-
-    ctx.lineWidth =
-        1;
-
-
-    const aantalLijnen = 3;
-
-
-    for (
-        let i = 0;
-        i <= aantalLijnen;
-        i++
-    ) {
-
-        const y =
-            paddingBoven +
-            (
-                i /
-                aantalLijnen
-            ) *
-            grafiekHoogte;
-
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            paddingLinks,
-            y
-        );
-
-        ctx.lineTo(
-            breedte - paddingRechts,
-            y
-        );
-
-        ctx.stroke();
-
-    }
-
-
-    /*
-     * ==========================================
-     * LIJN TEKENEN
+     * GRAFIEKLIJN
      * ==========================================
      */
 
@@ -3269,13 +3547,42 @@ function tekenGrafiek() {
         function(item, index) {
 
             const x =
-                berekenX(index);
+                paddingLinks +
+                (
+                    index /
+                    Math.max(
+                        gegevens.length - 1,
+                        1
+                    )
+                ) *
+                grafiekBreedte;
 
 
             const y =
-                berekenY(
-                    Number(item.bedrag)
-                );
+                paddingBoven +
+                (
+                    1 -
+                    (
+                        (
+                            Number(item.bedrag) -
+                            minWaarde
+                        ) /
+                        (
+                            maxWaarde -
+                            minWaarde
+                        )
+                    )
+                ) *
+                grafiekHoogte;
+
+
+            grafiekPunten.push({
+
+                x: x,
+
+                y: y
+
+            });
 
 
             if (index === 0) {
@@ -3319,35 +3626,23 @@ function tekenGrafiek() {
 
     /*
      * ==========================================
-     * PUNTEN + WAARDEN
+     * GRAFIEKPUNTEN
      * ==========================================
      */
 
     gegevens.forEach(
         function(item, index) {
 
-            const waarde =
-                Number(item.bedrag);
+            const punt =
+                grafiekPunten[index];
 
-
-            const x =
-                berekenX(index);
-
-
-            const y =
-                berekenY(waarde);
-
-
-            /*
-             * Punt
-             */
 
             ctx.beginPath();
 
 
             ctx.arc(
-                x,
-                y,
+                punt.x,
+                punt.y,
                 4,
                 0,
                 Math.PI * 2
@@ -3360,149 +3655,43 @@ function tekenGrafiek() {
 
             ctx.fill();
 
-
-            /*
-             * Alleen de eerste,
-             * hoogste en laatste waarde
-             * krijgen een label.
-             */
-
-            const hoogsteIndex =
-                waarden.indexOf(
-                    Math.max(...waarden)
-                );
-
-
-            const isEerste =
-                index === 0;
-
-
-            const isLaatste =
-                index ===
-                gegevens.length - 1;
-
-
-            const isHoogste =
-                index === hoogsteIndex;
-
-
-            if (
-                isEerste ||
-                isLaatste ||
-                isHoogste
-            ) {
-
-                let labelY =
-                    y - 12;
-
-
-                /*
-                 * Zorg dat het label niet
-                 * buiten de grafiek valt.
-                 */
-
-                if (
-                    labelY < 16
-                ) {
-
-                    labelY =
-                        y + 22;
-
-                }
-
-
-                ctx.font =
-                    "600 11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-
-
-                ctx.fillStyle =
-                    "#111827";
-
-
-                ctx.textAlign =
-                    "center";
-
-
-                ctx.textBaseline =
-                    "middle";
-
-
-                ctx.fillText(
-                    formatteerBedrag(
-                        waarde
-                    ),
-                    x,
-                    labelY
-                );
-
-            }
-
         }
     );
 
-
-    /*
-     * ==========================================
-     * DATUM LABELS
-     * ==========================================
-     */
-
-    ctx.font =
-        "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-
-
-    ctx.fillStyle =
-        "#6b7280";
-
-
-    ctx.textBaseline =
-        "top";
-
-
-    if (gegevens.length >= 1) {
-
-        const eerste =
-            gegevens[0];
-
-
-        ctx.textAlign =
-            "left";
-
-
-        ctx.fillText(
-            formatteerDatum(
-                eerste.datum
-            ),
-            paddingLinks,
-            hoogte - 23
-        );
-
-    }
-
-
-    if (gegevens.length >= 2) {
-
-        const laatste =
-            gegevens[
-                gegevens.length - 1
-            ];
-
-
-        ctx.textAlign =
-            "right";
-
-
-        ctx.fillText(
-            formatteerDatum(
-                laatste.datum
-            ),
-            breedte - paddingRechts,
-            hoogte - 23
-        );
-
-    }
-
 }
+
+
+/*
+ * ==========================================
+ * GRAFIEK EVENTS
+ * ==========================================
+ */
+
+const grafiekCanvas =
+    document.getElementById(
+        "vermogenGrafiek"
+    );
+
+
+grafiekCanvas.addEventListener(
+    "mousemove",
+    grafiekMouseMove
+);
+
+
+grafiekCanvas.addEventListener(
+    "mouseleave",
+    grafiekMouseLeave
+);
+
+
+grafiekCanvas.addEventListener(
+    "touchstart",
+    grafiekTouch,
+    {
+        passive: false
+    }
+);
 
 
 /*
