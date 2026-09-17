@@ -3572,6 +3572,44 @@ function tekenGrafiek() {
     }
 
 
+    /*
+     * Per kalendermaand alleen het laatste
+     * vermogensmoment in de grafiek gebruiken.
+     * De originele historie blijft ongewijzigd.
+     */
+    const laatsteMomentPerMaand = new Map();
+
+    gegevens.forEach(function(item, index) {
+        const datum = new Date(item.datum);
+        const sleutel =
+            datum.getFullYear() + "-" +
+            String(datum.getMonth() + 1).padStart(2, "0");
+
+        const bestaand = laatsteMomentPerMaand.get(sleutel);
+
+        if (
+            !bestaand ||
+            datum > new Date(bestaand.item.datum) ||
+            (
+                datum.getTime() === new Date(bestaand.item.datum).getTime() &&
+                index > bestaand.index
+            )
+        ) {
+            laatsteMomentPerMaand.set(sleutel, {
+                item: item,
+                index: index
+            });
+        }
+    });
+
+    gegevens = Array.from(laatsteMomentPerMaand.values())
+        .map(function(entry) {
+            return entry.item;
+        })
+        .sort(function(a, b) {
+            return new Date(a.datum) - new Date(b.datum);
+        });
+
     updateGroeiInfo(
         gegevens
     );
