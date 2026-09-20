@@ -524,10 +524,19 @@ function berekenTotaal() {
         weergegevenPercentage + "%";
 
 
+    if (totaal >= vermogensDoel) {
+
+    doelTekst.textContent =
+        "Doel bereikt!";
+
+} else {
+
     doelTekst.textContent =
         formatteerBedrag(totaal)
         + " van "
         + formatteerBedrag(vermogensDoel);
+
+}
 
 }
 
