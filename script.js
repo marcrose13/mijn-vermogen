@@ -16,6 +16,13 @@ let historie = JSON.parse(
 
 let huidigePeriode = "alles";
 
+let vermogensDoel =
+    Number(
+        localStorage.getItem(
+            "mijnVermogenDoel"
+        )
+    ) || 0;
+
 
 /*
  * Punten van de huidige grafiek.
@@ -3343,4 +3350,3 @@ window.addEventListener(
     "resize",
     tekenGrafiek
 );
-
