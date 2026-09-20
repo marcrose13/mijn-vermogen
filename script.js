@@ -446,7 +446,6 @@ function formatteerDatum(datum) {
  * TOTAAL BEREKENEN
  * ==========================================
  */
-
 function berekenTotaal() {
 
     let totaal = 0;
@@ -457,12 +456,80 @@ function berekenTotaal() {
 
     });
 
+
     document.getElementById(
         "total-vermogen"
     ).textContent = formatteerBedrag(totaal);
 
-}
 
+    /*
+     * ==========================================
+     * DOELBALK BIJWERKEN
+     * ==========================================
+     */
+
+    const doelContainer =
+        document.getElementById(
+            "doel-container"
+        );
+
+    const doelPercentage =
+        document.getElementById(
+            "doel-percentage"
+        );
+
+    const doelBalkVulling =
+        document.getElementById(
+            "doel-balk-vulling"
+        );
+
+    const doelTekst =
+        document.getElementById(
+            "doel-tekst"
+        );
+
+
+    if (
+        vermogensDoel <= 0
+    ) {
+
+        doelContainer.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    doelContainer.style.display =
+        "block";
+
+
+    let percentage =
+        (totaal / vermogensDoel) * 100;
+
+
+    let weergegevenPercentage =
+        Math.min(
+            Math.round(percentage),
+            100
+        );
+
+
+    doelPercentage.textContent =
+        weergegevenPercentage + "%";
+
+
+    doelBalkVulling.style.width =
+        weergegevenPercentage + "%";
+
+
+    doelTekst.textContent =
+        formatteerBedrag(totaal)
+        + " van "
+        + formatteerBedrag(vermogensDoel);
+
+}
 
 /*
  * ==========================================
