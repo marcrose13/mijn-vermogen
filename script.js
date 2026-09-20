@@ -330,7 +330,7 @@ doelInput.addEventListener(
             vermogensDoel
         );
 
-        tekenDoelbalk();
+        berekenTotaal();
 
     }
 );
