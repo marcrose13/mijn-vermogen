@@ -524,17 +524,19 @@ function berekenTotaal() {
         weergegevenPercentage + "%";
 
 
-    if (totaal >= vermogensDoel) {
+if (totaal >= vermogensDoel) {
 
     doelTekst.textContent =
-        "Doel bereikt!";
+        "Doel bereikt 🎉";
 
 } else {
 
+    const resterend =
+        vermogensDoel - totaal;
+
     doelTekst.textContent =
-        formatteerBedrag(totaal)
-        + " van "
-        + formatteerBedrag(vermogensDoel);
+        formatteerBedrag(resterend)
+        + " te gaan";
 
 }
 
