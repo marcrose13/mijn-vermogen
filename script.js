@@ -307,6 +307,9 @@ doelInput.className =
 doelInput.placeholder =
     "Bijvoorbeeld 100000";
 
+doelInput.style.marginBottom =
+    "18px";
+
 doelInput.value =
     vermogensDoel > 0
         ? vermogensDoel
