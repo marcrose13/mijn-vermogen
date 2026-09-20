@@ -317,7 +317,7 @@ doelInput.value =
 
 
 doelInput.addEventListener(
-    "change",
+    "input",
     function() {
 
         vermogensDoel =
