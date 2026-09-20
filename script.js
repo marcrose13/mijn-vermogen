@@ -273,11 +273,78 @@ function instellingenOpenen() {
 
     popup.appendChild(label);
 
-    popup.appendChild(kleurOpties);
+popup.appendChild(kleurOpties);
 
-    popup.appendChild(
-        sluitenButton
-    );
+
+/*
+ * ==========================================
+ * VERMOGENSDOEL
+ * ==========================================
+ */
+
+const doelLabel =
+    document.createElement("div");
+
+doelLabel.className =
+    "instellingen-label";
+
+doelLabel.textContent =
+    "Vermogensdoel";
+
+
+const doelInput =
+    document.createElement("input");
+
+doelInput.type =
+    "number";
+
+doelInput.inputMode =
+    "decimal";
+
+doelInput.className =
+    "formulier-input";
+
+doelInput.placeholder =
+    "Bijvoorbeeld 100000";
+
+doelInput.value =
+    vermogensDoel > 0
+        ? vermogensDoel
+        : "";
+
+
+doelInput.addEventListener(
+    "change",
+    function() {
+
+        vermogensDoel =
+            Number(
+                doelInput.value
+            ) || 0;
+
+        localStorage.setItem(
+            "mijnVermogenDoel",
+            vermogensDoel
+        );
+
+        tekenDoelbalk();
+
+    }
+);
+
+
+popup.appendChild(
+    doelLabel
+);
+
+popup.appendChild(
+    doelInput
+);
+
+
+popup.appendChild(
+    sluitenButton
+);
 
 
     overlay.appendChild(
