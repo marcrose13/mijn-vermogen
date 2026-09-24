@@ -586,12 +586,13 @@ function toonRekeningen() {
     <span class="rekening-type-icoon">
         ${
             rekening.type === "Sparen"
-                ? "S"
-                : rekening.type === "Beleggen"
-                    ? "↗"
-                    : rekening.type === "Betaalrekening"
-                        ? "€"
-                        : "•"
+                ? "◈"
+                    : rekening.type === "Beleggen"
+        ? "↗"
+        : rekening.type === "Betaalrekening"
+            ? "≡"
+            : "•"
+                
         }
     </span>
     ${rekening.type}
