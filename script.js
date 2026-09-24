@@ -582,9 +582,20 @@ function toonRekeningen() {
                     ${rekening.naam}
                 </div>
 
-                <div class="rekening-type">
-                    ${rekening.type}
-                </div>
+<div class="rekening-type">
+    <span class="rekening-type-icoon">
+        ${
+            rekening.type === "Sparen"
+                ? "S"
+                : rekening.type === "Beleggen"
+                    ? "↗"
+                    : rekening.type === "Betaalrekening"
+                        ? "€"
+                        : "•"
+        }
+    </span>
+    ${rekening.type}
+</div>
 
             </div>
 
