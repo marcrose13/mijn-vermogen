@@ -1138,7 +1138,6 @@ typeSelect.innerHTML = `
     </option>
 
 `;
-    `;
 
 
     typeSelect.value =
