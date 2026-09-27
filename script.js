@@ -742,21 +742,21 @@ function rekeningToevoegen() {
             Kies een type
         </option>
 
-        <option value="Sparen">
-            🏦 Sparen
-        </option>
+<option value="Sparen">
+    ◈ Sparen
+</option>
 
-        <option value="Beleggen">
-            📈 Beleggen
-        </option>
+<option value="Beleggen">
+    ↗ Beleggen
+</option>
 
-        <option value="Betaalrekening">
-            💳 Betaalrekening
-        </option>
+<option value="Betaalrekening">
+    ≡ Betaalrekening
+</option>
 
-        <option value="Overig">
-            📦 Overig
-        </option>
+<option value="Overig">
+    • Overig
+</option>
 
     `;
 
@@ -1117,24 +1117,25 @@ function rekeningBewerken(id) {
         "formulier-select";
 
 
-    typeSelect.innerHTML = `
+typeSelect.innerHTML = `
 
-        <option value="Sparen">
-            🏦 Sparen
-        </option>
+    <option value="Sparen">
+        ◈ Sparen
+    </option>
 
-        <option value="Beleggen">
-            📈 Beleggen
-        </option>
+    <option value="Beleggen">
+        ↗ Beleggen
+    </option>
 
-        <option value="Betaalrekening">
-            💳 Betaalrekening
-        </option>
+    <option value="Betaalrekening">
+        ≡ Betaalrekening
+    </option>
 
-        <option value="Overig">
-            📦 Overig
-        </option>
+    <option value="Overig">
+        • Overig
+    </option>
 
+`;
     `;
 
 
