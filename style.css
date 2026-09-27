@@ -282,10 +282,10 @@
         white-space: nowrap;
     }
 
-    .rekening-acties {
-        display: flex;
-        gap: 6px;
-    }
+   .rekening-acties {
+    display: flex;
+    gap: 6px;
+}
 
 .rekening-acties button {
     width: 34px;
@@ -313,10 +313,9 @@
         background 0.2s ease,
         color 0.2s ease,
         transform 0.15s ease;
-}
 
-.rekening-acties button:first-child {
-    font-size: 18px;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .rekening-acties button:hover {
