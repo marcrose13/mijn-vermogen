@@ -608,17 +608,19 @@ function toonRekeningen() {
 
             <div class="rekening-acties">
 
-                <button
-                    onclick="rekeningBewerken(${rekening.id})"
-                >
-                    ✏️
-                </button>
+               <button
+    onclick="rekeningBewerken(${rekening.id})"
+    aria-label="Rekening bewerken"
+>
+    ✎
+</button>
 
-                <button
-                    onclick="rekeningVerwijderen(${rekening.id})"
-                >
-                    🗑️
-                </button>
+<button
+    onclick="rekeningVerwijderen(${rekening.id})"
+    aria-label="Rekening verwijderen"
+>
+    ×
+</button>
 
             </div>
 
