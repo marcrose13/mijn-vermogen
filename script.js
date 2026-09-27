@@ -1593,39 +1593,26 @@ function toonHistorie() {
 
 
         const verwijderButton =
-            document.createElement("button");
+    document.createElement("button");
 
-        verwijderButton.type =
-            "button";
+verwijderButton.type =
+    "button";
 
-        verwijderButton.textContent =
-            "🗑️";
+verwijderButton.className =
+    "historie-verwijderknop";
 
-        verwijderButton.title =
-            "Dit vermogensmoment verwijderen";
+verwijderButton.textContent =
+    "×";
 
-        verwijderButton.setAttribute(
-            "aria-label",
-            "Vermogensmoment van " +
-            formatteerDatum(moment.datum) +
-            " verwijderen"
-        );
+verwijderButton.title =
+    "Dit vermogensmoment verwijderen";
 
-        verwijderButton.style.border =
-            "none";
-
-        verwijderButton.style.borderRadius =
-            "8px";
-
-        verwijderButton.style.padding =
-            "6px 10px";
-
-        verwijderButton.style.background =
-            "#f3f4f6";
-
-        verwijderButton.style.cursor =
-            "pointer";
-
+verwijderButton.setAttribute(
+    "aria-label",
+    "Vermogensmoment van " +
+    formatteerDatum(moment.datum) +
+    " verwijderen"
+);
 
         verwijderButton.onclick =
             function() {
