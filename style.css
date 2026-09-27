@@ -287,13 +287,42 @@
         gap: 6px;
     }
 
-    .rekening-acties button {
-        border: none;
-        border-radius: 8px;
-        padding: 8px 10px;
-        background: #f3f4f6;
-        cursor: pointer;
-    }
+.rekening-acties button {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #f3f4f6;
+    color: #6b7280;
+
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.rekening-acties button:hover {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.rekening-acties button:active {
+    transform: scale(0.94);
+}
 
     .primary-button {
         width: 100%;
@@ -594,10 +623,6 @@
 
         .section {
             padding: 17px;
-        }
-
-        .rekening-acties button {
-            padding: 7px 8px;
         }
 
         .rekening-popup {
