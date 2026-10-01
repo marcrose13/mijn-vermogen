@@ -1543,7 +1543,6 @@ function vermogensMomentOpslaan() {
 
 }
 
-
 /*
  * ==========================================
  * HISTORIE TONEN
@@ -1568,6 +1567,12 @@ function toonHistorie() {
     }
 
 
+    /*
+     * ==========================================
+     * LAATSTE 3 MOMENTEN
+     * ==========================================
+     */
+
     historie.forEach(function(moment, index) {
 
         const div =
@@ -1575,6 +1580,20 @@ function toonHistorie() {
 
         div.className =
             "historie-item";
+
+
+        /*
+         * Oudere momenten krijgen
+         * een aparte klasse.
+         */
+
+        if (index >= 3) {
+
+            div.classList.add(
+                "historie-ouder"
+            );
+
+        }
 
 
         const datum =
@@ -1595,26 +1614,27 @@ function toonHistorie() {
 
 
         const verwijderButton =
-    document.createElement("button");
+            document.createElement("button");
 
-verwijderButton.type =
-    "button";
+        verwijderButton.type =
+            "button";
 
-verwijderButton.className =
-    "historie-verwijderknop";
+        verwijderButton.className =
+            "historie-verwijderknop";
 
-verwijderButton.textContent =
-    "×";
+        verwijderButton.textContent =
+            "×";
 
-verwijderButton.title =
-    "Dit vermogensmoment verwijderen";
+        verwijderButton.title =
+            "Dit vermogensmoment verwijderen";
 
-verwijderButton.setAttribute(
-    "aria-label",
-    "Vermogensmoment van " +
-    formatteerDatum(moment.datum) +
-    " verwijderen"
-);
+        verwijderButton.setAttribute(
+            "aria-label",
+            "Vermogensmoment van " +
+            formatteerDatum(moment.datum) +
+            " verwijderen"
+        );
+
 
         verwijderButton.onclick =
             function() {
@@ -1634,12 +1654,86 @@ verwijderButton.setAttribute(
             verwijderButton
         );
 
+
         container.appendChild(div);
 
     });
 
-}
 
+    /*
+     * ==========================================
+     * OUDERE MOMENTEN
+     * ==========================================
+     */
+
+    if (historie.length > 3) {
+
+        const oudereMomenten =
+            Array.from(
+                container.querySelectorAll(
+                    ".historie-ouder"
+                )
+            );
+
+
+        oudereMomenten.forEach(
+            function(item) {
+
+                item.style.display =
+                    "none";
+
+            }
+        );
+
+
+        const knop =
+            document.createElement("button");
+
+        knop.type =
+            "button";
+
+        knop.className =
+            "historie-meer-knop";
+
+        knop.textContent =
+            "Toon oudere momenten ↓";
+
+
+        let geopend = false;
+
+
+        knop.onclick =
+            function() {
+
+                geopend =
+                    !geopend;
+
+
+                oudereMomenten.forEach(
+                    function(item) {
+
+                        item.style.display =
+                            geopend
+                                ? "flex"
+                                : "none";
+
+                    }
+                );
+
+
+                knop.textContent =
+                    geopend
+                        ? "Verberg oudere momenten ↑"
+                        : "Toon oudere momenten ↓";
+
+            };
+
+
+        container.appendChild(knop);
+
+    }
+
+}
 
 /*
  * ==========================================
