@@ -1,28 +1,20 @@
+
+
 /*
  * ==========================================
  * DATA
  * ==========================================
  */
 
-let rekeningen =
-    JSON.parse(
-        localStorage.getItem(
-            "mijnVermogenRekeningen"
-        )
-    ) || [];
+let rekeningen = JSON.parse(
+    localStorage.getItem("mijnVermogenRekeningen")
+) || [];
 
+let historie = JSON.parse(
+    localStorage.getItem("mijnVermogenHistorie")
+) || [];
 
-let historie =
-    JSON.parse(
-        localStorage.getItem(
-            "mijnVermogenHistorie"
-        )
-    ) || [];
-
-
-let huidigePeriode =
-    "alles";
-
+let huidigePeriode = "alles";
 
 let vermogensDoel =
     Number(
@@ -33,10 +25,372 @@ let vermogensDoel =
 
 
 /*
+ * Punten van de huidige grafiek.
+ * Deze worden gebruikt voor hover en tik.
+ */
+
+let grafiekPunten = [];
+
+
+/*
  * ==========================================
- * HISTORIE OPSLAAN
+ * ACHTERGRONDKLEUR
  * ==========================================
  */
+
+const standaardAchtergrond =
+    "#C5DEDE";
+
+
+let opgeslagenAchtergrond =
+    localStorage.getItem(
+        "mijnVermogenAchtergrond"
+    ) || standaardAchtergrond;
+
+
+function achtergrondInstellen(kleur) {
+
+    document.documentElement.style
+        .setProperty(
+            "--app-background",
+            kleur
+        );
+
+}
+
+
+achtergrondInstellen(
+    opgeslagenAchtergrond
+);
+
+
+/*
+ * ==========================================
+ * INSTELLINGEN OPENEN
+ * ==========================================
+ */
+
+function instellingenOpenen() {
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "instellingen-popup-overlay";
+
+
+    const popup =
+        document.createElement("div");
+
+    popup.className =
+        "instellingen-popup";
+
+
+    const titel =
+        document.createElement("div");
+
+    titel.className =
+        "instellingen-titel";
+
+    titel.textContent =
+        "Instellingen";
+
+
+    const subtitel =
+        document.createElement("div");
+
+    subtitel.className =
+        "instellingen-subtitel";
+
+    subtitel.textContent =
+        "Geef Mijn Vermogen jouw eigen uitstraling.";
+
+
+    const label =
+        document.createElement("div");
+
+    label.className =
+        "instellingen-label";
+
+    label.textContent =
+        "Achtergrondkleur";
+
+
+    const kleurOpties =
+        document.createElement("div");
+
+    kleurOpties.className =
+        "kleur-opties";
+
+
+    const kleuren = [
+
+        {
+            naam: "Mint",
+            kleur: "#C5DEDE"
+        },
+
+        {
+            naam: "Blauw",
+            kleur: "#C7D8E8"
+        },
+
+        {
+            naam: "Lavendel",
+            kleur: "#D8D0E8"
+        }
+
+    ];
+
+
+    kleuren.forEach(
+        function(item) {
+
+            const optie =
+                document.createElement("button");
+
+            optie.className =
+                "kleur-optie";
+
+            optie.type =
+                "button";
+
+
+            if (
+                item.kleur ===
+                opgeslagenAchtergrond
+            ) {
+
+                optie.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            const preview =
+                document.createElement("div");
+
+            preview.className =
+                "kleur-preview";
+
+            preview.style.background =
+                item.kleur;
+
+
+            const naam =
+                document.createElement("div");
+
+            naam.className =
+                "kleur-naam";
+
+            naam.textContent =
+                item.naam;
+
+
+            optie.appendChild(
+                preview
+            );
+
+            optie.appendChild(
+                naam
+            );
+
+
+            optie.onclick =
+                function() {
+
+                    opgeslagenAchtergrond =
+                        item.kleur;
+
+
+                    localStorage.setItem(
+                        "mijnVermogenAchtergrond",
+                        item.kleur
+                    );
+
+
+                    achtergrondInstellen(
+                        item.kleur
+                    );
+
+
+                    document
+                        .querySelectorAll(
+                            ".kleur-optie"
+                        )
+                        .forEach(
+                            function(knop) {
+
+                                knop.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
+                        );
+
+
+                    optie.classList.add(
+                        "active"
+                    );
+
+                };
+
+
+            kleurOpties.appendChild(
+                optie
+            );
+
+        }
+    );
+
+
+    const sluitenButton =
+        document.createElement("button");
+
+    sluitenButton.className =
+        "primary-button";
+
+    sluitenButton.type =
+        "button";
+
+    sluitenButton.textContent =
+        "Gereed";
+
+
+    sluitenButton.onclick =
+        function() {
+
+            overlay.remove();
+
+        };
+
+
+    popup.appendChild(titel);
+
+    popup.appendChild(subtitel);
+
+    popup.appendChild(label);
+
+popup.appendChild(kleurOpties);
+
+
+/*
+ * ==========================================
+ * VERMOGENSDOEL
+ * ==========================================
+ */
+
+const doelLabel =
+    document.createElement("div");
+
+doelLabel.className =
+    "instellingen-label";
+
+doelLabel.textContent =
+    "Vermogensdoel";
+
+
+const doelInput =
+    document.createElement("input");
+
+doelInput.type =
+    "number";
+
+doelInput.inputMode =
+    "decimal";
+
+doelInput.className =
+    "formulier-input";
+
+doelInput.placeholder =
+    "Bijvoorbeeld 100000";
+
+doelInput.style.marginBottom =
+    "18px";
+
+doelInput.value =
+    vermogensDoel > 0
+        ? vermogensDoel
+        : "";
+
+
+doelInput.addEventListener(
+    "input",
+    function() {
+
+        vermogensDoel =
+            Number(
+                doelInput.value
+            ) || 0;
+
+        localStorage.setItem(
+            "mijnVermogenDoel",
+            vermogensDoel
+        );
+
+        berekenTotaal();
+
+    }
+);
+
+
+popup.appendChild(
+    doelLabel
+);
+
+popup.appendChild(
+    doelInput
+);
+
+
+popup.appendChild(
+    sluitenButton
+);
+
+
+    overlay.appendChild(
+        popup
+    );
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    overlay.onclick =
+        function(event) {
+
+            if (
+                event.target === overlay
+            ) {
+
+                overlay.remove();
+
+            }
+
+        };
+
+}
+
+
+/*
+ * ==========================================
+ * OPSLAAN
+ * ==========================================
+ */
+
+function slaRekeningenOp() {
+
+    localStorage.setItem(
+        "mijnVermogenRekeningen",
+        JSON.stringify(rekeningen)
+    );
+
+}
+
 
 function slaHistorieOp() {
 
@@ -50,7 +404,7 @@ function slaHistorieOp() {
 
 /*
  * ==========================================
- * BEDRAG FORMATTEREN
+ * BEDRAG OPMAKEN
  * ==========================================
  */
 
@@ -69,15 +423,13 @@ function formatteerBedrag(bedrag) {
 
 /*
  * ==========================================
- * DATUM FORMATTEREN
+ * DATUM OPMAKEN
  * ==========================================
  */
 
 function formatteerDatum(datum) {
 
-    return new Date(
-        datum
-    ).toLocaleDateString(
+    return new Date(datum).toLocaleDateString(
         "nl-NL",
         {
             day: "2-digit",
@@ -94,43 +446,25 @@ function formatteerDatum(datum) {
  * TOTAAL BEREKENEN
  * ==========================================
  */
-
 function berekenTotaal() {
 
     let totaal = 0;
 
+    rekeningen.forEach(function(rekening) {
 
-    rekeningen.forEach(
-        function(rekening) {
+        totaal += Number(rekening.bedrag) || 0;
 
-            totaal +=
-                Number(
-                    rekening.bedrag
-                ) || 0;
-
-        }
-    );
+    });
 
 
-    const totaalElement =
-        document.getElementById(
-            "totaal"
-        );
-
-
-    if (totaalElement) {
-
-        totaalElement.textContent =
-            formatteerBedrag(
-                totaal
-            );
-
-    }
+    document.getElementById(
+        "total-vermogen"
+    ).textContent = formatteerBedrag(totaal);
 
 
     /*
      * ==========================================
-     * DOELSTELLING
+     * DOELBALK BIJWERKEN
      * ==========================================
      */
 
@@ -139,35 +473,20 @@ function berekenTotaal() {
             "doel-container"
         );
 
-
     const doelPercentage =
         document.getElementById(
             "doel-percentage"
         );
-
 
     const doelBalkVulling =
         document.getElementById(
             "doel-balk-vulling"
         );
 
-
     const doelTekst =
         document.getElementById(
             "doel-tekst"
         );
-
-
-    if (
-        !doelContainer ||
-        !doelPercentage ||
-        !doelBalkVulling ||
-        !doelTekst
-    ) {
-
-        return;
-
-    }
 
 
     if (
@@ -187,54 +506,41 @@ function berekenTotaal() {
 
 
     let percentage =
-        (
-            totaal /
-            vermogensDoel
-        ) * 100;
+        (totaal / vermogensDoel) * 100;
 
 
-    percentage =
+    let weergegevenPercentage =
         Math.min(
-            percentage,
+            Math.round(percentage),
             100
         );
 
 
     doelPercentage.textContent =
-        Math.round(
-            percentage
-        ) + "%";
+        weergegevenPercentage + "%";
 
 
     doelBalkVulling.style.width =
-        percentage + "%";
+        weergegevenPercentage + "%";
 
 
-    if (
-        totaal >=
-        vermogensDoel
-    ) {
+if (totaal >= vermogensDoel) {
 
-        doelTekst.textContent =
-            "Doel bereikt 🎉";
+    doelTekst.textContent =
+        "Doel bereikt 🎉";
 
-    } else {
+} else {
 
-        const resterend =
-            vermogensDoel -
-            totaal;
+    const resterend =
+        vermogensDoel - totaal;
 
-
-        doelTekst.textContent =
-            formatteerBedrag(
-                resterend
-            ) +
-            " te gaan";
-
-    }
+    doelTekst.textContent =
+        formatteerBedrag(resterend)
+        + " te gaan";
 
 }
 
+}
 
 /*
  * ==========================================
@@ -245,18 +551,12 @@ function berekenTotaal() {
 function toonRekeningen() {
 
     const container =
-        document.getElementById(
-            "rekeningen"
-        );
+        document.getElementById("rekeningen");
+
+    container.innerHTML = "";
 
 
-    container.innerHTML =
-        "";
-
-
-    if (
-        rekeningen.length === 0
-    ) {
+    if (rekeningen.length === 0) {
 
         container.innerHTML =
             '<div class="leeg">Nog geen rekeningen toegevoegd.</div>';
@@ -266,187 +566,72 @@ function toonRekeningen() {
     }
 
 
-    rekeningen.forEach(
-        function(rekening, index) {
+    rekeningen.forEach(function(rekening) {
 
-            const div =
-                document.createElement(
-                    "div"
-                );
+        const div =
+            document.createElement("div");
 
+        div.className = "rekening";
 
-            div.className =
-                "rekening-item";
 
+        div.innerHTML = `
 
-            const informatie =
-                document.createElement(
-                    "div"
-                );
+            <div class="rekening-info">
 
+                <div class="rekening-naam">
+                    ${rekening.naam}
+                </div>
 
-            informatie.className =
-                "rekening-informatie";
-
-
-            const naam =
-                document.createElement(
-                    "div"
-                );
-
-
-            naam.className =
-                "rekening-naam";
-
-
-            naam.textContent =
-                rekening.naam;
-
-
-            const type =
-                document.createElement(
-                    "div"
-                );
-
-
-            type.className =
-                "rekening-type";
-
-
-            type.textContent =
-                rekening.type;
-
-
-            informatie.appendChild(
-                naam
-            );
-
-            informatie.appendChild(
-                type
-            );
-
-
-            const bedrag =
-                document.createElement(
-                    "div"
-                );
-
-
-            bedrag.className =
-                "rekening-bedrag";
-
-
-            bedrag.textContent =
-                formatteerBedrag(
-                    rekening.bedrag
-                );
-
-
-            const acties =
-                document.createElement(
-                    "div"
-                );
-
-
-            acties.className =
-                "rekening-acties";
-
-
-            const bewerkButton =
-                document.createElement(
-                    "button"
-                );
-
-
-            bewerkButton.type =
-                "button";
-
-
-            bewerkButton.className =
-                "rekening-bewerkknop";
-
-
-            bewerkButton.textContent =
-                "✎";
-
-
-            bewerkButton.title =
-                "Rekening bewerken";
-
-
-            bewerkButton.onclick =
-                function() {
-
-                    rekeningBewerken(
-                        index
-                    );
-
-                };
-
-
-            const verwijderButton =
-                document.createElement(
-                    "button"
-                );
-
-
-            verwijderButton.type =
-                "button";
-
-
-            verwijderButton.className =
-                "rekening-verwijderknop";
-
-
-            verwijderButton.textContent =
-                "×";
-
-
-            verwijderButton.title =
-                "Rekening verwijderen";
-
-
-            verwijderButton.onclick =
-                function() {
-
-                    rekeningVerwijderen(
-                        index
-                    );
-
-                };
-
-
-            acties.appendChild(
-                bewerkButton
-            );
-
-
-            acties.appendChild(
-                verwijderButton
-            );
-
-
-            div.appendChild(
-                informatie
-            );
-
-
-            div.appendChild(
-                bedrag
-            );
-
-
-            div.appendChild(
-                acties
-            );
-
-
-            container.appendChild(
-                div
-            );
-
+<div class="rekening-type">
+    <span class="rekening-type-icoon">
+        ${
+            rekening.type === "Sparen"
+                ? "◈"
+                    : rekening.type === "Beleggen"
+        ? "↗"
+        : rekening.type === "Betaalrekening"
+            ? "≡"
+            : "•"
+                
         }
-    );
+    </span>
+    ${rekening.type}
+</div>
+
+            </div>
+
+
+            <div class="rekening-bedrag">
+                ${formatteerBedrag(rekening.bedrag)}
+            </div>
+
+
+            <div class="rekening-acties">
+
+          <button
+    class="historie-verwijderknop"
+    onclick="rekeningBewerken(${rekening.id})"
+    aria-label="Rekening bewerken"
+>
+    ✎
+</button>
+
+<button
+    class="historie-verwijderknop"
+    onclick="rekeningVerwijderen(${rekening.id})"
+    aria-label="Rekening verwijderen"
+>
+    ×
+</button>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
 
 }
 
@@ -459,85 +644,358 @@ function toonRekeningen() {
 
 function rekeningToevoegen() {
 
-    const naam =
-        prompt(
-            "Naam van de rekening:"
-        );
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "rekening-popup-overlay";
 
 
-    if (
-        !naam
-    ) {
+    const popup =
+        document.createElement("div");
 
-        return;
-
-    }
+    popup.className =
+        "rekening-popup";
 
 
-    const bedrag =
-        Number(
-            prompt(
-                "Bedrag:"
-            )
-        );
+    const titel =
+        document.createElement("div");
+
+    titel.className =
+        "rekening-popup-titel";
+
+    titel.textContent =
+        "Rekening toevoegen";
 
 
-    if (
-        isNaN(bedrag)
-    ) {
+    const subtitel =
+        document.createElement("div");
 
-        return;
+    subtitel.className =
+        "rekening-popup-subtitel";
 
-    }
-
-
-    const type =
-        prompt(
-            "Type rekening:\n\n" +
-            "◈ Sparen\n" +
-            "↗ Beleggen\n" +
-            "≡ Betaalrekening\n" +
-            "• Overig"
-        );
+    subtitel.textContent =
+        "Vul de gegevens van je rekening in.";
 
 
-    if (
-        !type
-    ) {
+    const naamGroep =
+        document.createElement("div");
 
-        return;
-
-    }
+    naamGroep.className =
+        "formulier-groep";
 
 
-    rekeningen.push({
+    const naamLabel =
+        document.createElement("label");
 
-        id:
-            Date.now(),
+    naamLabel.className =
+        "formulier-label";
 
-        naam:
-            naam,
-
-        type:
-            type,
-
-        bedrag:
-            bedrag
-
-    });
+    naamLabel.textContent =
+        "Naam rekening";
 
 
-    localStorage.setItem(
-        "mijnVermogenRekeningen",
-        JSON.stringify(
-            rekeningen
-        )
+    const naamInput =
+        document.createElement("input");
+
+    naamInput.className =
+        "formulier-input";
+
+    naamInput.type =
+        "text";
+
+    naamInput.placeholder =
+        "Bijvoorbeeld ING Spaarrekening";
+
+    naamInput.autocomplete =
+        "off";
+
+
+    naamGroep.appendChild(naamLabel);
+
+    naamGroep.appendChild(naamInput);
+
+
+    const typeGroep =
+        document.createElement("div");
+
+    typeGroep.className =
+        "formulier-groep";
+
+
+    const typeLabel =
+        document.createElement("label");
+
+    typeLabel.className =
+        "formulier-label";
+
+    typeLabel.textContent =
+        "Type rekening";
+
+
+    const typeSelect =
+        document.createElement("select");
+
+    typeSelect.className =
+        "formulier-select";
+
+
+    typeSelect.innerHTML = `
+
+        <option value="">
+            Kies een type
+        </option>
+
+<option value="Sparen">
+    ◈ Sparen
+</option>
+
+<option value="Beleggen">
+    ↗ Beleggen
+</option>
+
+<option value="Betaalrekening">
+    ≡ Betaalrekening
+</option>
+
+<option value="Overig">
+    • Overig
+</option>
+
+    `;
+
+
+    typeGroep.appendChild(typeLabel);
+
+    typeGroep.appendChild(typeSelect);
+
+
+    const bedragGroep =
+        document.createElement("div");
+
+    bedragGroep.className =
+        "formulier-groep";
+
+
+    const bedragLabel =
+        document.createElement("label");
+
+    bedragLabel.className =
+        "formulier-label";
+
+    bedragLabel.textContent =
+        "Huidig bedrag";
+
+
+    const bedragInput =
+        document.createElement("input");
+
+    bedragInput.className =
+        "formulier-input";
+
+    bedragInput.type =
+        "text";
+
+    bedragInput.inputMode =
+        "decimal";
+
+    bedragInput.placeholder =
+        "Bijvoorbeeld 12500,50";
+
+    bedragInput.autocomplete =
+        "off";
+
+
+    bedragGroep.appendChild(bedragLabel);
+
+    bedragGroep.appendChild(bedragInput);
+
+
+    const knoppen =
+        document.createElement("div");
+
+    knoppen.className =
+        "popup-knoppen";
+
+
+    const annulerenButton =
+        document.createElement("button");
+
+    annulerenButton.className =
+        "secondary-button";
+
+    annulerenButton.type =
+        "button";
+
+    annulerenButton.textContent =
+        "Annuleren";
+
+
+    const opslaanButton =
+        document.createElement("button");
+
+    opslaanButton.className =
+        "primary-button";
+
+    opslaanButton.type =
+        "button";
+
+    opslaanButton.textContent =
+        "Opslaan";
+
+
+    knoppen.appendChild(
+        annulerenButton
+    );
+
+    knoppen.appendChild(
+        opslaanButton
     );
 
 
-    toonRekeningen();
+    popup.appendChild(titel);
 
-    berekenTotaal();
+    popup.appendChild(subtitel);
+
+    popup.appendChild(naamGroep);
+
+    popup.appendChild(typeGroep);
+
+    popup.appendChild(bedragGroep);
+
+    popup.appendChild(knoppen);
+
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
+
+
+    setTimeout(function() {
+
+        naamInput.focus();
+
+    }, 100);
+
+
+    annulerenButton.onclick = function() {
+
+        overlay.remove();
+
+    };
+
+
+    opslaanButton.onclick = function() {
+
+        const naam =
+            naamInput.value.trim();
+
+        const type =
+            typeSelect.value;
+
+        const bedragInputWaarde =
+            bedragInput.value.trim();
+
+
+        if (!naam) {
+
+            alert(
+                "Vul een naam voor de rekening in."
+            );
+
+            naamInput.focus();
+
+            return;
+
+        }
+
+
+        if (!type) {
+
+            alert(
+                "Kies eerst een type rekening."
+            );
+
+            typeSelect.focus();
+
+            return;
+
+        }
+
+
+        if (!bedragInputWaarde) {
+
+            alert(
+                "Vul een bedrag in."
+            );
+
+            bedragInput.focus();
+
+            return;
+
+        }
+
+
+        const bedrag =
+            parseFloat(
+                bedragInputWaarde
+                    .replace("€", "")
+                    .replace(/\s/g, "")
+                    .replace(/\./g, "")
+                    .replace(",", ".")
+            );
+
+
+        if (isNaN(bedrag)) {
+
+            alert(
+                "Vul een geldig bedrag in."
+            );
+
+            bedragInput.focus();
+
+            return;
+
+        }
+
+
+        rekeningen.push({
+
+            id: Date.now(),
+
+            naam: naam,
+
+            type: type,
+
+            bedrag: bedrag
+
+        });
+
+
+        slaRekeningenOp();
+
+        toonRekeningen();
+
+        berekenTotaal();
+
+        overlay.remove();
+
+        vraagVermogensMomentOpslaan();
+
+    };
+
+
+    bedragInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                opslaanButton.click();
+
+            }
+
+        }
+    );
 
 }
 
@@ -548,98 +1006,385 @@ function rekeningToevoegen() {
  * ==========================================
  */
 
-function rekeningBewerken(index) {
+function rekeningBewerken(id) {
 
     const rekening =
-        rekeningen[index];
+        rekeningen.find(function(item) {
+
+            return item.id === id;
+
+        });
 
 
-    if (
-        !rekening
-    ) {
-
+    if (!rekening) {
         return;
-
     }
 
 
-    const nieuweNaam =
-        prompt(
-            "Naam van de rekening:",
-            rekening.naam
-        );
+    const oudBedrag =
+        Number(rekening.bedrag);
 
 
-    if (
-        nieuweNaam === null
-    ) {
+    const overlay =
+        document.createElement("div");
 
-        return;
-
-    }
+    overlay.className =
+        "rekening-popup-overlay";
 
 
-    const nieuwBedrag =
-        Number(
-            prompt(
-                "Bedrag:",
-                rekening.bedrag
-            )
-        );
+    const popup =
+        document.createElement("div");
+
+    popup.className =
+        "rekening-popup";
 
 
-    if (
-        isNaN(nieuwBedrag)
-    ) {
+    const titel =
+        document.createElement("div");
 
-        return;
+    titel.className =
+        "rekening-popup-titel";
 
-    }
-
-
-    const nieuwType =
-        prompt(
-            "Type rekening:\n\n" +
-            "◈ Sparen\n" +
-            "↗ Beleggen\n" +
-            "≡ Betaalrekening\n" +
-            "• Overig",
-            rekening.type
-        );
+    titel.textContent =
+        "Rekening bewerken";
 
 
-    if (
-        nieuwType === null
-    ) {
+    const subtitel =
+        document.createElement("div");
 
-        return;
+    subtitel.className =
+        "rekening-popup-subtitel";
 
-    }
-
-
-    rekening.naam =
-        nieuweNaam;
+    subtitel.textContent =
+        "Pas de gegevens van je rekening aan.";
 
 
-    rekening.bedrag =
-        nieuwBedrag;
+    const naamGroep =
+        document.createElement("div");
+
+    naamGroep.className =
+        "formulier-groep";
 
 
-    rekening.type =
-        nieuwType;
+    const naamLabel =
+        document.createElement("label");
+
+    naamLabel.className =
+        "formulier-label";
+
+    naamLabel.textContent =
+        "Naam rekening";
 
 
-    localStorage.setItem(
-        "mijnVermogenRekeningen",
-        JSON.stringify(
-            rekeningen
-        )
+    const naamInput =
+        document.createElement("input");
+
+    naamInput.className =
+        "formulier-input";
+
+    naamInput.type =
+        "text";
+
+    naamInput.value =
+        rekening.naam;
+
+    naamInput.autocomplete =
+        "off";
+
+
+    naamGroep.appendChild(naamLabel);
+
+    naamGroep.appendChild(naamInput);
+
+
+    const typeGroep =
+        document.createElement("div");
+
+    typeGroep.className =
+        "formulier-groep";
+
+
+    const typeLabel =
+        document.createElement("label");
+
+    typeLabel.className =
+        "formulier-label";
+
+    typeLabel.textContent =
+        "Type rekening";
+
+
+    const typeSelect =
+        document.createElement("select");
+
+    typeSelect.className =
+        "formulier-select";
+
+
+typeSelect.innerHTML = `
+
+    <option value="Sparen">
+        ◈ Sparen
+    </option>
+
+    <option value="Beleggen">
+        ↗ Beleggen
+    </option>
+
+    <option value="Betaalrekening">
+        ≡ Betaalrekening
+    </option>
+
+    <option value="Overig">
+        • Overig
+    </option>
+
+`;
+
+
+    typeSelect.value =
+        rekening.type;
+
+
+    typeGroep.appendChild(typeLabel);
+
+    typeGroep.appendChild(typeSelect);
+
+
+    const bedragGroep =
+        document.createElement("div");
+
+    bedragGroep.className =
+        "formulier-groep";
+
+
+    const bedragLabel =
+        document.createElement("label");
+
+    bedragLabel.className =
+        "formulier-label";
+
+    bedragLabel.textContent =
+        "Huidig bedrag";
+
+
+    const bedragInput =
+        document.createElement("input");
+
+    bedragInput.className =
+        "formulier-input";
+
+    bedragInput.type =
+        "text";
+
+    bedragInput.inputMode =
+        "decimal";
+
+    bedragInput.value =
+        rekening.bedrag
+            .toString()
+            .replace(".", ",");
+
+    bedragInput.autocomplete =
+        "off";
+
+
+    bedragGroep.appendChild(bedragLabel);
+
+    bedragGroep.appendChild(bedragInput);
+
+
+    const knoppen =
+        document.createElement("div");
+
+    knoppen.className =
+        "popup-knoppen";
+
+
+    const annulerenButton =
+        document.createElement("button");
+
+    annulerenButton.className =
+        "secondary-button";
+
+    annulerenButton.type =
+        "button";
+
+    annulerenButton.textContent =
+        "Annuleren";
+
+
+    const opslaanButton =
+        document.createElement("button");
+
+    opslaanButton.className =
+        "primary-button";
+
+    opslaanButton.type =
+        "button";
+
+    opslaanButton.textContent =
+        "Opslaan";
+
+
+    knoppen.appendChild(
+        annulerenButton
+    );
+
+    knoppen.appendChild(
+        opslaanButton
     );
 
 
-    toonRekeningen();
+    popup.appendChild(titel);
 
-    berekenTotaal();
+    popup.appendChild(subtitel);
+
+    popup.appendChild(naamGroep);
+
+    popup.appendChild(typeGroep);
+
+    popup.appendChild(bedragGroep);
+
+    popup.appendChild(knoppen);
+
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
+
+
+    setTimeout(function() {
+
+        naamInput.focus();
+
+        naamInput.select();
+
+    }, 100);
+
+
+    annulerenButton.onclick =
+        function() {
+
+            overlay.remove();
+
+        };
+
+
+    opslaanButton.onclick =
+        function() {
+
+            const nieuweNaam =
+                naamInput.value.trim();
+
+            const nieuwType =
+                typeSelect.value;
+
+            const nieuwBedragInput =
+                bedragInput.value.trim();
+
+
+            if (!nieuweNaam) {
+
+                alert(
+                    "Vul een naam voor de rekening in."
+                );
+
+                naamInput.focus();
+
+                return;
+
+            }
+
+
+            if (!nieuwType) {
+
+                alert(
+                    "Kies eerst een type rekening."
+                );
+
+                typeSelect.focus();
+
+                return;
+
+            }
+
+
+            if (!nieuwBedragInput) {
+
+                alert(
+                    "Vul een bedrag in."
+                );
+
+                bedragInput.focus();
+
+                return;
+
+            }
+
+
+            const nieuwBedrag =
+                parseFloat(
+                    nieuwBedragInput
+                        .replace("€", "")
+                        .replace(/\s/g, "")
+                        .replace(/\./g, "")
+                        .replace(",", ".")
+                );
+
+
+            if (isNaN(nieuwBedrag)) {
+
+                alert(
+                    "Vul een geldig bedrag in."
+                );
+
+                bedragInput.focus();
+
+                return;
+
+            }
+
+
+            rekening.naam =
+                nieuweNaam;
+
+            rekening.type =
+                nieuwType;
+
+            rekening.bedrag =
+                nieuwBedrag;
+
+
+            slaRekeningenOp();
+
+            toonRekeningen();
+
+            berekenTotaal();
+
+            overlay.remove();
+
+
+            if (nieuwBedrag !== oudBedrag) {
+
+                vraagVermogensMomentOpslaan();
+
+            }
+
+        };
+
+
+    bedragInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                opslaanButton.click();
+
+            }
+
+        }
+    );
 
 }
 
@@ -650,45 +1395,42 @@ function rekeningBewerken(index) {
  * ==========================================
  */
 
-function rekeningVerwijderen(index) {
+function rekeningVerwijderen(id) {
 
-    if (
-        !rekeningen[index]
-    ) {
+    const rekening =
+        rekeningen.find(function(item) {
 
+            return item.id === id;
+
+        });
+
+
+    if (!rekening) {
         return;
-
     }
 
 
-    const akkoord =
-        confirm(
-            "Weet je zeker dat je deze rekening wilt verwijderen?"
-        );
+    const bevestigen = confirm(
+        "Wil je " +
+        rekening.naam +
+        " verwijderen?"
+    );
 
 
-    if (
-        !akkoord
-    ) {
-
+    if (!bevestigen) {
         return;
-
     }
 
 
-    rekeningen.splice(
-        index,
-        1
-    );
+    rekeningen =
+        rekeningen.filter(function(item) {
+
+            return item.id !== id;
+
+        });
 
 
-    localStorage.setItem(
-        "mijnVermogenRekeningen",
-        JSON.stringify(
-            rekeningen
-        )
-    );
-
+    slaRekeningenOp();
 
     toonRekeningen();
 
@@ -699,28 +1441,66 @@ function rekeningVerwijderen(index) {
 
 /*
  * ==========================================
- * VERMOGENSMOMENT OPSLAAN
+ * VRAGEN OF VERMOGENSMOMENT OPGESLAGEN MOET WORDEN
  * ==========================================
  */
 
 function vraagVermogensMomentOpslaan() {
 
-    const akkoord =
-        confirm(
-            "Wil je het huidige vermogen opslaan als vermogensmoment?"
+    const totaal =
+        rekeningen.reduce(
+            function(som, rekening) {
+
+                return som +
+                    (Number(rekening.bedrag) || 0);
+
+            },
+            0
         );
 
 
-    if (
-        !akkoord
-    ) {
+    const bevestigen =
+        confirm(
+            "Je totale vermogen is nu " +
+            formatteerBedrag(totaal) +
+            ".\n\n" +
+            "Wil je dit opslaan als nieuw vermogensmoment?"
+        );
 
+
+    if (!bevestigen) {
         return;
-
     }
 
 
-    vermogensMomentOpslaan();
+    historie.push({
+
+        datum:
+            new Date().toISOString(),
+
+        bedrag:
+            totaal
+
+    });
+
+
+    historie.sort(
+        function(a, b) {
+
+            return (
+                new Date(a.datum) -
+                new Date(b.datum)
+            );
+
+        }
+    );
+
+
+    slaHistorieOp();
+
+    toonHistorie();
+
+    tekenGrafiek();
 
 }
 
@@ -736,16 +1516,12 @@ function vermogensMomentOpslaan() {
     let totaal = 0;
 
 
-    rekeningen.forEach(
-        function(rekening) {
+    rekeningen.forEach(function(rekening) {
 
-            totaal +=
-                Number(
-                    rekening.bedrag
-                ) || 0;
+        totaal +=
+            Number(rekening.bedrag) || 0;
 
-        }
-    );
+    });
 
 
     historie.push({
@@ -767,7 +1543,6 @@ function vermogensMomentOpslaan() {
 
 }
 
-
 /*
  * ==========================================
  * HISTORIE TONEN
@@ -777,18 +1552,12 @@ function vermogensMomentOpslaan() {
 function toonHistorie() {
 
     const container =
-        document.getElementById(
-            "historie"
-        );
+        document.getElementById("historie");
+
+    container.innerHTML = "";
 
 
-    container.innerHTML =
-        "";
-
-
-    if (
-        historie.length === 0
-    ) {
+    if (historie.length === 0) {
 
         container.innerHTML =
             '<div class="leeg">Nog geen vermogensmomenten opgeslagen.</div>';
@@ -801,38 +1570,26 @@ function toonHistorie() {
     /*
      * ==========================================
      * HISTORIE SORTEREN
+     * Nieuwste bovenaan
      * ==========================================
      */
 
     const gesorteerdeHistorie =
         historie
-            .map(
-                function(moment, index) {
+            .map(function(moment, index) {
 
-                    return {
+                return {
+                    moment: moment,
+                    origineleIndex: index
+                };
 
-                        moment:
-                            moment,
+            })
+            .sort(function(a, b) {
 
-                        origineleIndex:
-                            index
+                return new Date(b.moment.datum)
+                    - new Date(a.moment.datum);
 
-                    };
-
-                }
-            )
-            .sort(
-                function(a, b) {
-
-                    return new Date(
-                        b.moment.datum
-                    ) -
-                    new Date(
-                        a.moment.datum
-                    );
-
-                }
-            );
+            });
 
 
     /*
@@ -853,23 +1610,18 @@ function toonHistorie() {
 
 
             const div =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             div.className =
                 "historie-item";
 
 
             /*
-             * Vanaf het 4e moment zijn
-             * de historische momenten ouder.
+             * Vanaf het 4e moment zijn de
+             * historische momenten ouder.
              */
 
-            if (
-                weergaveIndex >= 3
-            ) {
+            if (weergaveIndex >= 3) {
 
                 div.classList.add(
                     "historie-ouder"
@@ -879,14 +1631,10 @@ function toonHistorie() {
 
 
             const datum =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             datum.className =
                 "historie-datum";
-
 
             datum.textContent =
                 formatteerDatum(
@@ -895,10 +1643,7 @@ function toonHistorie() {
 
 
             const bedrag =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             bedrag.textContent =
                 formatteerBedrag(
@@ -907,36 +1652,33 @@ function toonHistorie() {
 
 
             const verwijderButton =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             verwijderButton.type =
                 "button";
 
-
             verwijderButton.className =
                 "historie-verwijderknop";
-
 
             verwijderButton.textContent =
                 "×";
 
-
             verwijderButton.title =
                 "Dit vermogensmoment verwijderen";
-
 
             verwijderButton.setAttribute(
                 "aria-label",
                 "Vermogensmoment van " +
-                formatteerDatum(
-                    moment.datum
-                ) +
+                formatteerDatum(moment.datum) +
                 " verwijderen"
             );
 
+
+            /*
+             * Belangrijk:
+             * gebruik de originele index uit
+             * de historie-array.
+             */
 
             verwijderButton.onclick =
                 function() {
@@ -952,11 +1694,9 @@ function toonHistorie() {
                 datum
             );
 
-
             div.appendChild(
                 bedrag
             );
-
 
             div.appendChild(
                 verwijderButton
@@ -989,6 +1729,10 @@ function toonHistorie() {
             );
 
 
+        /*
+         * Oudere momenten standaard verbergen.
+         */
+
         oudereMomenten.forEach(
             function(item) {
 
@@ -999,27 +1743,29 @@ function toonHistorie() {
         );
 
 
-        const knop =
-            document.createElement(
-                "button"
-            );
+        /*
+         * Knop maken.
+         */
 
+        const knop =
+            document.createElement("button");
 
         knop.type =
             "button";
 
-
         knop.className =
             "historie-meer-knop";
-
 
         knop.textContent =
             "Toon oudere momenten ↓";
 
 
-        let geopend =
-            false;
+        let geopend = false;
 
+
+        /*
+         * Openen / sluiten.
+         */
 
         knop.onclick =
             function() {
@@ -1056,7 +1802,6 @@ function toonHistorie() {
 
 }
 
-
 /*
  * ==========================================
  * HISTORISCH VERMOGENSMOMENT TOEVOEGEN
@@ -1065,139 +1810,365 @@ function toonHistorie() {
 
 function historischMomentToevoegen() {
 
-    const datum =
-        prompt(
-            "Datum (bijvoorbeeld 01-09-2026):"
-        );
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "rekening-popup-overlay";
 
 
-    if (
-        !datum
-    ) {
+    const popup =
+        document.createElement("div");
 
-        return;
-
-    }
+    popup.className =
+        "rekening-popup";
 
 
-    const delen =
-        datum.split("-");
+    const titel =
+        document.createElement("div");
+
+    titel.className =
+        "rekening-popup-titel";
+
+    titel.textContent =
+        "Historisch vermogensmoment";
 
 
-    if (
-        delen.length !== 3
-    ) {
+    const subtitel =
+        document.createElement("div");
 
-        alert(
-            "Gebruik het formaat DD-MM-JJJJ."
-        );
+    subtitel.className =
+        "rekening-popup-subtitel";
 
-        return;
-
-    }
+    subtitel.textContent =
+        "Leg je vermogen op een eerdere datum vast.";
 
 
-    const dag =
-        delen[0];
+    const datumGroep =
+        document.createElement("div");
+
+    datumGroep.className =
+        "formulier-groep";
 
 
-    const maand =
-        delen[1];
+    const datumLabel =
+        document.createElement("label");
+
+    datumLabel.className =
+        "formulier-label";
+
+    datumLabel.textContent =
+        "Datum";
 
 
-    const jaar =
-        delen[2];
+    const datumInput =
+        document.createElement("input");
+
+    datumInput.className =
+        "formulier-input";
+
+    datumInput.type =
+        "date";
+
+    datumInput.max =
+        new Date().toISOString().split("T")[0];
 
 
-    const datumObject =
-        new Date(
-            jaar,
-            maand - 1,
-            dag
-        );
+    datumGroep.appendChild(
+        datumLabel
+    );
+
+    datumGroep.appendChild(
+        datumInput
+    );
 
 
-    if (
-        isNaN(
-            datumObject.getTime()
-        )
-    ) {
+    const bedragGroep =
+        document.createElement("div");
 
-        alert(
-            "Ongeldige datum."
-        );
-
-        return;
-
-    }
+    bedragGroep.className =
+        "formulier-groep";
 
 
-    const bedrag =
-        Number(
-            prompt(
-                "Vermogen op deze datum:"
-            )
-        );
+    const bedragLabel =
+        document.createElement("label");
+
+    bedragLabel.className =
+        "formulier-label";
+
+    bedragLabel.textContent =
+        "Totaal vermogen";
 
 
-    if (
-        isNaN(bedrag)
-    ) {
+    const bedragInput =
+        document.createElement("input");
 
-        return;
+    bedragInput.className =
+        "formulier-input";
 
-    }
+    bedragInput.type =
+        "text";
+
+    bedragInput.inputMode =
+        "decimal";
+
+    bedragInput.placeholder =
+        "Bijvoorbeeld 12500,50";
+
+    bedragInput.autocomplete =
+        "off";
 
 
-    historie.push({
+    bedragGroep.appendChild(
+        bedragLabel
+    );
 
-        datum:
-            datumObject.toISOString(),
-
-        bedrag:
-            bedrag
-
-    });
+    bedragGroep.appendChild(
+        bedragInput
+    );
 
 
-    slaHistorieOp();
+    const knoppen =
+        document.createElement("div");
 
-    toonHistorie();
+    knoppen.className =
+        "popup-knoppen";
 
-    tekenGrafiek();
+
+    const annulerenButton =
+        document.createElement("button");
+
+    annulerenButton.className =
+        "secondary-button";
+
+    annulerenButton.type =
+        "button";
+
+    annulerenButton.textContent =
+        "Annuleren";
+
+
+    const opslaanButton =
+        document.createElement("button");
+
+    opslaanButton.className =
+        "primary-button";
+
+    opslaanButton.type =
+        "button";
+
+    opslaanButton.textContent =
+        "Opslaan";
+
+
+    knoppen.appendChild(
+        annulerenButton
+    );
+
+    knoppen.appendChild(
+        opslaanButton
+    );
+
+
+    popup.appendChild(titel);
+
+    popup.appendChild(subtitel);
+
+    popup.appendChild(datumGroep);
+
+    popup.appendChild(bedragGroep);
+
+    popup.appendChild(knoppen);
+
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
+
+
+    setTimeout(function() {
+
+        datumInput.focus();
+
+    }, 100);
+
+
+    annulerenButton.onclick =
+        function() {
+
+            overlay.remove();
+
+        };
+
+
+    opslaanButton.onclick =
+        function() {
+
+            const datumWaarde =
+                datumInput.value;
+
+            const bedragInputWaarde =
+                bedragInput.value.trim();
+
+
+            if (!datumWaarde) {
+
+                alert(
+                    "Kies een datum."
+                );
+
+                datumInput.focus();
+
+                return;
+
+            }
+
+
+            if (!bedragInputWaarde) {
+
+                alert(
+                    "Vul het totale vermogen in."
+                );
+
+                bedragInput.focus();
+
+                return;
+
+            }
+
+
+            const bedrag =
+                parseFloat(
+                    bedragInputWaarde
+                        .replace("€", "")
+                        .replace(/\s/g, "")
+                        .replace(/\./g, "")
+                        .replace(",", ".")
+                );
+
+
+            if (isNaN(bedrag)) {
+
+                alert(
+                    "Vul een geldig bedrag in."
+                );
+
+                bedragInput.focus();
+
+                return;
+
+            }
+
+
+            const datum =
+                new Date(
+                    datumWaarde +
+                    "T12:00:00"
+                );
+
+
+            const vandaag =
+                new Date();
+
+            vandaag.setHours(
+                23,
+                59,
+                59,
+                999
+            );
+
+
+            if (datum > vandaag) {
+
+                alert(
+                    "Oeps, deze datum ligt in de toekomst!"
+                );
+
+                datumInput.focus();
+
+                return;
+
+            }
+
+
+            historie.push({
+
+                datum:
+                    datum.toISOString(),
+
+                bedrag:
+                    bedrag
+
+            });
+
+
+            historie.sort(
+                function(a, b) {
+
+                    return (
+                        new Date(a.datum) -
+                        new Date(b.datum)
+                    );
+
+                }
+            );
+
+
+            slaHistorieOp();
+
+            toonHistorie();
+
+            tekenGrafiek();
+
+            overlay.remove();
+
+        };
+
+
+    bedragInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                opslaanButton.click();
+
+            }
+
+        }
+    );
 
 }
 
 
 /*
  * ==========================================
- * HISTORISCH MOMENT VERWIJDEREN
+ * ÉÉN HISTORISCH VERMOGENSMOMENT VERWIJDEREN
  * ==========================================
  */
 
 function historischMomentVerwijderen(index) {
 
-    if (
-        !historie[index]
-    ) {
+    const moment =
+        historie[index];
 
+
+    if (!moment) {
         return;
-
     }
 
 
-    const akkoord =
+    const bevestigen =
         confirm(
-            "Weet je zeker dat je dit vermogensmoment wilt verwijderen?"
+            "Wil je het vermogensmoment van " +
+            formatteerDatum(moment.datum) +
+            " (" +
+            formatteerBedrag(moment.bedrag) +
+            ") verwijderen?"
         );
 
 
-    if (
-        !akkoord
-    ) {
-
+    if (!bevestigen) {
         return;
-
     }
 
 
@@ -1224,27 +2195,19 @@ function historischMomentVerwijderen(index) {
 
 function historieWissen() {
 
-    if (
-        historie.length === 0
-    ) {
-
+    if (historie.length === 0) {
         return;
-
     }
 
 
-    const akkoord =
+    const bevestigen =
         confirm(
-            "Weet je zeker dat je alle historische vermogensmomenten wilt verwijderen?"
+            "Weet je zeker dat je alle historie wilt wissen?"
         );
 
 
-    if (
-        !akkoord
-    ) {
-
+    if (!bevestigen) {
         return;
-
     }
 
 
@@ -1257,6 +2220,8 @@ function historieWissen() {
 
     tekenGrafiek();
 
+    updateGroeiInfo([]);
+
 }
 
 
@@ -1266,49 +2231,53 @@ function historieWissen() {
  * ==========================================
  */
 
-function zetPeriode(
-    periode
-) {
+function zetPeriode(periode) {
 
     huidigePeriode =
         periode;
 
 
     document
-        .querySelectorAll(
-            ".periode-knop"
-        )
-        .forEach(
-            function(knop) {
-
-                knop.classList.remove(
-                    "actief"
-                );
-
-            }
-        );
+        .getElementById("btn-3m")
+        .classList.remove("active");
 
 
-    const actieveKnop =
-        document.querySelector(
-            '[data-periode="' +
-            periode +
-            '"]'
-        );
+    document
+        .getElementById("btn-1j")
+        .classList.remove("active");
 
 
-    if (
-        actieveKnop
-    ) {
+    document
+        .getElementById("btn-alles")
+        .classList.remove("active");
 
-        actieveKnop.classList.add(
-            "actief"
-        );
+
+    if (periode === "3m") {
+
+        document
+            .getElementById("btn-3m")
+            .classList.add("active");
 
     }
 
 
-    updateGroeiInfo();
+    if (periode === "1j") {
+
+        document
+            .getElementById("btn-1j")
+            .classList.add("active");
+
+    }
+
+
+    if (periode === "alles") {
+
+        document
+            .getElementById("btn-alles")
+            .classList.add("active");
+
+    }
+
 
     tekenGrafiek();
 
@@ -1317,124 +2286,25 @@ function zetPeriode(
 
 /*
  * ==========================================
- * GROEI-INFORMATIE
+ * GROEI INFORMATIE
  * ==========================================
  */
 
-function updateGroeiInfo() {
+function updateGroeiInfo(gegevens) {
 
-    const groeiInfo =
+    const element =
         document.getElementById(
             "groeiInfo"
         );
 
 
     if (
-        !groeiInfo
+        !gegevens ||
+        gegevens.length < 2
     ) {
 
-        return;
-
-    }
-
-
-    if (
-        historie.length < 2
-    ) {
-
-        groeiInfo.textContent =
-            "";
-
-        return;
-
-    }
-
-
-    const gesorteerd =
-        historie
-            .slice()
-            .sort(
-                function(a, b) {
-
-                    return new Date(
-                        a.datum
-                    ) -
-                    new Date(
-                        b.datum
-                    );
-
-                }
-            );
-
-
-    let relevanteHistorie =
-        gesorteerd;
-
-
-    const nu =
-        new Date();
-
-
-    if (
-        huidigePeriode ===
-        "3m"
-    ) {
-
-        const grens =
-            new Date();
-
-        grens.setMonth(
-            grens.getMonth() - 3
-        );
-
-
-        relevanteHistorie =
-            gesorteerd.filter(
-                function(moment) {
-
-                    return new Date(
-                        moment.datum
-                    ) >= grens;
-
-                }
-            );
-
-    }
-
-
-    if (
-        huidigePeriode ===
-        "1j"
-    ) {
-
-        const grens =
-            new Date();
-
-        grens.setFullYear(
-            grens.getFullYear() - 1
-        );
-
-
-        relevanteHistorie =
-            gesorteerd.filter(
-                function(moment) {
-
-                    return new Date(
-                        moment.datum
-                    ) >= grens;
-
-                }
-            );
-
-    }
-
-
-    if (
-        relevanteHistorie.length < 2
-    ) {
-
-        groeiInfo.textContent =
-            "";
+        element.textContent =
+            "Nog onvoldoende gegevens voor groei.";
 
         return;
 
@@ -1442,13 +2312,17 @@ function updateGroeiInfo() {
 
 
     const eerste =
-        relevanteHistorie[0].bedrag;
+        Number(
+            gegevens[0].bedrag
+        );
 
 
     const laatste =
-        relevanteHistorie[
-            relevanteHistorie.length - 1
-        ].bedrag;
+        Number(
+            gegevens[
+                gegevens.length - 1
+            ].bedrag
+        );
 
 
     const verschil =
@@ -1457,10 +2331,7 @@ function updateGroeiInfo() {
 
     const percentage =
         eerste !== 0
-            ? (
-                verschil /
-                eerste
-            ) * 100
+            ? (verschil / eerste) * 100
             : 0;
 
 
@@ -1470,16 +2341,13 @@ function updateGroeiInfo() {
             : "";
 
 
-    groeiInfo.textContent =
+    element.textContent =
+        "Groei: " +
         teken +
-        formatteerBedrag(
-            verschil
-        ) +
+        formatteerBedrag(verschil) +
         " (" +
         teken +
-        percentage.toFixed(
-            1
-        ) +
+        percentage.toFixed(1) +
         "%)";
 
 }
@@ -1487,7 +2355,607 @@ function updateGroeiInfo() {
 
 /*
  * ==========================================
- * GRAFIEK
+ * GRAFIEK TOOLTIP
+ * ==========================================
+ */
+
+function verbergGrafiekTooltip() {
+
+    const tooltip =
+        document.getElementById(
+            "grafiekTooltip"
+        );
+
+
+    if (!tooltip) {
+        return;
+    }
+
+
+    tooltip.classList.remove(
+        "visible"
+    );
+
+    tooltip.classList.remove(
+        "onder"
+    );
+
+    tooltip.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+function toonGrafiekTooltip(punt) {
+
+    const tooltip =
+        document.getElementById(
+            "grafiekTooltip"
+        );
+
+
+    const wrapper =
+        document.getElementById(
+            "grafiekWrapper"
+        );
+
+
+    if (
+        !tooltip ||
+        !wrapper ||
+        !punt
+    ) {
+
+        return;
+
+    }
+
+
+    const vorigePunt =
+        punt.index > 0
+            ? grafiekPunten[
+                punt.index - 1
+            ]
+            : null;
+
+
+    let verschil =
+        null;
+
+
+    if (vorigePunt) {
+
+        verschil =
+            Number(punt.item.bedrag) -
+            Number(
+                vorigePunt.item.bedrag
+            );
+
+    }
+
+
+    const teken =
+        verschil !== null &&
+        verschil >= 0
+            ? "+"
+            : "";
+
+
+    tooltip.innerHTML = `
+
+        <div class="grafiek-tooltip-datum">
+            ${formatteerDatum(punt.item.datum)}
+        </div>
+
+        <div class="grafiek-tooltip-bedrag">
+            ${formatteerBedrag(punt.item.bedrag)}
+        </div>
+
+        ${
+            verschil !== null
+                ? `
+                    <div class="grafiek-tooltip-verschil">
+                        ${teken}${formatteerBedrag(verschil)}
+                        t.o.v. vorig meetpunt
+                    </div>
+                  `
+                : ""
+        }
+
+    `;
+
+
+    /*
+     * Tooltip niet buiten de grafiek laten vallen.
+     */
+
+    const tooltipBreedte =
+        tooltip.offsetWidth || 180;
+
+
+    const helft =
+        tooltipBreedte / 2;
+
+
+    const breedte =
+        wrapper.clientWidth;
+
+
+    let tooltipX =
+        punt.x;
+
+
+    tooltipX =
+        Math.max(
+            helft + 4,
+            Math.min(
+                breedte - helft - 4,
+                tooltipX
+            )
+        );
+
+
+    tooltip.style.left =
+        tooltipX + "px";
+
+
+    tooltip.style.top =
+        punt.y + "px";
+
+
+    tooltip.classList.remove(
+        "onder"
+    );
+
+
+    if (punt.y < 80) {
+
+        tooltip.classList.add(
+            "onder"
+        );
+
+    }
+
+
+    tooltip.classList.add(
+        "visible"
+    );
+
+
+    tooltip.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+/*
+ * ==========================================
+ * DICHTSTBIJZIJNDE GRAFIEKPUNT VINDEN
+ * ==========================================
+ */
+
+function vindDichtstbijzijndePunt(event) {
+
+    const canvas =
+        document.getElementById(
+            "vermogenGrafiek"
+        );
+
+
+    if (
+        !canvas ||
+        grafiekPunten.length === 0
+    ) {
+
+        return null;
+
+    }
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    const x =
+        event.clientX -
+        rect.left;
+
+
+    const y =
+        event.clientY -
+        rect.top;
+
+
+    let bestePunt =
+        null;
+
+
+    let besteAfstand =
+        Infinity;
+
+
+    grafiekPunten.forEach(
+        function(punt) {
+
+            const dx =
+                punt.x - x;
+
+
+            const dy =
+                punt.y - y;
+
+
+            const afstand =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+
+            if (
+                afstand <
+                besteAfstand
+            ) {
+
+                besteAfstand =
+                    afstand;
+
+                bestePunt =
+                    punt;
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Alleen reageren als je redelijk
+     * dicht bij een meetpunt zit.
+     */
+
+    if (
+        besteAfstand <= 45
+    ) {
+
+        return bestePunt;
+
+    }
+
+
+    return null;
+
+}
+
+
+/*
+ * ==========================================
+ * TIJDAS LABELS
+ * ==========================================
+ */
+
+function maakTijdAsLabels(
+    ctx,
+    minDatum,
+    maxDatum,
+    xStart,
+    xEinde,
+    y
+) {
+
+    const verschilMs =
+        maxDatum - minDatum;
+
+
+    if (verschilMs <= 0) {
+
+        return;
+
+    }
+
+
+    const dagen =
+        verschilMs /
+        (
+            1000 *
+            60 *
+            60 *
+            24
+        );
+
+
+    let aantalLabels;
+
+
+    if (dagen <= 45) {
+
+        aantalLabels = 4;
+
+    } else if (dagen <= 120) {
+
+        aantalLabels = 5;
+
+    } else if (dagen <= 400) {
+
+        aantalLabels = 5;
+
+    } else {
+
+        aantalLabels = 5;
+
+    }
+
+
+    /*
+     * Voor een korte periode gebruiken we
+     * dagen/weken.
+     *
+     * Voor langere periodes gebruiken we
+     * maanden.
+     */
+
+    const datums = [];
+
+
+    if (dagen <= 45) {
+
+        const stap =
+            verschilMs /
+            (aantalLabels - 1);
+
+
+        for (
+            let i = 0;
+            i < aantalLabels;
+            i++
+        ) {
+
+            datums.push(
+                new Date(
+                    minDatum.getTime() +
+                    stap * i
+                )
+            );
+
+        }
+
+    } else {
+
+        const eerste =
+            new Date(minDatum);
+
+
+        eerste.setDate(1);
+
+
+        /*
+         * Als het eerste label voor de
+         * gekozen periode ligt, schuiven
+         * we het door naar de volgende maand.
+         */
+
+        if (
+            eerste <
+            minDatum
+        ) {
+
+            eerste.setMonth(
+                eerste.getMonth() + 1
+            );
+
+        }
+
+
+        const laatste =
+            new Date(maxDatum);
+
+
+        laatste.setDate(1);
+
+
+        const beschikbareMaanden =
+            (
+                laatste.getFullYear() -
+                eerste.getFullYear()
+            ) * 12 +
+            (
+                laatste.getMonth() -
+                eerste.getMonth()
+            ) +
+            1;
+
+
+        if (
+            beschikbareMaanden <=
+            aantalLabels
+        ) {
+
+            for (
+                let datum = new Date(eerste);
+                datum <= laatste;
+                datum.setMonth(
+                    datum.getMonth() + 1
+                )
+            ) {
+
+                datums.push(
+                    new Date(datum)
+                );
+
+            }
+
+        } else {
+
+            const maandStap =
+                Math.ceil(
+                    (
+                        beschikbareMaanden - 1
+                    ) /
+                    (
+                        aantalLabels - 1
+                    )
+                );
+
+
+            for (
+                let i = 0;
+                i < aantalLabels;
+                i++
+            ) {
+
+                const datum =
+                    new Date(eerste);
+
+
+                datum.setMonth(
+                    datum.getMonth() +
+                    (
+                        i *
+                        maandStap
+                    )
+                );
+
+
+                if (
+                    datum <=
+                    laatste
+                ) {
+
+                    datums.push(
+                        datum
+                    );
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * Labels tekenen.
+     */
+
+    ctx.save();
+
+
+    ctx.fillStyle =
+        "#6b7280";
+
+
+    ctx.strokeStyle =
+        "#e5e7eb";
+
+
+    ctx.lineWidth =
+        1;
+
+
+    ctx.font =
+        "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.textBaseline =
+        "top";
+
+
+    datums.forEach(
+        function(datum) {
+
+            const verhouding =
+                (
+                    datum -
+                    minDatum
+                ) /
+                verschilMs;
+
+
+            const x =
+                xStart +
+                (
+                    verhouding *
+                    (
+                        xEinde -
+                        xStart
+                    )
+                );
+
+
+            /*
+             * Verticale hulplijn.
+             */
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x,
+                y - 5
+            );
+
+            ctx.lineTo(
+                x,
+                y + 1
+            );
+
+            ctx.stroke();
+
+
+            let label;
+
+
+            if (dagen <= 45) {
+
+                label =
+                    datum.toLocaleDateString(
+                        "nl-NL",
+                        {
+                            day: "numeric",
+                            month: "short"
+                        }
+                    );
+
+            } else {
+
+                label =
+                    datum.toLocaleDateString(
+                        "nl-NL",
+                        {
+                            month: "short",
+                            year: "numeric"
+                        }
+                    );
+
+            }
+
+
+            ctx.fillText(
+                label,
+                x,
+                y + 7
+            );
+
+        }
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/*
+ * ==========================================
+ * GRAFIEK TEKENEN
  * ==========================================
  */
 
@@ -1499,8 +2967,31 @@ function tekenGrafiek() {
         );
 
 
+    if (!canvas) {
+        return;
+    }
+
+
+    const wrapper =
+        document.getElementById(
+            "grafiekWrapper"
+        );
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    const breedte =
+        canvas.clientWidth;
+
+
+    const hoogte =
+        290;
+
+
     if (
-        !canvas
+        breedte <= 0
     ) {
 
         return;
@@ -1508,30 +2999,22 @@ function tekenGrafiek() {
     }
 
 
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    const wrapper =
-        canvas.parentElement;
-
-
-    const breedte =
-        wrapper.clientWidth;
-
-
-    const hoogte =
-        290;
+    const dpr =
+        window.devicePixelRatio || 1;
 
 
     canvas.width =
-        breedte;
+        breedte * dpr;
 
 
     canvas.height =
-        hoogte;
+        hoogte * dpr;
+
+
+    ctx.scale(
+        dpr,
+        dpr
+    );
 
 
     ctx.clearRect(
@@ -1542,195 +3025,444 @@ function tekenGrafiek() {
     );
 
 
-    if (
-        historie.length === 0
-    ) {
+    grafiekPunten = [];
 
-        return;
 
-    }
+    verbergGrafiekTooltip();
+
+
+    let gegevens =
+        [...historie];
 
 
     /*
-     * ==========================================
-     * HISTORIE PER MAAND
-     * ==========================================
+     * Altijd chronologisch sorteren.
      */
 
-    const perMaand = {};
+    gegevens.sort(
+        function(a, b) {
 
-
-    historie.forEach(
-        function(moment) {
-
-            const datum =
-                new Date(
-                    moment.datum
-                );
-
-
-            const sleutel =
-                datum.getFullYear() +
-                "-" +
-                String(
-                    datum.getMonth() + 1
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            perMaand[sleutel] =
-                moment;
+            return (
+                new Date(a.datum) -
+                new Date(b.datum)
+            );
 
         }
     );
 
 
-    const punten =
-        Object.keys(
-            perMaand
-        )
-        .sort()
-        .map(
-            function(sleutel) {
-
-                return perMaand[
-                    sleutel
-                ];
-
-            }
-        );
-
+    /*
+     * Periode filteren.
+     */
 
     if (
-        punten.length === 0
+        huidigePeriode === "3m"
     ) {
 
-        return;
-
-    }
-
-
-    const padding =
-        30;
+        const grens =
+            new Date();
 
 
-    const minWaarde =
-        Math.min(
-            ...punten.map(
-                function(punt) {
-
-                    return punt.bedrag;
-
-                }
-            )
+        grens.setMonth(
+            grens.getMonth() - 3
         );
 
 
-    const maxWaarde =
-        Math.max(
-            ...punten.map(
-                function(punt) {
+        gegevens =
+            gegevens.filter(
+                function(item) {
 
-                    return punt.bedrag;
+                    return (
+                        new Date(item.datum) >=
+                        grens
+                    );
 
                 }
-            )
-        );
-
-
-    const verschil =
-        maxWaarde -
-        minWaarde;
-
-
-    const marge =
-        verschil === 0
-            ? 100
-            : verschil * 0.15;
-
-
-    const ondergrens =
-        minWaarde -
-        marge;
-
-
-    const bovengrens =
-        maxWaarde +
-        marge;
-
-
-    function xPositie(index) {
-
-        if (
-            punten.length === 1
-        ) {
-
-            return breedte / 2;
-
-        }
-
-
-        return padding +
-            (
-                index /
-                (
-                    punten.length - 1
-                )
-            ) *
-            (
-                breedte -
-                padding * 2
             );
 
     }
 
 
-    function yPositie(bedrag) {
+    if (
+        huidigePeriode === "1j"
+    ) {
 
-        return hoogte -
-            padding -
-            (
-                (
-                    bedrag -
-                    ondergrens
-                ) /
-                (
-                    bovengrens -
-                    ondergrens
-                )
-            ) *
-            (
-                hoogte -
-                padding * 2
+        const grens =
+            new Date();
+
+
+        grens.setFullYear(
+            grens.getFullYear() - 1
+        );
+
+
+        gegevens =
+            gegevens.filter(
+                function(item) {
+
+                    return (
+                        new Date(item.datum) >=
+                        grens
+                    );
+
+                }
             );
 
     }
 
 
     /*
+     * Per kalendermaand alleen het laatste
+     * vermogensmoment in de grafiek gebruiken.
+     * De originele historie blijft ongewijzigd.
+     */
+    const laatsteMomentPerMaand = new Map();
+
+    gegevens.forEach(function(item, index) {
+        const datum = new Date(item.datum);
+        const sleutel =
+            datum.getFullYear() + "-" +
+            String(datum.getMonth() + 1).padStart(2, "0");
+
+        const bestaand = laatsteMomentPerMaand.get(sleutel);
+
+        if (
+            !bestaand ||
+            datum > new Date(bestaand.item.datum) ||
+            (
+                datum.getTime() === new Date(bestaand.item.datum).getTime() &&
+                index > bestaand.index
+            )
+        ) {
+            laatsteMomentPerMaand.set(sleutel, {
+                item: item,
+                index: index
+            });
+        }
+    });
+
+    gegevens = Array.from(laatsteMomentPerMaand.values())
+        .map(function(entry) {
+            return entry.item;
+        })
+        .sort(function(a, b) {
+            return new Date(a.datum) - new Date(b.datum);
+        });
+
+    updateGroeiInfo(
+        gegevens
+    );
+
+
+    if (
+        gegevens.length === 0
+    ) {
+
+        ctx.fillStyle =
+            "#6b7280";
+
+
+        ctx.font =
+            "14px sans-serif";
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.textBaseline =
+            "middle";
+
+
+        ctx.fillText(
+            "Nog geen gegevens",
+            breedte / 2,
+            120
+        );
+
+
+        return;
+
+    }
+
+
+    /*
      * ==========================================
-     * LIJN
+     * GRAFIEK BEREKENEN
+     * ==========================================
+     */
+
+    const waarden =
+        gegevens.map(
+            function(item) {
+
+                return Number(
+                    item.bedrag
+                );
+
+            }
+        );
+
+
+    const minimum =
+        Math.min(
+            ...waarden
+        );
+
+
+    const maximum =
+        Math.max(
+            ...waarden
+        );
+
+
+    const marge =
+        maximum === minimum
+            ? Math.max(
+                100,
+                Math.abs(maximum) * 0.05
+            )
+            : (
+                maximum - minimum
+            ) * 0.15;
+
+
+    const minWaarde =
+        minimum - marge;
+
+
+    const maxWaarde =
+        maximum + marge;
+
+
+    /*
+     * Extra ruimte links/rechts zodat
+     * de eerste en laatste punten niet
+     * tegen de rand staan.
+     */
+
+    const paddingLinks =
+        12;
+
+
+    const paddingRechts =
+        12;
+
+
+    const paddingBoven =
+        20;
+
+
+    const paddingOnder =
+        55;
+
+
+    const grafiekBreedte =
+        breedte -
+        paddingLinks -
+        paddingRechts;
+
+
+    const grafiekHoogte =
+        hoogte -
+        paddingBoven -
+        paddingOnder;
+
+
+    /*
+     * ==========================================
+     * ECHTE TIJDSCHAAL
+     * ==========================================
+     */
+
+    let minDatum =
+        new Date(
+            gegevens[0].datum
+        );
+
+
+    let maxDatum =
+        new Date(
+            gegevens[
+                gegevens.length - 1
+            ].datum
+        );
+
+
+    /*
+     * Als er maar één meetpunt is,
+     * maken we een kleine tijdspanne.
+     */
+
+    if (
+        minDatum.getTime() ===
+        maxDatum.getTime()
+    ) {
+
+        minDatum =
+            new Date(
+                minDatum.getTime() -
+                7 *
+                24 *
+                60 *
+                60 *
+                1000
+            );
+
+
+        maxDatum =
+            new Date(
+                maxDatum.getTime() +
+                7 *
+                24 *
+                60 *
+                60 *
+                1000
+            );
+
+    }
+
+
+    const tijdsduur =
+        maxDatum -
+        minDatum;
+
+
+    /*
+     * ==========================================
+     * HULPLIJNEN
+     * ==========================================
+     */
+
+    ctx.save();
+
+
+    ctx.strokeStyle =
+        "#f0f1f3";
+
+
+    ctx.lineWidth =
+        1;
+
+
+    /*
+     * Een paar horizontale hulplijnen.
+     */
+
+    const aantalHorizontaleLijnen =
+        4;
+
+
+    for (
+        let i = 0;
+        i <= aantalHorizontaleLijnen;
+        i++
+    ) {
+
+        const y =
+            paddingBoven +
+            (
+                i /
+                aantalHorizontaleLijnen
+            ) *
+            grafiekHoogte;
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+            paddingLinks,
+            y
+        );
+
+
+        ctx.lineTo(
+            breedte -
+            paddingRechts,
+            y
+        );
+
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.restore();
+
+
+    /*
+     * ==========================================
+     * LIJN TEKENEN
      * ==========================================
      */
 
     ctx.beginPath();
 
 
-    punten.forEach(
-        function(punt, index) {
+    gegevens.forEach(
+        function(item, index) {
+
+            const datum =
+                new Date(
+                    item.datum
+                );
+
+
+            const tijdVerhouding =
+                (
+                    datum -
+                    minDatum
+                ) /
+                tijdsduur;
+
 
             const x =
-                xPositie(
-                    index
+                paddingLinks +
+                (
+                    tijdVerhouding *
+                    grafiekBreedte
+                );
+
+
+            const waarde =
+                Number(
+                    item.bedrag
+                );
+
+
+            const waardeVerhouding =
+                (
+                    waarde -
+                    minWaarde
+                ) /
+                (
+                    maxWaarde -
+                    minWaarde
                 );
 
 
             const y =
-                yPositie(
-                    punt.bedrag
-                );
+                paddingBoven +
+                (
+                    1 -
+                    waardeVerhouding
+                ) *
+                grafiekHoogte;
+
+
+            grafiekPunten.push({
+
+                x: x,
+
+                y: y,
+
+                item: item,
+
+                index: index
+
+            });
 
 
             if (
@@ -1755,40 +3487,48 @@ function tekenGrafiek() {
     );
 
 
+    ctx.strokeStyle =
+        "#111827";
+
+
+    ctx.lineWidth =
+        3;
+
+
+    ctx.lineJoin =
+        "round";
+
+
+    ctx.lineCap =
+        "round";
+
+
     ctx.stroke();
 
 
     /*
      * ==========================================
-     * PUNTEN
+     * MEETPUNTEN
      * ==========================================
      */
 
-    punten.forEach(
-        function(punt, index) {
-
-            const x =
-                xPositie(
-                    index
-                );
-
-
-            const y =
-                yPositie(
-                    punt.bedrag
-                );
-
+    grafiekPunten.forEach(
+        function(punt) {
 
             ctx.beginPath();
 
 
             ctx.arc(
-                x,
-                y,
+                punt.x,
+                punt.y,
                 4,
                 0,
                 Math.PI * 2
             );
+
+
+            ctx.fillStyle =
+                "#111827";
 
 
             ctx.fill();
@@ -1796,19 +3536,111 @@ function tekenGrafiek() {
         }
     );
 
+
+    /*
+     * ==========================================
+     * TIJDAS
+     * ==========================================
+     */
+
+    maakTijdAsLabels(
+        ctx,
+        minDatum,
+        maxDatum,
+        paddingLinks,
+        breedte - paddingRechts,
+        paddingBoven +
+        grafiekHoogte
+    );
+
+
 }
 
 
 /*
  * ==========================================
- * GRAFIEK OPNIEUW TEKENEN BIJ RESIZE
+ * GRAFIEK INTERACTIE
  * ==========================================
  */
 
-window.addEventListener(
-    "resize",
-    tekenGrafiek
-);
+const grafiekCanvas =
+    document.getElementById(
+        "vermogenGrafiek"
+    );
+
+
+if (grafiekCanvas) {
+
+    /*
+     * Desktop: hover.
+     */
+
+    grafiekCanvas.addEventListener(
+        "mousemove",
+        function(event) {
+
+            const punt =
+                vindDichtstbijzijndePunt(
+                    event
+                );
+
+
+            if (punt) {
+
+                toonGrafiekTooltip(
+                    punt
+                );
+
+            } else {
+
+                verbergGrafiekTooltip();
+
+            }
+
+        }
+    );
+
+
+    grafiekCanvas.addEventListener(
+        "mouseleave",
+        function() {
+
+            verbergGrafiekTooltip();
+
+        }
+    );
+
+
+    /*
+     * Mobiel: tik op een meetpunt.
+     */
+
+    grafiekCanvas.addEventListener(
+        "click",
+        function(event) {
+
+            const punt =
+                vindDichtstbijzijndePunt(
+                    event
+                );
+
+
+            if (punt) {
+
+                toonGrafiekTooltip(
+                    punt
+                );
+
+            } else {
+
+                verbergGrafiekTooltip();
+
+            }
+
+        }
+    );
+
+}
 
 
 /*
@@ -1823,6 +3655,10 @@ berekenTotaal();
 
 toonHistorie();
 
-zetPeriode(
-    "alles"
+zetPeriode("alles");
+
+
+window.addEventListener(
+    "resize",
+    tekenGrafiek
 );
