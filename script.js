@@ -1573,7 +1573,10 @@ function toonHistorie() {
      * ==========================================
      */
 
-    historie.forEach(function(moment, index) {
+    historie.slice().reverse().forEach(function(moment) {
+
+    const index =
+        historie.indexOf(moment);
 
         const div =
             document.createElement("div");
