@@ -608,7 +608,8 @@ function toonRekeningen() {
 
             <div class="rekening-acties">
 
-               <button
+          <button
+    class="historie-verwijderknop"
     onclick="rekeningBewerken(${rekening.id})"
     aria-label="Rekening bewerken"
 >
@@ -616,6 +617,7 @@ function toonRekeningen() {
 </button>
 
 <button
+    class="historie-verwijderknop"
     onclick="rekeningVerwijderen(${rekening.id})"
     aria-label="Rekening verwijderen"
 >
