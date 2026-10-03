@@ -1149,10 +1149,12 @@ if (grafiekCanvas) {
     });
 }
 
-// App opstarten
-toonRekeningen();
-berekenTotaal();
-toonHistorie();
-zetPeriode("alles");
+// App opstarten zodra de HTML helemaal geladen is
+document.addEventListener("DOMContentLoaded", function() {
+    toonRekeningen();
+    berekenTotaal();
+    toonHistorie();
+    zetPeriode("alles");
+});
 
 window.addEventListener("resize", tekenGrafiek);
