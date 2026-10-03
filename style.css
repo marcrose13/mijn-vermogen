@@ -704,7 +704,11 @@
         .instellingen-popup {
             padding: 20px;
         }
-        
-        
 
     }
+    
+    .rekening-potlood {
+    font-size: 20px;
+    line-height: 1;
+    color: #6b7280;
+}
