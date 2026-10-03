@@ -441,6 +441,10 @@
 
     cursor: pointer;
     transition: background 0.2s ease;
+    
+    appearance: none;
+-webkit-appearance: none;
+    
 }
 
 .historie-meer-knop:hover {
