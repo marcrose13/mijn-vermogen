@@ -5,10 +5,14 @@
  */
 
 let rekeningen = JSON.parse(
+    localStorage.getItem("rekeningenData")
+) || JSON.parse(
     localStorage.getItem("mijnVermogenRekeningen")
 ) || [];
 
 let historie = JSON.parse(
+    localStorage.getItem("vermogensData")
+) || JSON.parse(
     localStorage.getItem("mijnVermogenHistorie")
 ) || [];
 
