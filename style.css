@@ -88,13 +88,12 @@
     }
 .instellingen-icoon {
     width: 20px;
-    height: 20px; 
+    height: 20px;
     fill: none;
-    stroke: #111827;
-    stroke-width: 1.8;
+    stroke: currentColor;
+    stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transform: translateY(1px);
 }
 
     h2 {
