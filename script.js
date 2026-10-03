@@ -617,15 +617,17 @@ function toonRekeningen() {
     class="rekening-icoon"
     viewBox="0 0 24 24"
     aria-hidden="true"
-    fill="none"
-    stroke="#6b7280"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
 >
-        <path d="M4 20h4L19 9l-4-4L4 16v4"></path>
-        <path d="M13 6l4 4"></path>
-    </svg>
+    <path
+        d="M5 19h4L19 9l-4-4L5 15v4Z"
+        fill="none"
+        stroke="#6b7280"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+</svg>
 </button>
 
 <button
