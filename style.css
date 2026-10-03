@@ -425,6 +425,28 @@
     }
 
 
+.historie-meer-knop {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 16px;
+
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 14px;
+
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.historie-meer-knop:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
     /*
      * ==========================================
      * INSTELLINGEN POPUP
