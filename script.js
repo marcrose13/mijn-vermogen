@@ -4,14 +4,24 @@
  * ==========================================
  */
 
-let rekeningen = JSON.parse(
-    localStorage.getItem("rekeningenData")
-) || JSON.parse(
-    localStorage.getItem("mijnVermogenRekeningen")
-) || [];
+/*
+ * ==========================================
+ * DATA (Met automatische herstel-check)
+ * ==========================================
+ */
 
-let historie = JSON.parse(
-    localStorage.getItem("vermogensData")
+let rekeningen = JSON.parse(localStorage.getItem("rekeningenData")) || 
+                 JSON.parse(localStorage.getItem("rekeningen")) || 
+                 JSON.parse(localStorage.getItem("mijnVermogenRekeningen")) || [];
+
+let historie = JSON.parse(localStorage.getItem("vermogensData")) || 
+               JSON.parse(localStorage.getItem("historie")) || 
+               JSON.parse(localStorage.getItem("mijnVermogenHistorie")) || [];
+
+// Direct opslaan onder de actieve sleutels zodat het hersteld blijft
+localStorage.setItem("mijnVermogenRekeningen", JSON.stringify(rekeningen));
+localStorage.setItem("mijnVermogenHistorie", JSON.stringify(historie));
+    
 ) || JSON.parse(
     localStorage.getItem("mijnVermogenHistorie")
 ) || [];
