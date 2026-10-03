@@ -613,12 +613,8 @@ function toonRekeningen() {
     onclick="rekeningBewerken(${rekening.id})"
     aria-label="Rekening bewerken"
 >
-<svg
-    class="rekening-icoon"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
->
+<span class="rekening-potlood">✎</span>
+
     <path
         d="M5 19h4L19 9l-4-4L5 15v4Z"
         fill="none"
