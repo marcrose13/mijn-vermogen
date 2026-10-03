@@ -613,7 +613,14 @@ function toonRekeningen() {
     onclick="rekeningBewerken(${rekening.id})"
     aria-label="Rekening bewerken"
 >
-    ✎
+    <svg
+    class="rekening-icoon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+>
+    <path d="M4 20h4L19 9l-4-4L4 16v4z"></path>
+    <path d="M13 6l4 4"></path>
+</svg>
 </button>
 
 <button
@@ -621,7 +628,17 @@ function toonRekeningen() {
     onclick="rekeningVerwijderen(${rekening.id})"
     aria-label="Rekening verwijderen"
 >
-    ×
+    <svg
+    class="rekening-icoon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+>
+    <path d="M5 7h14"></path>
+    <path d="M9 7V4h6v3"></path>
+    <path d="M7 7l1 13h8l1-13"></path>
+    <path d="M10 11v6"></path>
+    <path d="M14 11v6"></path>
+</svg>
 </button>
 
             </div>
