@@ -1,11 +1,5 @@
 /*
  * ==========================================
- * DATA
- * ==========================================
- */
-
-/*
- * ==========================================
  * DATA (Met automatische herstel-check)
  * ==========================================
  */
@@ -21,10 +15,6 @@ let historie = JSON.parse(localStorage.getItem("vermogensData")) ||
 // Direct opslaan onder de actieve sleutels zodat het hersteld blijft
 localStorage.setItem("mijnVermogenRekeningen", JSON.stringify(rekeningen));
 localStorage.setItem("mijnVermogenHistorie", JSON.stringify(historie));
-    
-) || JSON.parse(
-    localStorage.getItem("mijnVermogenHistorie")
-) || [];
 
 let huidigePeriode = "alles";
 
