@@ -436,19 +436,30 @@
     border-radius: 14px;
 
     color: #334155;
+    font-family: inherit;
     font-size: 14px;
     font-weight: 600;
+    line-height: 1.2;
 
     cursor: pointer;
-    transition: background 0.2s ease;
-    
+    text-align: center;
+
     appearance: none;
--webkit-appearance: none;
-    
+    -webkit-appearance: none;
+
+    box-shadow: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
 }
 
 .historie-meer-knop:hover {
     background: #e5e7eb;
+}
+
+.historie-meer-knop:active {
+    transform: scale(0.98);
 }
 
     /*
