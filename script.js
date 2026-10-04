@@ -608,51 +608,84 @@ function toonRekeningen() {
 
             <div class="rekening-acties">
 
-         <button
-    class="rekening-actieknop"
-    onclick="rekeningBewerken(${rekening.id})"
-    aria-label="Rekening bewerken"
->
-<span class="rekening-potlood">✎</span>
+    <button
+        class="rekening-actieknop"
+        onclick="rekeningBewerken(${rekening.id})"
+        aria-label="Rekening bewerken"
+    ></button>
 
-    <path
-        d="M5 19h4L19 9l-4-4L5 15v4Z"
-        fill="none"
-        stroke="#6b7280"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-    />
-</svg>
-</button>
+    <button
+        class="rekening-actieknop"
+        onclick="rekeningVerwijderen(${rekening.id})"
+        aria-label="Rekening verwijderen"
+    >
+        <svg
+            class="rekening-icoon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path d="M5 7h14"></path>
+            <path d="M9 7V4h6v3"></path>
+            <path d="M7 7l1 13h8l1-13"></path>
+        </svg>
+    </button>
 
-<button
-    class="rekening-actieknop"
-    onclick="rekeningVerwijderen(${rekening.id})"
-    aria-label="Rekening verwijderen"
->
-<svg
-    class="rekening-icoon"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    fill="none"
-    stroke="#6b7280"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
->
-        <path d="M5 7h14"></path>
-        <path d="M9 7V4h6v3"></path>
-        <path d="M7 7l1 13h8l1-13"></path>
-    </svg>
-</button>
-
-            </div>
+</div>
 
         `;
 
 
-        container.appendChild(div);
+        const bewerkKnop = div.querySelector(
+    '.rekening-actieknop'
+);
+
+const potlood = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'svg'
+);
+
+potlood.setAttribute('class', 'rekening-icoon');
+potlood.setAttribute('viewBox', '0 0 24 24');
+potlood.setAttribute('aria-hidden', 'true');
+
+const potloodPad = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'path'
+);
+
+potloodPad.setAttribute(
+    'd',
+    'M5 19h4L19 9l-4-4L5 15v4Z'
+);
+
+potloodPad.setAttribute('fill', 'none');
+potloodPad.setAttribute('stroke', '#6b7280');
+potloodPad.setAttribute('stroke-width', '2');
+potloodPad.setAttribute('stroke-linecap', 'round');
+potloodPad.setAttribute('stroke-linejoin', 'round');
+
+const potloodDetail = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'path'
+);
+
+potloodDetail.setAttribute(
+    'd',
+    'm13 6 4 4'
+);
+
+potloodDetail.setAttribute('fill', 'none');
+potloodDetail.setAttribute('stroke', '#6b7280');
+potloodDetail.setAttribute('stroke-width', '2');
+potloodDetail.setAttribute('stroke-linecap', 'round');
+potloodDetail.setAttribute('stroke-linejoin', 'round');
+
+potlood.appendChild(potloodPad);
+potlood.appendChild(potloodDetail);
+
+bewerkKnop.appendChild(potlood);
+
+container.appendChild(div);
 
     });
 
