@@ -1678,27 +1678,80 @@ function toonHistorie() {
 
 
             const verwijderButton =
-                document.createElement("button");
+    document.createElement("button");
 
-            verwijderButton.type =
-                "button";
+verwijderButton.type =
+    "button";
 
-            verwijderButton.className =
-                "historie-verwijderknop";
+verwijderButton.className =
+    "rekening-svg-button rekening-svg-button-verwijderen";
 
-            verwijderButton.textContent =
-                "×";
+verwijderButton.style.cssText =
+    "width:38px;" +
+    "height:38px;" +
+    "flex:0 0 38px;" +
+    "display:flex;" +
+    "align-items:center;" +
+    "justify-content:center;" +
+    "padding:0;" +
+    "border:1px solid #e5e7eb;" +
+    "border-radius:12px;" +
+    "background:#ffffff;" +
+    "color:#6b7280;" +
+    "cursor:pointer;" +
+    "appearance:none;" +
+    "-webkit-appearance:none;" +
+    "box-shadow:0 2px 6px rgba(0,0,0,0.04);";
 
-            verwijderButton.title =
-                "Dit vermogensmoment verwijderen";
+verwijderButton.title =
+    "Dit vermogensmoment verwijderen";
 
-            verwijderButton.setAttribute(
-                "aria-label",
-                "Vermogensmoment van " +
-                formatteerDatum(moment.datum) +
-                " verwijderen"
-            );
+verwijderButton.setAttribute(
+    "aria-label",
+    "Vermogensmoment van " +
+    formatteerDatum(moment.datum) +
+    " verwijderen"
+);
 
+
+const verwijderIcon =
+    document.createElement("svg");
+
+verwijderIcon.setAttribute(
+    "viewBox",
+    "0 0 24 24"
+);
+
+verwijderIcon.setAttribute(
+    "aria-hidden",
+    "true"
+);
+
+verwijderIcon.style.cssText =
+    "width:18px;" +
+    "height:18px;" +
+    "display:block;" +
+    "fill:currentColor;" +
+    "stroke:none;" +
+    "pointer-events:none;";
+
+
+const verwijderPath =
+    document.createElement("path");
+
+verwijderPath.setAttribute(
+    "d",
+    "M7 8h10l-.7 11.2a1 1 0 0 1-1 .8H8.7a1 1 0 0 1-1-.8L7 8Zm2-4h6l1 2H8l1-2Zm-3 2h12v2H6V6Z"
+);
+
+
+verwijderIcon.appendChild(
+    verwijderPath
+);
+
+verwijderButton.appendChild(
+    verwijderIcon
+);
 
             /*
              * Belangrijk:
