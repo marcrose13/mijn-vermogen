@@ -6,12 +6,10 @@
     html {
         background: var(--app-background);
     }
-
-    body {
     
     body {
     background: red !important;
-}
+
         outline: 5px solid red;
     
         margin: 0;
