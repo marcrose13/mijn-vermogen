@@ -700,16 +700,3 @@
 
     }
     
-    .rekening-potlood {
-    display: block;
-    width: 18px;
-    height: 18px;
-
-    font-size: 0;
-
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 19h4L19 9l-4-4L5 15v4Z' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='m13 6 4 4' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-}
