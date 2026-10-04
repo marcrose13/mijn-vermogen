@@ -1,5 +1,4 @@
 
-
 /*
  * ==========================================
  * DATA
@@ -273,7 +272,7 @@ function instellingenOpenen() {
 
     popup.appendChild(label);
 
-popup.appendChild(kleurOpties);
+    popup.appendChild(kleurOpties);
 
 
 /*
@@ -446,6 +445,7 @@ function formatteerDatum(datum) {
  * TOTAAL BEREKENEN
  * ==========================================
  */
+
 function berekenTotaal() {
 
     let totaal = 0;
@@ -462,11 +462,11 @@ function berekenTotaal() {
     ).textContent = formatteerBedrag(totaal);
 
 
-    /*
-     * ==========================================
-     * DOELBALK BIJWERKEN
-     * ==========================================
-     */
+/*
+ * ==========================================
+ * DOELBALK BIJWERKEN
+ * ==========================================
+ */
 
     const doelContainer =
         document.getElementById(
@@ -524,23 +524,24 @@ function berekenTotaal() {
         weergegevenPercentage + "%";
 
 
-if (totaal >= vermogensDoel) {
+    if (totaal >= vermogensDoel) {
 
-    doelTekst.textContent =
-        "Doel bereikt 🎉";
+        doelTekst.textContent =
+            "Doel bereikt 🎉";
 
-} else {
+    } else {
 
-    const resterend =
-        vermogensDoel - totaal;
+        const resterend =
+            vermogensDoel - totaal;
 
-    doelTekst.textContent =
-        formatteerBedrag(resterend)
-        + " te gaan";
+        doelTekst.textContent =
+            formatteerBedrag(resterend)
+            + " te gaan";
+
+    }
 
 }
 
-}
 
 /*
  * ==========================================
@@ -582,21 +583,20 @@ function toonRekeningen() {
                     ${rekening.naam}
                 </div>
 
-<div class="rekening-type">
-    <span class="rekening-type-icoon">
-        ${
-            rekening.type === "Sparen"
-                ? "◈"
-                    : rekening.type === "Beleggen"
-        ? "↗"
-        : rekening.type === "Betaalrekening"
-            ? "≡"
-            : "•"
-                
-        }
-    </span>
-    ${rekening.type}
-</div>
+                <div class="rekening-type">
+                    <span class="rekening-type-icoon">
+                        ${
+                            rekening.type === "Sparen"
+                                ? "◈"
+                                : rekening.type === "Beleggen"
+                                ? "↗"
+                                : rekening.type === "Betaalrekening"
+                                ? "≡"
+                                : "•"
+                        }
+                    </span>
+                    ${rekening.type}
+                </div>
 
             </div>
 
@@ -608,84 +608,52 @@ function toonRekeningen() {
 
             <div class="rekening-acties">
 
-    <button
-        class="rekening-actieknop"
-        onclick="rekeningBewerken(${rekening.id})"
-        aria-label="Rekening bewerken"
-    ></button>
+                <button
+                    type="button"
+                    class="rekening-svg-button"
+                    style="width:38px;height:38px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid #e5e7eb;border-radius:12px;background:#ffffff;color:#6b7280;cursor:pointer;appearance:none;-webkit-appearance:none;box-shadow:0 2px 6px rgba(0,0,0,0.04);"
+                    onclick="rekeningBewerken(${rekening.id})"
+                    aria-label="Rekening bewerken"
+                >
+                    <svg
+                        class="rekening-svg-icon"
+                        viewBox="0 0 24 24"
+                        style="width:18px;height:18px;display:block;fill:currentColor;stroke:none;pointer-events:none;"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M5 16.8V20h3.2L18.9 9.3l-3.2-3.2L5 16.8Zm13.8-9.1
+                               1.1-1.1a1.7 1.7 0 0 0 0-2.4l-.1-.1a1.7 1.7 0 0 0-2.4 0l-1.1 1.1
+                               2.5 2.5Z"
+                        />
+                    </svg>
+                </button>
 
-    <button
-        class="rekening-actieknop"
-        onclick="rekeningVerwijderen(${rekening.id})"
-        aria-label="Rekening verwijderen"
-    >
-        <svg
-            class="rekening-icoon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-        >
-            <path d="M5 7h14"></path>
-            <path d="M9 7V4h6v3"></path>
-            <path d="M7 7l1 13h8l1-13"></path>
-        </svg>
-    </button>
 
-</div>
+                <button
+                    type="button"
+                    class="rekening-svg-button rekening-svg-button-verwijderen"
+                    style="width:38px;height:38px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid #e5e7eb;border-radius:12px;background:#ffffff;color:#6b7280;cursor:pointer;appearance:none;-webkit-appearance:none;box-shadow:0 2px 6px rgba(0,0,0,0.04);"
+                    onclick="rekeningVerwijderen(${rekening.id})"
+                    aria-label="Rekening verwijderen"
+                >
+                    <svg
+                        class="rekening-svg-icon"
+                        viewBox="0 0 24 24"
+                        style="width:18px;height:18px;display:block;fill:currentColor;stroke:none;pointer-events:none;"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M7 8h10l-.7 11.2a1 1 0 0 1-1 .8H8.7a1 1 0 0 1-1-.8L7 8Zm2-4h6l1 2H8l1-2Zm-3 2h12v2H6V6Z"
+                        />
+                    </svg>
+                </button>
+
+            </div>
 
         `;
 
-
-        const bewerkKnop = div.querySelector(
-    '.rekening-actieknop'
-);
-
-const potlood = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'svg'
-);
-
-potlood.setAttribute('class', 'rekening-icoon');
-potlood.setAttribute('viewBox', '0 0 24 24');
-potlood.setAttribute('aria-hidden', 'true');
-
-const potloodPad = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'path'
-);
-
-potloodPad.setAttribute(
-    'd',
-    'M5 19h4L19 9l-4-4L5 15v4Z'
-);
-
-potloodPad.setAttribute('fill', 'none');
-potloodPad.setAttribute('stroke', '#6b7280');
-potloodPad.setAttribute('stroke-width', '2');
-potloodPad.setAttribute('stroke-linecap', 'round');
-potloodPad.setAttribute('stroke-linejoin', 'round');
-
-const potloodDetail = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'path'
-);
-
-potloodDetail.setAttribute(
-    'd',
-    'm13 6 4 4'
-);
-
-potloodDetail.setAttribute('fill', 'none');
-potloodDetail.setAttribute('stroke', '#6b7280');
-potloodDetail.setAttribute('stroke-width', '2');
-potloodDetail.setAttribute('stroke-linecap', 'round');
-potloodDetail.setAttribute('stroke-linejoin', 'round');
-
-potlood.appendChild(potloodPad);
-potlood.appendChild(potloodDetail);
-
-bewerkKnop.appendChild(potlood);
-
-container.appendChild(div);
+        container.appendChild(div);
 
     });
 
@@ -802,21 +770,21 @@ function rekeningToevoegen() {
             Kies een type
         </option>
 
-<option value="Sparen">
-    ◈ Sparen
-</option>
+        <option value="Sparen">
+            ◈ Sparen
+        </option>
 
-<option value="Beleggen">
-    ↗ Beleggen
-</option>
+        <option value="Beleggen">
+            ↗ Beleggen
+        </option>
 
-<option value="Betaalrekening">
-    ≡ Betaalrekening
-</option>
+        <option value="Betaalrekening">
+            ≡ Betaalrekening
+        </option>
 
-<option value="Overig">
-    • Overig
-</option>
+        <option value="Overig">
+            • Overig
+        </option>
 
     `;
 
@@ -1033,6 +1001,7 @@ function rekeningToevoegen() {
 
         berekenTotaal();
 
+
         overlay.remove();
 
         vraagVermogensMomentOpslaan();
@@ -1177,25 +1146,25 @@ function rekeningBewerken(id) {
         "formulier-select";
 
 
-typeSelect.innerHTML = `
+    typeSelect.innerHTML = `
 
-    <option value="Sparen">
-        ◈ Sparen
-    </option>
+        <option value="Sparen">
+            ◈ Sparen
+        </option>
 
-    <option value="Beleggen">
-        ↗ Beleggen
-    </option>
+        <option value="Beleggen">
+            ↗ Beleggen
+        </option>
 
-    <option value="Betaalrekening">
-        ≡ Betaalrekening
-    </option>
+        <option value="Betaalrekening">
+            ≡ Betaalrekening
+        </option>
 
-    <option value="Overig">
-        • Overig
-    </option>
+        <option value="Overig">
+            • Overig
+        </option>
 
-`;
+    `;
 
 
     typeSelect.value =
@@ -1599,6 +1568,7 @@ function vermogensMomentOpslaan() {
 
 }
 
+
 /*
  * ==========================================
  * HISTORIE TONEN
@@ -1857,6 +1827,7 @@ function toonHistorie() {
     }
 
 }
+
 
 /*
  * ==========================================
@@ -3172,38 +3143,75 @@ function tekenGrafiek() {
      * vermogensmoment in de grafiek gebruiken.
      * De originele historie blijft ongewijzigd.
      */
+
     const laatsteMomentPerMaand = new Map();
 
+
     gegevens.forEach(function(item, index) {
-        const datum = new Date(item.datum);
+
+        const datum =
+            new Date(item.datum);
+
         const sleutel =
             datum.getFullYear() + "-" +
-            String(datum.getMonth() + 1).padStart(2, "0");
+            String(
+                datum.getMonth() + 1
+            ).padStart(2, "0");
 
-        const bestaand = laatsteMomentPerMaand.get(sleutel);
+
+        const bestaand =
+            laatsteMomentPerMaand.get(
+                sleutel
+            );
+
 
         if (
             !bestaand ||
-            datum > new Date(bestaand.item.datum) ||
+            datum >
+            new Date(
+                bestaand.item.datum
+            ) ||
             (
-                datum.getTime() === new Date(bestaand.item.datum).getTime() &&
-                index > bestaand.index
+                datum.getTime() ===
+                new Date(
+                    bestaand.item.datum
+                ).getTime() &&
+                index >
+                bestaand.index
             )
         ) {
-            laatsteMomentPerMaand.set(sleutel, {
-                item: item,
-                index: index
-            });
+
+            laatsteMomentPerMaand.set(
+                sleutel,
+                {
+                    item: item,
+                    index: index
+                }
+            );
+
         }
+
     });
 
-    gegevens = Array.from(laatsteMomentPerMaand.values())
+
+    gegevens =
+        Array.from(
+            laatsteMomentPerMaand.values()
+        )
         .map(function(entry) {
+
             return entry.item;
+
         })
         .sort(function(a, b) {
-            return new Date(a.datum) - new Date(b.datum);
+
+            return (
+                new Date(a.datum) -
+                new Date(b.datum)
+            );
+
         });
+
 
     updateGroeiInfo(
         gegevens
@@ -3608,7 +3616,6 @@ function tekenGrafiek() {
         paddingBoven +
         grafiekHoogte
     );
-
 
 }
 
