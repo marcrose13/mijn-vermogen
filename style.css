@@ -861,7 +861,7 @@ h2 {
     width: 100%;
     max-width: 380px;
 
-    background: white;
+    background: var(--color-surface-light);
 
     border-radius: 22px;
 
@@ -975,7 +975,7 @@ h2 {
     width: 100%;
     max-width: 430px;
 
-    background: white;
+    background: var(--color-surface-light);
 
     border-radius: 22px;
 
