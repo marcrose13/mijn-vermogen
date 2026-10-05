@@ -1,100 +1,151 @@
+:root {
+    --app-background: #C5DEDE;
+}
 
-    :root {
-        --app-background: #C5DEDE;
-    }
+html {
+    background: var(--app-background);
+}
 
-    html {
-        background: var(--app-background);
-    }
-    
-    body {
-        margin: 0;
-        padding: 0;
-        background: var(--app-background);
-        font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-        color: #111827;
-        -webkit-font-smoothing: antialiased;
-    }
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--app-background);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+}
 
-    .container {
-        width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
-        padding:
-            calc(20px + env(safe-area-inset-top))
-            16px
-            calc(30px + env(safe-area-inset-bottom))
-            16px;
-        box-sizing: border-box;
-    }
+.container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding:
+        calc(20px + env(safe-area-inset-top))
+        16px
+        calc(30px + env(safe-area-inset-bottom))
+        16px;
+    box-sizing: border-box;
+}
 
 
-    /*
-     * ==========================================
-     * TITEL + INSTELLINGEN
-     * ==========================================
-     */
+/*
+ * ==========================================
+ * TITEL + INSTELLINGEN
+ * ==========================================
+ */
 
-    .header {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px 0 25px;
-    }
+.header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 25px;
+}
 
-    h1 {
-        margin: 0;
-        font-size: 30px;
-    }
+h1 {
+    margin: 0;
+    font-size: 30px;
+}
 
-    .instellingen-button {
-        position: absolute;
-        right: 0;
-        top: calc(50% + 2px);
-        transform: translateY(-50%);
+.instelingen-button {
+    position: absolute;
+    right: 0;
+    top: calc(50% + 2px);
+    transform: translateY(-50%);
 
-        width: 42px;
-        height: 42px;
+    width: 42px;
+    height: 42px;
 
-        border: none;
-        border-radius: 12px;
+    border: none;
+    border-radius: 12px;
 
-        background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.75);
 
-        cursor: pointer;
+    cursor: pointer;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        transition:
-            transform 0.15s ease,
-            background 0.15s ease;
-    }
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
 
-    .instellingen-button:active {
-        transform:
-            translateY(-50%)
-            scale(0.94);
-    }
+.instelingen-button:active {
+    transform:
+        translateY(-50%)
+        scale(0.94);
+}
 
-    .instellingen-button:hover {
-        background: white;
-    }
+.instelingen-button:hover {
+    background: white;
+}
+
+
+/*
+ * LET OP:
+ * De bestaande HTML gebruikt .instellingen-button
+ * zonder extra spellingvariant.
+ */
+
+.instellingen-button {
+    position: absolute;
+    right: 0;
+    top: calc(50% + 2px);
+    transform: translateY(-50%);
+
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.instellingen-button:active {
+    transform:
+        translateY(-50%)
+        scale(0.94);
+}
+
+.instellingen-button:hover {
+    background: white;
+}
+
 .instellingen-icoon {
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
+
+    display: block;
+
     fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
+    stroke: #111827;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
+
+    pointer-events: none;
 }
+
 .rekening-icoon {
     width: 18px;
     height: 18px;
@@ -107,197 +158,519 @@
     stroke-linejoin: round;
 }
 
-    h2 {
-        margin-top: 0;
-        font-size: 20px;
-    }
-
-    .section {
-        background: white;
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 18px;
-        box-shadow:
-            0 4px 15px rgba(0, 0, 0, 0.06);
-    }
-
-    .total-card {
-        text-align: center;
-        padding: 25px 20px;
-    }
-
-    .total-label {
-        font-size: 15px;
-        color: #6b7280;
-        margin-bottom: 8px;
-    }
-
-    #total-vermogen {
-        font-size: 36px;
-        font-weight: 700;
-    }
-
-    .groei-info {
-        margin-top: 8px;
-        margin-bottom: 12px;
-        font-size: 14px;
-        color: #6b7280;
-    }
-
-    .periode-buttons {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-
-    .periode-buttons button {
-        flex: 1;
-        min-height: 42px;
-        border: none;
-        border-radius: 10px;
-        background: #e5e7eb;
-        color: #374151;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .periode-buttons button.active {
-        background: #111827;
-        color: white;
-    }
+h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
 
 
-    /*
-     * ==========================================
-     * GRAFIEK
-     * ==========================================
-     */
+/*
+ * ==========================================
+ * SECTIES
+ * ==========================================
+ */
 
-    .grafiek-wrapper {
-        position: relative;
-        width: 100%;
-        height: 290px;
-        touch-action: pan-y;
-    }
+.section {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 16px;
 
-    .grafiek-wrapper canvas {
-        display: block;
-        width: 100%;
-        height: 290px;
-        max-width: 100%;
-        cursor: crosshair;
-    }
+    border: 1px solid rgba(17, 24, 39, 0.05);
 
-    .grafiek-tooltip {
-        position: absolute;
-        z-index: 20;
-
-        min-width: 150px;
-        max-width: 210px;
-
-        padding: 10px 12px;
-
-        border-radius: 12px;
-
-        background: rgba(17, 24, 39, 0.96);
-        color: white;
-
-        font-size: 13px;
-        line-height: 1.35;
-
-        box-shadow:
-            0 8px 25px rgba(0, 0, 0, 0.18);
-
-        pointer-events: none;
-
-        opacity: 0;
-
-        transform:
-            translate(
-                -50%,
-                calc(-100% - 12px)
-            );
-
-        transition:
-            opacity 0.12s ease;
-
-        box-sizing: border-box;
-    }
-
-    .grafiek-tooltip.visible {
-        opacity: 1;
-    }
-
-    .grafiek-tooltip.onder {
-        transform:
-            translate(
-                -50%,
-                12px
-            );
-    }
-
-    .grafiek-tooltip-datum {
-        color: #d1d5db;
-        margin-bottom: 3px;
-    }
-
-    .grafiek-tooltip-bedrag {
-        font-size: 16px;
-        font-weight: 700;
-    }
-
-    .grafiek-tooltip-verschil {
-        color: #d1d5db;
-        margin-top: 3px;
-    }
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.035);
+}
 
 
-    /*
-     * ==========================================
-     * REKENINGEN
-     * ==========================================
-     */
+/*
+ * ==========================================
+ * TOTAAL VERMOGEN
+ * ==========================================
+ */
 
-    .rekening {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 15px 0;
-        border-bottom: 1px solid #e5e7eb;
-    }
+.total-card {
+    text-align: left;
+    padding: 28px 24px;
+}
 
-    .rekening:last-child {
-        border-bottom: none;
-    }
+.total-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
 
-    .rekening-info {
-        flex: 1;
-        min-width: 0;
-    }
+#total-vermogen {
+    font-size: 36px;
+    font-weight: 700;
+}
 
-    .rekening-naam {
-        font-weight: 600;
-        font-size: 16px;
-        margin-bottom: 4px;
-    }
+.groei-info {
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #6b7280;
+}
 
-    .rekening-type {
-        font-size: 13px;
-        color: #6b7280;
-    }
 
-    .rekening-bedrag {
-        font-weight: 700;
-        white-space: nowrap;
-    }
+/*
+ * ==========================================
+ * DOELBALK
+ * ==========================================
+ */
 
-   .rekening-acties {
+.doel-container {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #eef0f2;
+}
+
+.doel-header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#doel-percentage {
+    color: #111827;
+    font-weight: 700;
+}
+
+.doel-balk {
+    width: 100%;
+    height: 8px;
+
+    background: #eef0f2;
+
+    border-radius: 999px;
+
+    overflow: hidden;
+}
+
+#doel-balk-vulling {
+    width: 0;
+    height: 100%;
+
+    background: #111827;
+
+    border-radius: 999px;
+
+    transition: width 0.35s ease;
+}
+
+.doel-tekst {
+    margin-top: 8px;
+
+    font-size: 13px;
+    color: #8a919b;
+}
+
+
+/*
+ * ==========================================
+ * PERIODE KNOPPEN
+ * ==========================================
+ */
+
+.periode-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.periode-buttons button {
+    flex: 1;
+
+    min-height: 42px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #e5e7eb;
+    color: #374151;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.periode-buttons button.active {
+    background: #111827;
+    color: white;
+}
+
+.periode-buttons button:active {
+    transform: scale(0.98);
+}
+
+
+/*
+ * ==========================================
+ * GRAFIEK
+ * ==========================================
+ */
+
+.grafiek-wrapper {
+    position: relative;
+    width: 100%;
+    height: 290px;
+    touch-action: pan-y;
+}
+
+.grafiek-wrapper canvas {
+    display: block;
+
+    width: 100%;
+    height: 290px;
+    max-width: 100%;
+
+    cursor: crosshair;
+}
+
+.grafiek-tooltip {
+    position: absolute;
+    z-index: 20;
+
+    min-width: 150px;
+    max-width: 210px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    background: rgba(17, 24, 39, 0.96);
+    color: white;
+
+    font-size: 13px;
+    line-height: 1.35;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.18);
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transform:
+        translate(
+            -50%,
+            calc(-100% - 12px)
+        );
+
+    transition:
+        opacity 0.12s ease;
+
+    box-sizing: border-box;
+}
+
+.grafiek-tooltip.visible {
+    opacity: 1;
+}
+
+.grafiek-tooltip.onder {
+    transform:
+        translate(
+            -50%,
+            12px
+        );
+}
+
+.grafiek-tooltip-datum {
+    color: #d1d5db;
+    margin-bottom: 3px;
+}
+
+.grafiek-tooltip-bedrag {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.grafiek-tooltip-verschil {
+    color: #d1d5db;
+    margin-top: 3px;
+}
+
+
+/*
+ * ==========================================
+ * REKENINGEN
+ * ==========================================
+ */
+
+.rekening {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid #eef0f2;
+}
+
+.rekening:last-child {
+    border-bottom: none;
+}
+
+.rekening-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.rekening-naam {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.3;
+
+    margin-bottom: 4px;
+
+    color: #111827;
+}
+
+.rekening-type {
+    display: flex;
+    align-items: center;
     gap: 6px;
+
+    font-size: 12px;
+    color: #8a919b;
+}
+
+.rekening-type-icoon {
+    width: 20px;
+    height: 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 20px;
+
+    border-radius: 7px;
+
+    background: #f1f3f5;
+    color: #374151;
+
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.rekening-bedrag {
+    font-weight: 700;
+    font-size: 16px;
+
+    white-space: nowrap;
+
+    letter-spacing: -0.3px;
+
+    color: #111827;
+}
+
+.rekening-acties {
+    display: flex;
+    gap: 5px;
 }
 
 .rekening-acties button {
+    padding: 7px 9px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #f5f6f7;
+    color: #6b7280;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.rekening-acties button:hover {
+    background: #e9eaec;
+    color: #111827;
+}
+
+.rekening-acties button:active {
+    transform: scale(0.94);
+}
+
+
+/*
+ * ==========================================
+ * REKENING SVG KNOPPEN
+ * ==========================================
+ */
+
+.rekening-svg-button {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    background: #ffffff;
+    color: #6b7280;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.04);
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.rekening-svg-button:hover {
+    background: #f8f9fa;
+    border-color: #dfe3e6;
+    color: #111827;
+}
+
+.rekening-svg-button:active {
+    transform: scale(0.94);
+}
+
+.rekening-svg-icon {
+    width: 18px;
+    height: 18px;
+
+    display: block;
+
+    fill: currentColor;
+    stroke: none;
+
+    pointer-events: none;
+}
+
+
+/*
+ * ==========================================
+ * ALGEMENE KNOPPEN
+ * ==========================================
+ */
+
+.primary-button {
+    width: 100%;
+    min-height: 50px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #111827;
+    color: white;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.secondary-button {
+    width: 100%;
+    min-height: 45px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #e5e7eb;
+    color: #111827;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.danger-button {
+    width: 100%;
+    min-height: 45px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #fee2e2;
+    color: #991b1b;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+/*
+ * ==========================================
+ * HISTORIE
+ * ==========================================
+ */
+
+.historie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.historie-item:last-child {
+    border-bottom: none;
+}
+
+.historie-datum {
+    color: #6b7280;
+    flex: 1;
+}
+
+.historie-verwijderknop {
     width: 34px;
     height: 34px;
 
@@ -328,97 +701,6 @@
     -webkit-appearance: none;
 }
 
-.rekening-acties button:hover {
-    background: #e5e7eb;
-    color: #111827;
-}
-
-.rekening-acties button:active {
-    transform: scale(0.94);
-}
-
-    .primary-button {
-        width: 100%;
-        min-height: 50px;
-        border: none;
-        border-radius: 12px;
-        background: #111827;
-        color: white;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .secondary-button {
-        width: 100%;
-        min-height: 45px;
-        border: none;
-        border-radius: 12px;
-        background: #e5e7eb;
-        color: #111827;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .danger-button {
-        width: 100%;
-        min-height: 45px;
-        border: none;
-        border-radius: 12px;
-        background: #fee2e2;
-        color: #991b1b;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .historie-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 0;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .historie-item:last-child {
-        border-bottom: none;
-    }
-
-    .historie-datum {
-        color: #6b7280;
-        flex: 1;
-    }
-    
-    .historie-verwijderknop {
-    width: 34px;
-    height: 34px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #f3f4f6;
-    color: #6b7280;
-
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        transform 0.15s ease;
-}
-
 .historie-verwijderknop:hover {
     background: #e5e7eb;
     color: #111827;
@@ -428,12 +710,18 @@
     transform: scale(0.94);
 }
 
-    .leeg {
-        color: #6b7280;
-        text-align: center;
-        padding: 10px 0;
-    }
+.leeg {
+    color: #6b7280;
+    text-align: center;
+    padding: 10px 0;
+}
 
+
+/*
+ * ==========================================
+ * HISTORIE — MEER / MINDER
+ * ==========================================
+ */
 
 .historie-meer-knop {
     display: flex;
@@ -442,17 +730,25 @@
 
     width: 100%;
     height: 44px;
+
     margin-top: 12px;
     padding: 0 16px;
 
     box-sizing: border-box;
 
     background: #f3f4f6;
+
     border: 1px solid #e5e7eb;
     border-radius: 12px;
 
     color: #374151;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
     font-size: 14px;
     font-weight: 600;
     line-height: 1;
@@ -483,220 +779,257 @@
     transform: scale(0.98);
 }
 
-.historie-meer-knop:active {
-    transform: scale(0.98);
+
+/*
+ * ==========================================
+ * INSTELLINGEN POPUP
+ * ==========================================
+ */
+
+.instellingen-popup-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(17, 24, 39, 0.45);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    z-index: 10000;
 }
 
-    /*
-     * ==========================================
-     * INSTELLINGEN POPUP
-     * ==========================================
-     */
+.instellingen-popup {
+    width: 100%;
+    max-width: 380px;
 
-    .instellingen-popup-overlay {
-        position: fixed;
-        inset: 0;
+    background: white;
 
-        background: rgba(17, 24, 39, 0.45);
+    border-radius: 22px;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    padding: 24px;
 
-        padding: 20px;
-        box-sizing: border-box;
+    box-sizing: border-box;
 
-        z-index: 10000;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.instellingen-titel {
+    font-size: 22px;
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+.instellingen-subtitel {
+    font-size: 14px;
+    color: #6b7280;
+
+    margin-bottom: 24px;
+}
+
+.instellingen-label {
+    font-size: 14px;
+    font-weight: 600;
+
+    margin-bottom: 12px;
+}
+
+.kleur-opties {
+    display: flex;
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.kleur-optie {
+    flex: 1;
+
+    border: 2px solid transparent;
+    border-radius: 14px;
+
+    padding: 6px;
+
+    background: #f3f4f6;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        transform 0.15s ease;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.kleur-optie:hover {
+    transform: translateY(-2px);
+}
+
+.kleur-optie.active {
+    border-color: #111827;
+}
+
+.kleur-preview {
+    width: 100%;
+    height: 55px;
+
+    border-radius: 9px;
+
+    margin-bottom: 7px;
+}
+
+.kleur-naam {
+    font-size: 12px;
+    font-weight: 600;
+
+    text-align: center;
+
+    color: #374151;
+}
+
+
+/*
+ * ==========================================
+ * REKENING POPUP
+ * ==========================================
+ */
+
+.rekening-popup-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(17, 24, 39, 0.45);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    z-index: 9999;
+}
+
+.rekening-popup {
+    width: 100%;
+    max-width: 430px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.rekening-popup-titel {
+    font-size: 22px;
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+.rekening-popup-subtitel {
+    font-size: 14px;
+    color: #6b7280;
+
+    margin-bottom: 22px;
+}
+
+.formulier-label {
+    display: block;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    margin-bottom: 7px;
+}
+
+.formulier-groep {
+    margin-bottom: 17px;
+}
+
+.formulier-input,
+.formulier-select {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 0 13px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d1d5db;
+    border-radius: 11px;
+
+    background: white;
+    color: #111827;
+
+    font-family: inherit;
+    font-size: 16px;
+
+    outline: none;
+
+    margin-bottom: 18px;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.formulier-input:focus,
+.formulier-select:focus {
+    border-color: #111827;
+}
+
+.popup-knoppen {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.popup-knoppen button {
+    flex: 1;
+}
+
+
+/*
+ * ==========================================
+ * MOBIEL
+ * ==========================================
+ */
+
+@media (max-width: 380px) {
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
-    .instellingen-popup {
-        width: 100%;
-        max-width: 380px;
-
-        background: white;
-
-        border-radius: 22px;
-
-        padding: 24px;
-
-        box-sizing: border-box;
-
-        box-shadow:
-            0 20px 50px rgba(0, 0, 0, 0.2);
+    #total-vermogen {
+        font-size: 32px;
     }
 
-    .instellingen-titel {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .instellingen-subtitel {
-        font-size: 14px;
-        color: #6b7280;
-        margin-bottom: 24px;
-    }
-
-    .instellingen-label {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
-
-    .kleur-opties {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 24px;
-    }
-
-    .kleur-optie {
-        flex: 1;
-
-        border: 2px solid transparent;
-
-        border-radius: 14px;
-
-        padding: 6px;
-
-        background: #f3f4f6;
-
-        cursor: pointer;
-
-        transition:
-            border-color 0.15s ease,
-            transform 0.15s ease;
-    }
-
-    .kleur-optie:hover {
-        transform: translateY(-2px);
-    }
-
-    .kleur-optie.active {
-        border-color: #111827;
-    }
-
-    .kleur-preview {
-        width: 100%;
-        height: 55px;
-
-        border-radius: 9px;
-
-        margin-bottom: 7px;
-    }
-
-    .kleur-naam {
-        font-size: 12px;
-        font-weight: 600;
-        text-align: center;
-        color: #374151;
-    }
-
-
-    /*
-     * ==========================================
-     * REKENING POPUP
-     * ==========================================
-     */
-
-    .rekening-popup-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(17, 24, 39, 0.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
-        z-index: 9999;
+    .section {
+        padding: 17px;
     }
 
     .rekening-popup {
-        width: 100%;
-        max-width: 430px;
-        background: white;
-        border-radius: 22px;
-        padding: 24px;
-        box-sizing: border-box;
-        box-shadow:
-            0 20px 50px rgba(0, 0, 0, 0.2);
+        padding: 20px;
     }
 
-    .rekening-popup-titel {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 6px;
+    .instellingen-popup {
+        padding: 20px;
     }
 
-    .rekening-popup-subtitel {
-        font-size: 14px;
-        color: #6b7280;
-        margin-bottom: 22px;
-    }
-
-    .formulier-label {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 7px;
-    }
-
-    .formulier-groep {
-        margin-bottom: 17px;
-    }
-
-    .formulier-input,
-    .formulier-select {
-        width: 100%;
-        min-height: 48px;
-        padding: 0 13px;
-        box-sizing: border-box;
-        border: 1px solid #d1d5db;
-        border-radius: 11px;
-        background: white;
-        color: #111827;
-        font-family: inherit;
-        font-size: 16px;
-        outline: none;
-        margin-bottom: 18px;
-    }
-
-    .formulier-input:focus,
-    .formulier-select:focus {
-        border-color: #111827;
-    }
-
-    .popup-knoppen {
-        display: flex;
-        gap: 10px;
-        margin-top: 22px;
-    }
-
-    .popup-knoppen button {
-        flex: 1;
-    }
-
-    @media (max-width: 380px) {
-
-        .container {
-            padding-left: 12px;
-            padding-right: 12px;
-        }
-
-        #total-vermogen {
-            font-size: 32px;
-        }
-
-        .section {
-            padding: 17px;
-        }
-
-        .rekening-popup {
-            padding: 20px;
-        }
-
-        .instellingen-popup {
-            padding: 20px;
-        }
-
-    }
-    
+}
