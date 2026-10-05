@@ -41,11 +41,10 @@ const standaardAchtergrond =
     "#EAF2F4";
 
 
-let opgeslagenAchtergrond =
-    localStorage.getItem(
-        "mijnVermogenAchtergrond"
-    ) || standaardAchtergrond;
+localStorage.removeItem("mijnVermogenAchtergrond");
 
+let opgeslagenAchtergrond =
+    standaardAchtergrond;
 
 function achtergrondInstellen(kleur) {
 
