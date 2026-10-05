@@ -38,7 +38,7 @@ let grafiekPunten = [];
  */
 
 const standaardAchtergrond =
-    "#C5DEDE";
+    "#EAF2F4";
 
 
 let opgeslagenAchtergrond =
