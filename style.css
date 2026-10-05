@@ -1,18 +1,4 @@
-:root {
-    --app-background: #C5DEDE;
 
-    --color-primary: #244B52;
-    --color-primary-hover: #1D3D43;
-
-    --color-text: #26363A;
-    --color-text-secondary: #6B7B7F;
-
-    --color-surface-light: #F3F7F7;
-    --color-border: #E1EAEA;
-    --color-muted: #EDF2F2;
-
-    --color-accent: #3F806F;
-}
 
 html {
     background: var(--app-background);
@@ -321,7 +307,7 @@ h2 {
 }
 
 .periode-buttons button.active {
-    background: background: var(--color-primary);
+    background: #111827;
     color: white;
 }
 
@@ -604,7 +590,7 @@ h2 {
     border: none;
     border-radius: 12px;
 
-    background: background: var(--color-primary);
+    background: #111827;
     color: white;
 
     font-size: 16px;
