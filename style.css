@@ -183,15 +183,15 @@ h2 {
  */
 
 .section {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.78);
     border-radius: 18px;
     padding: 22px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 
-    border: 1px solid rgba(17, 24, 39, 0.05);
+    border: 1px solid rgba(36, 75, 82, 0.06);
 
     box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.035);
+        0 2px 8px rgba(36, 75, 82, 0.025);
 }
 
 
