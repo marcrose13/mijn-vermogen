@@ -304,7 +304,7 @@ h2 {
     border: none;
     border-radius: 10px;
 
-    background: #e5e7eb;
+    background: var(--color-muted);
     color: #374151;
 
     font-size: 14px;
