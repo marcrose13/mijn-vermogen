@@ -321,7 +321,7 @@ h2 {
 }
 
 .periode-buttons button.active {
-    background: #111827;
+    background: background: var(--color-primary);
     color: white;
 }
 
@@ -604,7 +604,7 @@ h2 {
     border: none;
     border-radius: 12px;
 
-    background: #111827;
+    background: background: var(--color-primary);
     color: white;
 
     font-size: 16px;
