@@ -1,4 +1,6 @@
-
+:root {
+    --app-background: #C5DEDE;
+}
 
 html {
     background: var(--app-background);
