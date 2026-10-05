@@ -118,9 +118,8 @@ function instellingenOpenen() {
     const kleurOpties =
         document.createElement("div");
 
-    kleurOpties.className =
-        "kleur-opties";
-
+    kleurOpties.className = "kleur-opties";
+kleurOpties.style.display = "none";
 
     const kleuren = [
 
