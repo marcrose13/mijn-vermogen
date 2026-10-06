@@ -1,15 +1,20 @@
 :root {
-    --app-background: #EAF2F4;
+    --app-background: #F5F7FA;
 
-    --color-primary: #17324D;
-    --color-primary-hover: #10263A;
+    --color-primary: #172A46;
+    --color-primary-hover: #102238;
 
-    --color-text: #17324D;
-    --color-text-secondary: #607487;
+    --color-accent: #3B82F6;
 
-    --color-surface-light: #F7FAFB;
-    --color-border: #E1EAEA;
-    --color-muted: #EDF2F2;
+    --color-text: #182230;
+    --color-text-secondary: #718096;
+
+    --color-surface-light: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-muted: #F1F5F9;
+
+    --color-success: #10B981;
+    --color-info: #DBEAFE;
 }
 
 html {
