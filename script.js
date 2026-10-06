@@ -38,13 +38,17 @@ let grafiekPunten = [];
  */
 
 const standaardAchtergrond =
-    "#EAF2F4";
+    "#F5F7FA";
 
 
 let opgeslagenAchtergrond =
-    localStorage.getItem(
-        "mijnVermogenAchtergrond"
-    ) || standaardAchtergrond;
+    standaardAchtergrond;
+
+localStorage.setItem(
+    "mijnVermogenAchtergrond",
+    standaardAchtergrond
+);
+
 
 function achtergrondInstellen(kleur) {
 
