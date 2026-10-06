@@ -118,7 +118,7 @@ h1 {
     border: none;
     border-radius: 12px;
 
-    background: rgba(255, 255, 255, 0.75);
+    background: var(--color-surface-light);
 
     cursor: pointer;
 
@@ -141,7 +141,7 @@ h1 {
 }
 
 .instellingen-button:hover {
-    background: white;
+    background: var(--color-border);
 }
 
 .instellingen-icoon {
@@ -165,7 +165,7 @@ h1 {
     display: block;
 
     fill: none;
-    stroke: #6b7280;
+    stroke: var(--color-text-secondary);
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -189,7 +189,7 @@ h2 {
     padding: 22px;
     margin-bottom: 20px;
 
-    border: 1px solid rgba(17, 24, 39, 0.05);
+    border: 1px solid var(--color-border);
 
     box-shadow:
         0 4px 14px rgba(0, 0, 0, 0.035);
@@ -556,11 +556,11 @@ h2 {
 
     padding: 0;
 
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     border-radius: 12px;
 
-    background: #ffffff;
-    color: #6b7280;
+    background: var(--color-surface-light);
+    color: var(--color-text-secondary);
 
     cursor: pointer;
 
@@ -578,9 +578,9 @@ h2 {
 }
 
 .rekening-svg-button:hover {
-    background: #f8f9fa;
-    border-color: #dfe3e6;
-    color: #111827;
+    background: var(--color-muted);
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 .rekening-svg-button:active {
