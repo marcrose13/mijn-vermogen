@@ -151,7 +151,7 @@ h1 {
     display: block;
 
     fill: none;
-    stroke: #111827;
+    stroke: var(--color-text);
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -714,7 +714,7 @@ h2 {
 
     padding: 12px 0;
 
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .historie-item:last-child {
@@ -722,7 +722,7 @@ h2 {
 }
 
 .historie-datum {
-    color: #6b7280;
+    color: var(--color-text-secondary);
     flex: 1;
 }
 
@@ -739,8 +739,8 @@ h2 {
     border: none;
     border-radius: 10px;
 
-    background: #f3f4f6;
-    color: #6b7280;
+    background: var(--color-surface-light);
+    color: var(--color-text-secondary);
 
     font-size: 22px;
     font-weight: 400;
@@ -758,8 +758,8 @@ h2 {
 }
 
 .historie-verwijderknop:hover {
-    background: #e5e7eb;
-    color: #111827;
+    background: var(--color-border);
+    color: var(--color-text);
 }
 
 .historie-verwijderknop:active {
@@ -792,12 +792,12 @@ h2 {
 
     box-sizing: border-box;
 
-    background: #f3f4f6;
+    background: var(--color-muted);
 
     border: 1px solid #e5e7eb;
     border-radius: 12px;
 
-    color: #374151;
+    color: var(--color-text);
 
     font-family:
         -apple-system,
@@ -827,8 +827,8 @@ h2 {
 }
 
 .historie-meer-knop:hover {
-    background: #e9eaec;
-    border-color: #dfe1e5;
+    background: var(--color-border);
+    border-color: var(--color-border);
 }
 
 .historie-meer-knop:active {
