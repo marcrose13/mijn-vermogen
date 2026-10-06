@@ -3563,9 +3563,9 @@ function tekenGrafiek() {
     );
 
 
-    ctx.strokeStyle =
-        "#111827";
-
+    ctx.strokeStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-accent")
+    .trim();
 
     ctx.lineWidth =
         3;
@@ -3603,8 +3603,9 @@ function tekenGrafiek() {
             );
 
 
-            ctx.fillStyle =
-                "#111827";
+            ctx.fillStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-accent")
+    .trim();
 
 
             ctx.fill();
