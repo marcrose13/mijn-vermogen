@@ -1688,22 +1688,7 @@ verwijderButton.type =
 verwijderButton.className =
     "rekening-svg-button rekening-svg-button-verwijderen";
 
-verwijderButton.style.cssText =
-    "width:38px;" +
-    "height:38px;" +
-    "flex:0 0 38px;" +
-    "display:flex;" +
-    "align-items:center;" +
-    "justify-content:center;" +
-    "padding:0;" +
-    "border:1px solid #e5e7eb;" +
-    "border-radius:12px;" +
-    "background:#ffffff;" +
-    "color:#6b7280;" +
-    "cursor:pointer;" +
-    "appearance:none;" +
-    "-webkit-appearance:none;" +
-    "box-shadow:0 2px 6px rgba(0,0,0,0.04);";
+verwijderButton.style.cssText = "";
 
 verwijderButton.innerHTML = `
     <svg
