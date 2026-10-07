@@ -528,10 +528,12 @@ function berekenTotaal() {
 
     if (totaal >= vermogensDoel) {
 
-        doelTekst.textContent =
-            "Doel bereikt 🎉";
+    doelTekst.classList.add("succes");
 
-    } else {
+    doelTekst.textContent =
+        "Doel bereikt 🎉";
+
+} else {
 
         const resterend =
             vermogensDoel - totaal;
