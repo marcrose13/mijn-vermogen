@@ -2889,8 +2889,9 @@ function maakTijdAsLabels(
     .trim();
 
 
-    ctx.strokeStyle =
-        "#e5e7eb";
+    ctx.strokeStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-border")
+    .trim();
 
 
     ctx.lineWidth =
@@ -3415,8 +3416,9 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
     ctx.save();
 
 
-    ctx.strokeStyle =
-        "#f0f1f3";
+    ctx.strokeStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-muted")
+    .trim();
 
 
     ctx.lineWidth =
