@@ -295,6 +295,10 @@ h2 {
     font-size: 13px;
     color: var(--color-text-secondary);
 }
+.doel-tekst.succes {
+    color: var(--color-success);
+    font-weight: 600;
+}
 
 
 /*
