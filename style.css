@@ -516,7 +516,7 @@ h2 {
     gap: 5px;
 }
 
-.rekening-acties button {
+.rekening-acties button:not(.rekening-svg-button) {
     padding: 7px 9px;
 
     border: none;
@@ -536,12 +536,12 @@ h2 {
         transform 0.15s ease;
 }
 
-.rekening-acties button:hover {
+.rekening-acties button:not(.rekening-svg-button):hover {
     background: var(--color-border);
     color: var(--color-text);
 }
 
-.rekening-acties button:active {
+.rekening-acties button:not(.rekening-svg-button):active {
     transform: scale(0.94);
 }
 
