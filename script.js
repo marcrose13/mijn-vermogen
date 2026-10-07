@@ -3412,10 +3412,108 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
         }
     );
 
+    /*
+     * ==========================================
+     * VULLING ONDER DE GRAFIEKLIJN
+     * ==========================================
+     */
 
-    ctx.strokeStyle = getComputedStyle(document.documentElement)
-    .getPropertyValue("--color-accent")
-    .trim();
+    if (
+        grafiekPunten.length > 0
+    ) {
+
+        const accentKleur =
+            getComputedStyle(
+                document.documentElement
+            )
+            .getPropertyValue(
+                "--color-accent"
+            )
+            .trim();
+
+        ctx.save();
+
+        ctx.globalAlpha =
+            0.10;
+
+        ctx.fillStyle =
+            accentKleur;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            grafiekPunten[0].x,
+            paddingBoven + grafiekHoogte
+        );
+
+        grafiekPunten.forEach(
+            function(punt) {
+
+                ctx.lineTo(
+                    punt.x,
+                    punt.y
+                );
+
+            }
+        );
+
+        ctx.lineTo(
+            grafiekPunten[
+                grafiekPunten.length - 1
+            ].x,
+            paddingBoven + grafiekHoogte
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+
+        ctx.restore();
+
+    }
+
+
+    /*
+     * ==========================================
+     * LIJN VAN DE GRAFIEK
+     * ==========================================
+     */
+
+    ctx.beginPath();
+
+    grafiekPunten.forEach(
+        function(punt, index) {
+
+            if (
+                index === 0
+            ) {
+
+                ctx.moveTo(
+                    punt.x,
+                    punt.y
+                );
+
+            } else {
+
+                ctx.lineTo(
+                    punt.x,
+                    punt.y
+                );
+
+            }
+
+        }
+    );
+
+
+    ctx.strokeStyle =
+        getComputedStyle(
+            document.documentElement
+        )
+        .getPropertyValue(
+            "--color-accent"
+        )
+        .trim();
 
     ctx.lineWidth =
         3;
@@ -3430,8 +3528,7 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
 
 
     ctx.stroke();
-
-
+   
     /*
      * ==========================================
      * MEETPUNTEN
