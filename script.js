@@ -2884,8 +2884,9 @@ function maakTijdAsLabels(
     ctx.save();
 
 
-    ctx.fillStyle =
-        "#6b7280";
+    ctx.fillStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-text-secondary")
+    .trim();
 
 
     ctx.strokeStyle =
@@ -3234,8 +3235,9 @@ function tekenGrafiek() {
         gegevens.length === 0
     ) {
 
-        ctx.fillStyle =
-            "#6b7280";
+ctx.fillStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-text-secondary")
+    .trim();
 
 
         ctx.font =
