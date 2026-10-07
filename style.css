@@ -334,7 +334,7 @@ h2 {
 }
 
 .periode-buttons button.active {
-    background: var(--color-primary);
+    background: var(--color-accent);
     color: white;
 }
 
@@ -1048,7 +1048,7 @@ h2 {
 
 .formulier-input:focus,
 .formulier-select:focus {
-    border-color: var(--color-primary);
+    border-color: var(--color-accent);
 }
 
 .popup-knoppen {
