@@ -3434,7 +3434,7 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
         ctx.save();
 
         ctx.globalAlpha =
-            0.10;
+            0.5;
 
         ctx.fillStyle =
             accentKleur;
