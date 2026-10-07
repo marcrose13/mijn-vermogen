@@ -535,6 +535,8 @@ function berekenTotaal() {
 
 } else {
 
+doelTekst.classList.remove("succes");
+
         const resterend =
             vermogensDoel - totaal;
 
