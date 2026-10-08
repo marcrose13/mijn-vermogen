@@ -1120,5 +1120,14 @@ h2 {
         --color-info: #1E3A5F;
     }
 
+    .primary-button {
+        background: var(--color-accent);
+        color: white;
+    }
+
+    .primary-button:hover {
+        background: #2563EB;
+    }
+
 }
     
