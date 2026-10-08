@@ -136,12 +136,27 @@ function instellingenOpenen() {
         knop.className =
             "thema-optie";
 
-        knop.textContent =
-            item.naam;
+knop.textContent =
+    item.naam;
 
-        themaOpties.appendChild(
-            knop
+knop.onclick =
+    function() {
+
+        localStorage.setItem(
+            "mijnVermogenThema",
+            item.waarde
         );
+
+        document.documentElement.setAttribute(
+            "data-thema",
+            item.waarde
+        );
+
+    };
+
+themaOpties.appendChild(
+    knop
+);
 
     }
 );
