@@ -85,6 +85,75 @@ function instellingenOpenen() {
 
     popup.appendChild(titel);
 
+    /*
+     * ==========================================
+     * THEMA
+     * ==========================================
+     */
+
+    const themaLabel =
+        document.createElement("div");
+
+    themaLabel.className =
+        "instellingen-label";
+
+    themaLabel.textContent =
+        "Thema";
+
+
+    const themaOpties =
+        document.createElement("div");
+
+    themaOpties.className =
+        "thema-opties";
+
+
+    const themaKeuzes = [
+        {
+            naam: "☀ Licht",
+            waarde: "licht"
+        },
+        {
+            naam: "🌙 Donker",
+            waarde: "donker"
+        },
+        {
+            naam: "📱 Automatisch",
+            waarde: "automatisch"
+        }
+    ];
+
+
+    themaKeuzes.forEach(
+        function(item) {
+
+            const knop =
+                document.createElement("button");
+
+            knop.type =
+                "button";
+
+            knop.className =
+                "thema-optie";
+
+            knop.textContent =
+                item.naam;
+
+            themaOpties.appendChild(
+                knop
+            );
+
+        }
+    );
+
+
+    popup.appendChild(
+        themaLabel
+    );
+
+    popup.appendChild(
+        themaOpties
+    );
 
 /*
  * ==========================================
