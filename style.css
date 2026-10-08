@@ -1141,13 +1141,43 @@ h2 {
     transform: scale(0.98);
 }
     
-    /* ==========================================
-   DONKERE MODUS — AUTOMATISCH
+/* ==========================================
+   DONKER THEMA
+   ========================================== */
+
+:root[data-thema="donker"] {
+    --app-background: #0F172A;
+
+    --color-primary: #E2E8F0;
+    --color-primary-hover: #F8FAFC;
+
+    --color-text: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+
+    --color-surface-light: #1E293B;
+    --color-border: #334155;
+    --color-muted: #1E293B;
+
+    --color-info: #1E3A5F;
+}
+
+:root[data-thema="donker"] .primary-button {
+    background: var(--color-accent);
+    color: white;
+}
+
+:root[data-thema="donker"] .primary-button:hover {
+    background: #2563EB;
+}
+
+
+/* ==========================================
+   AUTOMATISCH THEMA
    ========================================== */
 
 @media (prefers-color-scheme: dark) {
 
-    :root {
+    :root[data-thema="automatisch"] {
         --app-background: #0F172A;
 
         --color-primary: #E2E8F0;
@@ -1163,14 +1193,16 @@ h2 {
         --color-info: #1E3A5F;
     }
 
-    .primary-button {
+    :root[data-thema="automatisch"] .primary-button {
         background: var(--color-accent);
         color: white;
     }
 
-    .primary-button:hover {
+    :root[data-thema="automatisch"] .primary-button:hover {
         background: #2563EB;
     }
+
+}
 
 }
     
