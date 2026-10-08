@@ -1099,6 +1099,49 @@ h2 {
     }
     
     /* ==========================================
+   THEMA KEUZE
+   ========================================== */
+
+.thema-opties {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.thema-optie {
+    flex: 1;
+    min-height: 44px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+
+    background: var(--color-muted);
+    color: var(--color-text);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.thema-optie:hover {
+    background: var(--color-border);
+}
+
+.thema-optie:active {
+    transform: scale(0.98);
+}
+    
+    /* ==========================================
    DONKERE MODUS — AUTOMATISCH
    ========================================== */
 
