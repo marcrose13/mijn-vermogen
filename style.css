@@ -1095,5 +1095,30 @@ h2 {
     .instellingen-popup {
         padding: 20px;
     }
+    
+    }
+    
+    /* ==========================================
+   DONKERE MODUS — AUTOMATISCH
+   ========================================== */
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --app-background: #0F172A;
+
+        --color-primary: #E2E8F0;
+        --color-primary-hover: #F8FAFC;
+
+        --color-text: #F8FAFC;
+        --color-text-secondary: #94A3B8;
+
+        --color-surface-light: #1E293B;
+        --color-border: #334155;
+        --color-muted: #1E293B;
+
+        --color-info: #1E3A5F;
+    }
 
 }
+    
