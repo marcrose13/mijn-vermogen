@@ -33,41 +33,6 @@ let grafiekPunten = [];
 
 /*
  * ==========================================
- * ACHTERGRONDKLEUR
- * ==========================================
- */
-
-const standaardAchtergrond =
-    "#F5F7FA";
-
-
-let opgeslagenAchtergrond =
-    standaardAchtergrond;
-
-localStorage.setItem(
-    "mijnVermogenAchtergrond",
-    standaardAchtergrond
-);
-
-
-function achtergrondInstellen(kleur) {
-
-    document.documentElement.style
-        .setProperty(
-            "--app-background",
-            kleur
-        );
-
-}
-
-
-achtergrondInstellen(
-    opgeslagenAchtergrond
-);
-
-
-/*
- * ==========================================
  * INSTELLINGEN OPENEN
  * ==========================================
  */
