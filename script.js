@@ -125,27 +125,26 @@ function instellingenOpenen() {
 
 
     themaKeuzes.forEach(
-        function(item) {
+    function(item) {
 
-            const knop =
-                document.createElement("button");
+        const knop =
+            document.createElement("button");
 
-            knop.type =
-                "button";
+        knop.type =
+            "button";
 
-            knop.className =
-                "thema-optie";
+        knop.className =
+            "thema-optie";
 
-            knop.textContent =
-                item.naam;
+        knop.textContent =
+            item.naam;
 
-            themaOpties.appendChild(
-                knop
-            );
+        themaOpties.appendChild(
+            knop
+        );
 
-        }
-    );
-
+    }
+);
 
     popup.appendChild(
         themaLabel
