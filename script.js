@@ -3523,11 +3523,26 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
 
         ctx.save();
 
-        ctx.globalAlpha =
-            0.5;
+const grafiekGradient =
+    ctx.createLinearGradient(
+        0,
+        paddingBoven,
+        0,
+        paddingBoven + grafiekHoogte
+    );
 
-        ctx.fillStyle =
-            accentKleur;
+grafiekGradient.addColorStop(
+    0,
+    accentKleur
+);
+
+grafiekGradient.addColorStop(
+    1,
+    "rgba(59, 130, 246, 0)"
+);
+
+ctx.fillStyle =
+    grafiekGradient;
 
         ctx.beginPath();
 
