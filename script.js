@@ -31,8 +31,8 @@ let vermogensDoel =
 const opgeslagenThema =
     localStorage.getItem(
         "mijnVermogenThema"
-    ) || "automatisch";
-
+    ) || "licht";
+    
 document.documentElement.setAttribute(
     "data-thema",
     opgeslagenThema
