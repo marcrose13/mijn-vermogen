@@ -1137,6 +1137,12 @@ h2 {
     background: var(--color-border);
 }
 
+.thema-optie.actief {
+    background: var(--color-primary);
+    color: var(--color-surface-light);
+    border-color: var(--color-primary);
+}
+
 .thema-optie:active {
     transform: scale(0.98);
 }
