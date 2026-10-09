@@ -167,6 +167,22 @@ knop.onclick =
             item.waarde
         );
 
+        document
+            .querySelectorAll(".thema-optie")
+            .forEach(
+                function(themaKnop) {
+
+                    themaKnop.classList.remove(
+                        "actief"
+                    );
+
+                }
+            );
+
+        knop.classList.add(
+            "actief"
+        );
+
     };
 
 themaOpties.appendChild(
