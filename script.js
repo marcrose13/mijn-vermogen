@@ -151,6 +151,17 @@ function instellingenOpenen() {
         knop.className =
             "thema-optie";
 
+if (
+    item.waarde ===
+    localStorage.getItem(
+        "mijnVermogenThema"
+    )
+) {
+    knop.classList.add(
+        "actief"
+    );
+}
+
 knop.textContent =
     item.naam;
 
