@@ -282,7 +282,11 @@ h2 {
     width: 0;
     height: 100%;
 
-    background: var(--color-accent);
+    background: linear-gradient(
+    90deg,
+    var(--color-accent),
+    #60A5FA
+);
 
     border-radius: 999px;
 
