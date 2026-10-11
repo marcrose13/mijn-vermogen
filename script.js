@@ -942,7 +942,7 @@ function rekeningToevoegen() {
 
         overlay.remove();
 
-        vraagVermogensMomentOpslaan();
+        vermogensMomentAutomatischBijwerken();
 
     };
 
