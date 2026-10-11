@@ -1456,42 +1456,9 @@ function vermogensMomentAutomatischBijwerken() {
 
 }
 
+function vraagVermogensMomentOpslaan() {
 
-/*
- * ==========================================
- * VERMOGENSMOMENT OPSLAAN
- * ==========================================
- */
-
-function vermogensMomentOpslaan() {
-
-    let totaal = 0;
-
-
-    rekeningen.forEach(function(rekening) {
-
-        totaal +=
-            Number(rekening.bedrag) || 0;
-
-    });
-
-
-    historie.push({
-
-        datum:
-            new Date().toISOString(),
-
-        bedrag:
-            totaal
-
-    });
-
-
-    slaHistorieOp();
-
-    toonHistorie();
-
-    tekenGrafiek();
+    return;
 
 }
 
