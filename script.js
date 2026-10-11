@@ -1383,19 +1383,15 @@ function rekeningVerwijderen(id) {
     }
 
 
-    rekeningen =
-        rekeningen.filter(function(item) {
+   rekeningen = rekeningen.filter(function(item) {
+    return item.id !== id;
+});
 
-            return item.id !== id;
+slaRekeningenOp();
+toonRekeningen();
+berekenTotaal();
 
-        });
-
-
-    slaRekeningenOp();
-
-    toonRekeningen();
-
-    berekenTotaal();
+vermogensMomentAutomatischBijwerken();
 
 }
 
