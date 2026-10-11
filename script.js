@@ -1417,6 +1417,54 @@ function vraagVermogensMomentOpslaan() {
 
 /*
  * ==========================================
+ * AUTOMATISCH VERMOGENSMOMENT BIJWERKEN
+ * ==========================================
+ */
+
+function vermogensMomentAutomatischBijwerken() {
+
+    let totaal = 0;
+
+    rekeningen.forEach(function(rekening) {
+        totaal += Number(rekening.bedrag) || 0;
+    });
+
+    const vandaag = new Date();
+
+    const bestaandMoment = historie.find(function(moment) {
+
+        const datumMoment = new Date(moment.datum);
+
+        return (
+            datumMoment.getFullYear() === vandaag.getFullYear() &&
+            datumMoment.getMonth() === vandaag.getMonth() &&
+            datumMoment.getDate() === vandaag.getDate()
+        );
+
+    });
+
+    if (bestaandMoment) {
+
+        bestaandMoment.bedrag = totaal;
+
+    } else {
+
+        historie.push({
+            datum: vandaag.toISOString(),
+            bedrag: totaal
+        });
+
+    }
+
+    slaHistorieOp();
+    toonHistorie();
+    tekenGrafiek();
+
+}
+
+
+/*
+ * ==========================================
  * VERMOGENSMOMENT OPSLAAN
  * ==========================================
  */
