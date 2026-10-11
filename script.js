@@ -1410,42 +1410,9 @@ function rekeningVerwijderen(id) {
 
 function vraagVermogensMomentOpslaan() {
 
-    const totaal =
-        rekeningen.reduce(
-            function(som, rekening) {
+    return;
 
-                return som +
-                    (Number(rekening.bedrag) || 0);
-
-            },
-            0
-        );
-
-
-    const bevestigen =
-        confirm(
-            "Je totale vermogen is nu " +
-            formatteerBedrag(totaal) +
-            ".\n\n" +
-            "Wil je dit opslaan als nieuw vermogensmoment?"
-        );
-
-
-    if (!bevestigen) {
-        return;
-    }
-
-
-    historie.push({
-
-        datum:
-            new Date().toISOString(),
-
-        bedrag:
-            totaal
-
-    });
-
+}
 
     historie.sort(
         function(a, b) {
