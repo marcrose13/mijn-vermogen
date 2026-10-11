@@ -1398,19 +1398,6 @@ vermogensMomentAutomatischBijwerken();
 
 /*
  * ==========================================
- * VRAGEN OF VERMOGENSMOMENT OPGESLAGEN MOET WORDEN
- * ==========================================
- */
-
-function vraagVermogensMomentOpslaan() {
-
-    return;
-
-}
-
-
-/*
- * ==========================================
  * AUTOMATISCH VERMOGENSMOMENT BIJWERKEN
  * ==========================================
  */
