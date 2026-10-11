@@ -1414,26 +1414,6 @@ function vraagVermogensMomentOpslaan() {
 
 }
 
-    historie.sort(
-        function(a, b) {
-
-            return (
-                new Date(a.datum) -
-                new Date(b.datum)
-            );
-
-        }
-    );
-
-
-    slaHistorieOp();
-
-    toonHistorie();
-
-    tekenGrafiek();
-
-}
-
 
 /*
  * ==========================================
