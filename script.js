@@ -1328,10 +1328,8 @@ function rekeningBewerken(id) {
 
 
             if (nieuwBedrag !== oudBedrag) {
-
-                vraagVermogensMomentOpslaan();
-
-            }
+    vermogensMomentAutomatischBijwerken();
+}
 
         };
 
