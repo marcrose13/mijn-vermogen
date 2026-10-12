@@ -187,17 +187,20 @@ h2 {
  * ==========================================
  */
 
+
 .section {
     background: var(--color-surface-light);
-    border-radius: 18px;
+    border-radius: 20px;
     padding: 22px;
     margin-bottom: 20px;
 
     border: 1px solid var(--color-border);
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.035);
+        0 2px 4px rgba(23, 42, 70, 0.02),
+        0 8px 24px rgba(23, 42, 70, 0.045);
 }
+
 
 
 /*
