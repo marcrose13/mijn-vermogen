@@ -351,10 +351,16 @@ h2 {
         transform 0.15s ease;
 }
 
+
 .periode-buttons button.active {
-    background: var(--color-accent);
+    background: var(--color-primary);
     color: white;
+    font-weight: 600;
+
+    box-shadow:
+        0 3px 8px rgba(23, 42, 70, 0.16);
 }
+
 
 .periode-buttons button:active {
     transform: scale(0.98);
