@@ -770,6 +770,10 @@ h2 {
     -webkit-appearance: none;
 }
 
+/* Extra ruimte boven de knop Rekening toevoegen */
+#rekeningen + .primary-button {
+    margin-top: 18px;
+}
 
 /*
  * ==========================================
