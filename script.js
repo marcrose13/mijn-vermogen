@@ -217,6 +217,7 @@ themaOpties.appendChild(
  * ==========================================
  */
 
+
 const doelLabel =
     document.createElement("div");
 
@@ -231,34 +232,61 @@ const doelInput =
     document.createElement("input");
 
 doelInput.type =
-    "number";
+    "text";
 
 doelInput.inputMode =
-    "decimal";
+    "numeric";
 
 doelInput.className =
     "formulier-input";
 
 doelInput.placeholder =
-    "Bijvoorbeeld 100000";
+    "Bijvoorbeeld € 100.000";
 
 doelInput.style.marginBottom =
     "18px";
 
+
+function toonDoelBedrag(bedrag) {
+    return new Intl.NumberFormat(
+        "nl-NL",
+        {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 0
+        }
+    ).format(bedrag);
+}
+
+
 doelInput.value =
     vermogensDoel > 0
-        ? vermogensDoel
+        ? toonDoelBedrag(vermogensDoel)
         : "";
+
+
+doelInput.addEventListener(
+    "focus",
+    function() {
+        doelInput.value =
+            vermogensDoel > 0
+                ? String(vermogensDoel)
+                : "";
+    }
+);
 
 
 doelInput.addEventListener(
     "input",
     function() {
+        const getal =
+            doelInput.value.replace(
+                /[^0-9]/g,
+                ""
+            );
 
         vermogensDoel =
-            Number(
-                doelInput.value
-            ) || 0;
+            Number(getal) || 0;
 
         localStorage.setItem(
             "mijnVermogenDoel",
@@ -266,9 +294,23 @@ doelInput.addEventListener(
         );
 
         berekenTotaal();
-
     }
 );
+
+
+doelInput.addEventListener(
+    "blur",
+    function() {
+        doelInput.value =
+            vermogensDoel > 0
+                ? toonDoelBedrag(vermogensDoel)
+                : "";
+    }
+);
+
+
+popup.appendChild(doelLabel);
+popup.appendChild(doelInput);
 
 
 popup.appendChild(
