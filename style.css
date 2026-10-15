@@ -674,9 +674,10 @@ h2 {
         box-shadow 0.15s ease;
 }
 
+
 .secondary-button:hover {
-    background: var(--color-surface-light);
-    border-color: var(--color-border);
+    background: var(--color-muted);
+    border-color: var(--color-text-secondary);
 }
 
 .secondary-button:active {
