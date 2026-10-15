@@ -6,6 +6,9 @@
     
     --color-total-start: #172A46;
     --color-total-end: #21466B;
+    
+    --color-total-border: #294C70;
+    --color-total-shadow: rgba(23, 42, 70, 0.18);
 
     --color-accent: #3B82F6;
 
@@ -229,11 +232,12 @@ h2 {
     var(--color-total-end) 100%
 );
 
-    border: 1px solid #294C70;
+    border: 1px solid var(--color-total-border);
     border-radius: 22px;
 
     box-shadow:
-        0 12px 28px rgba(23, 42, 70, 0.18);
+    0 12px 28px var(--color-total-shadow);
+    
 }
 
 .total-label {
