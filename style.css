@@ -447,7 +447,11 @@ h2 {
             -50%,
             12px
         );
+        
 }
+
+
+
 
 .grafiek-tooltip-datum {
     color: #d1d5db;
@@ -491,6 +495,65 @@ h2 {
     flex: 1;
     min-width: 0;
 }
+
+.grafiek-tooltip {
+    position: absolute;
+    z-index: 20;
+
+    min-width: 150px;
+    max-width: 210px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    background: rgba(17, 24, 39, 0.96);
+    color: white;
+
+    font-size: 13px;
+    line-height: 1.35;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.18);
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transform:
+        translate(
+            -50%,
+            calc(-100% - 12px)
+        );
+
+    transition:
+        opacity 0.12s ease;
+
+    box-sizing: border-box;
+}
+
+.grafiek-tooltip.visible {
+    opacity: 1;
+}
+
+
+.grafiek-tooltip.onder {
+    transform: translate(-50%, 12px);
+}
+
+/* Extra styling voor de grafiekkaart */
+.grafiek-card {
+    border: 1px solid #D8E2ED;
+    box-shadow:
+        0 3px 8px rgba(23, 42, 70, 0.03),
+        0 10px 28px rgba(23, 42, 70, 0.06);
+}
+
+.grafiek-tooltip-datum {
+    color: #d1d5db;
+    margin-bottom: 3px;
+}
+
 
 .rekening-naam {
     font-weight: 600;
