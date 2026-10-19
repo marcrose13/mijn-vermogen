@@ -188,6 +188,97 @@ popup.appendChild(
 );
 
 
+/*
+ * ==========================================
+ * HISTORIE TONEN
+ * ==========================================
+ */
+
+const historieLabel =
+    document.createElement("label");
+
+historieLabel.className =
+    "historie-instelling";
+
+historieLabel.style.display =
+    "flex";
+
+historieLabel.style.alignItems =
+    "center";
+
+historieLabel.style.justifyContent =
+    "space-between";
+
+historieLabel.style.gap =
+    "16px";
+
+historieLabel.style.marginBottom =
+    "20px";
+
+historieLabel.textContent =
+    "Historie tonen";
+
+
+const historieToggle =
+    document.createElement("input");
+
+historieToggle.type =
+    "checkbox";
+
+historieToggle.id =
+    "historie-toggle";
+
+historieToggle.checked =
+    localStorage.getItem(
+        "mijnVermogenHistorieTonen"
+    ) === "true";
+
+historieToggle.style.width =
+    "20px";
+
+historieToggle.style.height =
+    "20px";
+
+historieToggle.style.accentColor =
+    "var(--color-primary)";
+
+
+historieLabel.appendChild(
+    historieToggle
+);
+
+
+historieToggle.addEventListener(
+    "change",
+    function() {
+
+        const historieContainer =
+            document.getElementById(
+                "historie-container"
+            );
+
+        const tonen =
+            historieToggle.checked;
+
+        if (historieContainer) {
+            historieContainer.style.display =
+                tonen ? "" : "none";
+        }
+
+        localStorage.setItem(
+            "mijnVermogenHistorieTonen",
+            tonen
+        );
+
+    }
+);
+
+
+popup.appendChild(
+    historieLabel
+);
+
+
 popup.appendChild(
     sluitenButton
 );
