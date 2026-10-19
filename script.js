@@ -220,27 +220,43 @@ historieLabel.textContent =
 
 
 const historieToggle =
-    document.createElement("input");
+    document.createElement("button");
 
-historieToggle.type =
-    "checkbox";
+historieToggle.type = "button";
+historieToggle.id = "historie-toggle";
+historieToggle.className = "schuifje";
 
-historieToggle.id =
-    "historie-toggle";
+historieToggle.setAttribute(
+    "role",
+    "switch"
+);
 
-historieToggle.checked =
-    localStorage.getItem(
-        "mijnVermogenHistorieTonen"
-    ) === "true";
+historieToggle.setAttribute(
+    "aria-label",
+    "Historie tonen"
+);
 
-historieToggle.style.width =
-    "20px";
+historieToggle.setAttribute(
+    "aria-checked",
+    String(
+        localStorage.getItem(
+            "mijnVermogenHistorieTonen"
+        ) === "true"
+    )
+);
 
-historieToggle.style.height =
-    "20px";
+historieToggle.setAttribute(
+    "data-aan",
+    String(
+        localStorage.getItem(
+            "mijnVermogenHistorieTonen"
+        ) === "true"
+    )
+);
 
-historieToggle.style.accentColor =
-    "var(--color-primary)";
+historieToggle.innerHTML =
+    '<span class="schuifje-knop"></span>';
+
 
 
 historieLabel.appendChild(
@@ -248,8 +264,9 @@ historieLabel.appendChild(
 );
 
 
+
 historieToggle.addEventListener(
-    "change",
+    "click",
     function() {
 
         const historieContainer =
@@ -258,7 +275,19 @@ historieToggle.addEventListener(
             );
 
         const tonen =
-            historieToggle.checked;
+            historieToggle.getAttribute(
+                "data-aan"
+            ) !== "true";
+
+        historieToggle.setAttribute(
+            "data-aan",
+            String(tonen)
+        );
+
+        historieToggle.setAttribute(
+            "aria-checked",
+            String(tonen)
+        );
 
         if (historieContainer) {
             historieContainer.style.display =
