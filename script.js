@@ -3748,13 +3748,29 @@ if (grafiekCanvas) {
  * ==========================================
  */
 
+
 toonRekeningen();
 
 berekenTotaal();
 
 toonHistorie();
 
+// Opgeslagen voorkeur voor de historie toepassen
+const historieContainer =
+    document.getElementById("historie-container");
+
+const historieTonen =
+    localStorage.getItem(
+        "mijnVermogenHistorieTonen"
+    ) === "true";
+
+if (historieContainer) {
+    historieContainer.style.display =
+        historieTonen ? "" : "none";
+}
+
 zetPeriode("alles");
+
 
 
 window.addEventListener(
