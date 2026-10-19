@@ -22,29 +22,6 @@ let vermogensDoel =
         )
     ) || 0;
 
-/*
- * ==========================================
- * THEMA LADEN
- * ==========================================
- */
-
-const opgeslagenThema =
-    localStorage.getItem(
-        "mijnVermogenThema"
-    ) || "licht";
-    
-document.documentElement.setAttribute(
-    "data-thema",
-    opgeslagenThema
-);
-
-/*
- * Punten van de huidige grafiek.
- * Deze worden gebruikt voor hover en tik.
- */
-
-let grafiekPunten = [];
-
 
 /*
  * ==========================================
