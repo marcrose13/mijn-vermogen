@@ -596,24 +596,13 @@ function toonRekeningen() {
                     </svg>
                 </button>
 
-
-                <button
-                    type="button"
-                    class="rekening-svg-button rekening-svg-button-verwijderen"
-                    onclick="rekeningVerwijderen(${rekening.id})"
-                    aria-label="Rekening verwijderen"
-                >
-                    <svg
-                        class="rekening-svg-icon"
-                        viewBox="0 0 24 24"
-                        style="width:18px;height:18px;display:block;fill:currentColor;stroke:none;pointer-events:none;"
-                        aria-hidden="true"
-                    >
-                        <path
-                            d="M7 8h10l-.7 11.2a1 1 0 0 1-1 .8H8.7a1 1 0 0 1-1-.8L7 8Zm2-4h6l1 2H8l1-2Zm-3 2h12v2H6V6Z"
-                        />
-                    </svg>
-                </button>
+<button
+    type="button"
+    class="rekening-verwijderen-tekstknop"
+    onclick="rekeningVerwijderen(${rekening.id})"
+>
+    Verwijder rekening
+</button>
 
             </div>
 
