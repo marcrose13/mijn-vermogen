@@ -816,7 +816,7 @@ bedragInput.addEventListener("blur", function() {
     );
 
     if (bedragInput.value.trim() !== "" && !isNaN(getal)) {
-        bedragInput.value = formatteerInvoerBedrag(getal);
+        bedragInput.value = formatteerBedrag(rekening.bedrag);
     }
 });
 
