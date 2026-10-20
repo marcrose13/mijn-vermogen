@@ -596,14 +596,6 @@ function toonRekeningen() {
                     </svg>
                 </button>
 
-<button
-    type="button"
-    class="rekening-verwijderen-tekstknop"
-    onclick="rekeningVerwijderen(${rekening.id})"
->
-    Verwijder rekening
-</button>
-
             </div>
 
         `;
@@ -820,6 +812,17 @@ bedragInput.addEventListener("blur", function() {
     knoppen.className =
         "popup-knoppen";
 
+const verwijderenButton =
+    document.createElement("button");
+
+verwijderenButton.className =
+    "secondary-button";
+
+verwijderenButton.type =
+    "button";
+
+verwijderenButton.textContent =
+    "Verwijder rekening";
 
     const annulerenButton =
         document.createElement("button");
