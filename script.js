@@ -1893,6 +1893,17 @@ function historischMomentToevoegen() {
     knoppen.className =
         "popup-knoppen";
 
+const verwijderenButton =
+    document.createElement("button");
+
+verwijderenButton.className =
+    "secondary-button";
+
+verwijderenButton.type =
+    "button";
+
+verwijderenButton.textContent =
+    "Verwijder rekening";
 
     const annulerenButton =
         document.createElement("button");
