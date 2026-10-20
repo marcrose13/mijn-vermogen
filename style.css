@@ -1258,4 +1258,36 @@ h2 {
 }
 
 
+/* Knop Annuleren in pop-ups */
+.secondary-button {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 16px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+
+    background: var(--color-surface-light);
+    color: var(--color-text);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.secondary-button:hover {
+    background: var(--color-muted);
+    border-color: var(--color-border);
+}
+
+.secondary-button:active {
+    transform: scale(0.98);
+}
+
+
     
