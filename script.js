@@ -795,6 +795,30 @@ function rekeningToevoegen() {
     bedragInput.autocomplete =
         "off";
 
+function formatteerInvoerBedrag(bedrag) {
+    return new Intl.NumberFormat("nl-NL", {
+        style: "currency",
+        currency: "EUR"
+    }).format(bedrag);
+}
+
+bedragInput.addEventListener("focus", function() {
+    bedragInput.value = bedragInput.value
+        .replace(/[^\d,.-]/g, "");
+});
+
+bedragInput.addEventListener("blur", function() {
+    const getal = parseFloat(
+        bedragInput.value
+            .replace(/\s/g, "")
+            .replace(/\./g, "")
+            .replace(",", ".")
+    );
+
+    if (bedragInput.value.trim() !== "" && !isNaN(getal)) {
+        bedragInput.value = formatteerInvoerBedrag(getal);
+    }
+});
 
     bedragGroep.appendChild(bedragLabel);
 
