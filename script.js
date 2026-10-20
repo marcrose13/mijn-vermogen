@@ -1195,10 +1195,7 @@ function rekeningBewerken(id) {
     bedragInput.inputMode =
         "decimal";
 
-    bedragInput.value =
-        rekening.bedrag
-            .toString()
-            .replace(".", ",");
+    bedragInput.value = formatteerInvoerBedrag(rekening.bedrag);
 
     bedragInput.autocomplete =
         "off";
