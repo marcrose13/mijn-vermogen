@@ -1139,6 +1139,9 @@ h2 {
 
 .popup-knoppen button {
     flex: 1;
+    width: auto;
+    min-width: 0;
+
 }
 
 
