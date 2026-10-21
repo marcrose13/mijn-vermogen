@@ -885,6 +885,27 @@ verwijderenButton.textContent =
 
     annulerenButton.onclick = function() {
 
+verwijderenButton.onclick = function() {
+    const bevestigen = confirm(
+        "Wil je " + rekening.naam + " verwijderen?"
+    );
+
+    if (!bevestigen) {
+        return;
+    }
+
+    rekeningen = rekeningen.filter(function(item) {
+        return item.id !== rekening.id;
+    });
+
+    slaRekeningenOp();
+    toonRekeningen();
+    berekenTotaal();
+    vermogensMomentAutomatischBijwerken();
+
+    overlay.remove();
+};
+
         overlay.remove();
 
     };
