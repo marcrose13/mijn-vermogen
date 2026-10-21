@@ -885,7 +885,12 @@ verwijderenButton.textContent =
 
     annulerenButton.onclick = function() {
 
+    overlay.remove();
+
+};
+
 verwijderenButton.onclick = function() {
+    
     const bevestigen = confirm(
         "Wil je " + rekening.naam + " verwijderen?"
     );
@@ -905,11 +910,6 @@ verwijderenButton.onclick = function() {
 
     overlay.remove();
 };
-
-        overlay.remove();
-
-    };
-
 
     opslaanButton.onclick = function() {
 
@@ -1306,6 +1306,33 @@ verwijderenButton.textContent =
             overlay.remove();
 
         };
+
+
+verwijderenButton.onclick = function() {
+
+    const bevestigen = confirm(
+        "Wil je " + rekening.naam + " verwijderen?"
+    );
+
+    if (!bevestigen) {
+        return;
+    }
+
+    rekeningen = rekeningen.filter(function(item) {
+        return item.id !== rekening.id;
+    });
+
+    slaRekeningenOp();
+
+    toonRekeningen();
+
+    berekenTotaal();
+
+    vermogensMomentAutomatischBijwerken();
+
+    overlay.remove();
+
+};
 
 
     opslaanButton.onclick =
