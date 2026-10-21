@@ -1204,6 +1204,17 @@ function rekeningBewerken(id) {
     knoppen.className =
         "popup-knoppen";
 
+const verwijderenButton =
+    document.createElement("button");
+
+verwijderenButton.className =
+    "secondary-button";
+
+verwijderenButton.type =
+    "button";
+
+verwijderenButton.textContent =
+    "Verwijder rekening";
 
     const annulerenButton =
         document.createElement("button");
@@ -1251,6 +1262,8 @@ function rekeningBewerken(id) {
     popup.appendChild(bedragGroep);
 
     popup.appendChild(knoppen);
+    
+    popup.appendChild(verwijderenButton);
 
     overlay.appendChild(popup);
 
