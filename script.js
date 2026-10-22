@@ -1958,7 +1958,7 @@ const verwijderenButton =
     document.createElement("button");
 
 verwijderenButton.className =
-    "secondary-button";
+    "danger-button";
 
 verwijderenButton.type =
     "button";
