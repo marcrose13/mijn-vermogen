@@ -1301,6 +1301,11 @@ h2 {
     border: 1px solid #fecaca;
 }
 
+.rekening-popup .danger-button {
+    margin-top: 16px;
+}
+
+
 .rekening-popup .danger-button:hover {
     background: #fecaca;
 }
