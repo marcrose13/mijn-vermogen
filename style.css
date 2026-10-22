@@ -1294,5 +1294,16 @@ h2 {
     transform: scale(0.98);
 }
 
+/* Verwijder rekening in de bewerk-popup */
+.rekening-popup .danger-button {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.rekening-popup .danger-button:hover {
+    background: #fecaca;
+}
+
 
     
