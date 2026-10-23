@@ -3640,56 +3640,62 @@ ctx.fillStyle =
      * ==========================================
      */
 
+    
     ctx.beginPath();
 
-    grafiekPunten.forEach(
-        function(punt, index) {
+    if (grafiekPunten.length > 0) {
 
-            if (
-                index === 0
-            ) {
+        ctx.moveTo(
+            grafiekPunten[0].x,
+            grafiekPunten[0].y
+        );
 
-                ctx.moveTo(
-                    punt.x,
-                    punt.y
-                );
+        for (
+            let i = 0;
+            i < grafiekPunten.length - 1;
+            i++
+        ) {
 
-            } else {
+            const huidig = grafiekPunten[i];
+            const volgend = grafiekPunten[i + 1];
 
-                ctx.lineTo(
-                    punt.x,
-                    punt.y
-                );
+            const middenX =
+                (huidig.x + volgend.x) / 2;
 
-            }
+            const middenY =
+                (huidig.y + volgend.y) / 2;
+
+            ctx.quadraticCurveTo(
+                huidig.x,
+                huidig.y,
+                middenX,
+                middenY
+            );
 
         }
-    );
 
+        const laatste =
+            grafiekPunten[grafiekPunten.length - 1];
+
+        ctx.lineTo(
+            laatste.x,
+            laatste.y
+        );
+
+    }
 
     ctx.strokeStyle =
-        getComputedStyle(
-            document.documentElement
-        )
-        .getPropertyValue(
-            "--color-accent"
-        )
-        .trim();
+        getComputedStyle(document.documentElement)
+            .getPropertyValue("--color-accent")
+            .trim();
 
-    ctx.lineWidth =
-        3;
-
-
-    ctx.lineJoin =
-        "round";
-
-
-    ctx.lineCap =
-        "round";
-
+    ctx.lineWidth = 3;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
 
     ctx.stroke();
-   
+
+       
     /*
      * ==========================================
      * MEETPUNTEN
