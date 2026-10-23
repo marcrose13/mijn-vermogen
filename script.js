@@ -3641,6 +3641,7 @@ ctx.fillStyle =
      */
 
     
+    
     ctx.beginPath();
 
     if (grafiekPunten.length > 0) {
@@ -3656,31 +3657,49 @@ ctx.fillStyle =
             i++
         ) {
 
-            const huidig = grafiekPunten[i];
-            const volgend = grafiekPunten[i + 1];
+            const vorig =
+                grafiekPunten[Math.max(0, i - 1)];
 
-            const middenX =
-                (huidig.x + volgend.x) / 2;
+            const huidig =
+                grafiekPunten[i];
 
-            const middenY =
-                (huidig.y + volgend.y) / 2;
+            const volgend =
+                grafiekPunten[i + 1];
 
-            ctx.quadraticCurveTo(
-                huidig.x,
-                huidig.y,
-                middenX,
-                middenY
+            const volgendVolgend =
+                grafiekPunten[
+                    Math.min(
+                        grafiekPunten.length - 1,
+                        i + 2
+                    )
+                ];
+
+            const controle1X =
+                huidig.x +
+                (volgend.x - vorig.x) / 6;
+
+            const controle1Y =
+                huidig.y +
+                (volgend.y - vorig.y) / 6;
+
+            const controle2X =
+                volgend.x -
+                (volgendVolgend.x - huidig.x) / 6;
+
+            const controle2Y =
+                volgend.y -
+                (volgendVolgend.y - huidig.y) / 6;
+
+            ctx.bezierCurveTo(
+                controle1X,
+                controle1Y,
+                controle2X,
+                controle2Y,
+                volgend.x,
+                volgend.y
             );
 
         }
-
-        const laatste =
-            grafiekPunten[grafiekPunten.length - 1];
-
-        ctx.lineTo(
-            laatste.x,
-            laatste.y
-        );
 
     }
 
@@ -3694,6 +3713,7 @@ ctx.fillStyle =
     ctx.lineCap = "round";
 
     ctx.stroke();
+
 
        
     /*
