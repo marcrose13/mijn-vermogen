@@ -424,10 +424,7 @@ function backupTerugzetten() {
     )) {
         return;
     }
-
-    // Bewaar de huidige gegevens voordat we iets vervangen.
-    backupDownloaden();
-
+    
     const bestandInput = document.createElement("input");
     bestandInput.type = "file";
     bestandInput.accept = ".json,application/json";
