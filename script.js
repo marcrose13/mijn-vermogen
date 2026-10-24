@@ -3607,16 +3607,62 @@ ctx.fillStyle =
             paddingBoven + grafiekHoogte
         );
 
-        grafiekPunten.forEach(
-            function(punt) {
-
-                ctx.lineTo(
-                    punt.x,
-                    punt.y
-                );
-
-            }
+        
+        ctx.lineTo(
+            grafiekPunten[0].x,
+            grafiekPunten[0].y
         );
+
+        for (
+            let i = 0;
+            i < grafiekPunten.length - 1;
+            i++
+        ) {
+
+            const vorig =
+                grafiekPunten[Math.max(0, i - 1)];
+
+            const huidig =
+                grafiekPunten[i];
+
+            const volgend =
+                grafiekPunten[i + 1];
+
+            const volgendVolgend =
+                grafiekPunten[
+                    Math.min(
+                        grafiekPunten.length - 1,
+                        i + 2
+                    )
+                ];
+
+            const controle1X =
+                huidig.x +
+                (volgend.x - vorig.x) / 6;
+
+            const controle1Y =
+                huidig.y +
+                (volgend.y - vorig.y) / 6;
+
+            const controle2X =
+                volgend.x -
+                (volgendVolgend.x - huidig.x) / 6;
+
+            const controle2Y =
+                volgend.y -
+                (volgendVolgend.y - huidig.y) / 6;
+
+            ctx.bezierCurveTo(
+                controle1X,
+                controle1Y,
+                controle2X,
+                controle2Y,
+                volgend.x,
+                volgend.y
+            );
+
+        }
+
 
         ctx.lineTo(
             grafiekPunten[
