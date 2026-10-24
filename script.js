@@ -417,22 +417,26 @@ function backupDownloaden() {
     URL.revokeObjectURL(url);
 }
 
+
 function backupTerugzetten() {
     if (!confirm(
-        "Er wordt eerst een backup van je huidige gegevens gedownload. " +
-        "Daarna kun je een eerdere backup kiezen."
+        "Wil je een eerdere backup selecteren?"
     )) {
         return;
     }
-    
+
     const bestandInput = document.createElement("input");
     bestandInput.type = "file";
     bestandInput.accept = ".json,application/json";
+    bestandInput.style.display = "none";
+
+    document.body.appendChild(bestandInput);
 
     bestandInput.addEventListener("change", async function () {
         const bestand = bestandInput.files[0];
 
         if (!bestand) {
+            bestandInput.remove();
             return;
         }
 
@@ -498,16 +502,19 @@ function backupTerugzetten() {
                 historieTonenBackup
             );
 
-            alert("Backup teruggezet! Saldootje wordt opnieuw geladen.");
+            alert(
+                "Backup teruggezet! Saldootje wordt opnieuw geladen."
+            );
             location.reload();
 
         } catch (fout) {
             console.error(fout);
             alert(
                 "De backup kon niet worden teruggezet. " +
-                "Je gegevens zijn niet aangepast als de fout ontstond " +
-                "tijdens het controleren van het bestand."
+                "Controleer of je het juiste Saldootje-backupbestand kiest."
             );
+        } finally {
+            bestandInput.remove();
         }
     });
 
