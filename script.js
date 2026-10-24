@@ -303,14 +303,29 @@ historieToggle.addEventListener(
 );
 
 
-popup.appendChild(
-    historieLabel
-);
 
+popup.appendChild(historieLabel);
 
-popup.appendChild(
-    sluitenButton
-);
+// Backup downloaden
+const backupLabel = document.createElement("div");
+backupLabel.className = "instellingen-label";
+backupLabel.textContent = "Gegevens veiligstellen";
+
+const backupButton = document.createElement("button");
+backupButton.type = "button";
+backupButton.className = "secondary-button";
+backupButton.textContent = "↓ Backup downloaden";
+
+backupButton.style.width = "100%";
+backupButton.style.marginBottom = "20px";
+
+backupButton.onclick = backupDownloaden;
+
+popup.appendChild(backupLabel);
+popup.appendChild(backupButton);
+
+popup.appendChild(sluitenButton);
+
 
 
     overlay.appendChild(
@@ -344,6 +359,48 @@ popup.appendChild(
  * OPSLAAN
  * ==========================================
  */
+
+
+function backupDownloaden() {
+    const backup = {
+        app: "Saldootje",
+        versie: 1,
+        aangemaaktOp: new Date().toISOString(),
+        gegevens: {
+            mijnVermogenRekeningen:
+                localStorage.getItem("mijnVermogenRekeningen") || "[]",
+
+            mijnVermogenHistorie:
+                localStorage.getItem("mijnVermogenHistorie") || "[]",
+
+            mijnVermogenDoel:
+                localStorage.getItem("mijnVermogenDoel") || "0",
+
+            mijnVermogenHistorieTonen:
+                localStorage.getItem("mijnVermogenHistorieTonen") || "false"
+        }
+    };
+
+    const inhoud = JSON.stringify(backup, null, 2);
+    const bestand = new Blob(
+        [inhoud],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(bestand);
+    const link = document.createElement("a");
+
+    const datum = new Date().toISOString().slice(0, 10);
+
+    link.href = url;
+    link.download = `saldootje-backup-${datum}.json`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+}
 
 function slaRekeningenOp() {
 
