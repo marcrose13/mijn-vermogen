@@ -3724,9 +3724,10 @@ ctx.fillStyle =
                 huidig.x +
                 (volgend.x - vorig.x) / 6;
 
+            
             const controle1Y =
                 huidig.y +
-                (volgend.y - vorig.y) / 6;
+                (volgend.y - vorig.y) / 8;
 
             const controle2X =
                 volgend.x -
@@ -3734,7 +3735,7 @@ ctx.fillStyle =
 
             const controle2Y =
                 volgend.y -
-                (volgendVolgend.y - huidig.y) / 6;
+                (volgendVolgend.y - huidig.y) / 8;
 
             ctx.bezierCurveTo(
                 controle1X,
