@@ -321,12 +321,27 @@ backupButton.style.marginBottom = "20px";
 
 backupButton.onclick = backupDownloaden;
 
+
 popup.appendChild(backupLabel);
 popup.appendChild(backupButton);
 
+// Backup terugzetten
+const herstelLabel = document.createElement("div");
+herstelLabel.className = "instellingen-label";
+herstelLabel.textContent = "Gegevens herstellen";
+
+const herstelButton = document.createElement("button");
+herstelButton.type = "button";
+herstelButton.className = "secondary-button";
+herstelButton.textContent = "↑ Backup terugzetten";
+herstelButton.style.width = "100%";
+herstelButton.style.marginBottom = "20px";
+herstelButton.onclick = backupTerugzetten;
+
+popup.appendChild(herstelLabel);
+popup.appendChild(herstelButton);
+
 popup.appendChild(sluitenButton);
-
-
 
     overlay.appendChild(
         popup
@@ -402,6 +417,106 @@ function backupDownloaden() {
     URL.revokeObjectURL(url);
 }
 
+function backupTerugzetten() {
+    if (!confirm(
+        "Er wordt eerst een backup van je huidige gegevens gedownload. " +
+        "Daarna kun je een eerdere backup kiezen."
+    )) {
+        return;
+    }
+
+    // Bewaar de huidige gegevens voordat we iets vervangen.
+    backupDownloaden();
+
+    const bestandInput = document.createElement("input");
+    bestandInput.type = "file";
+    bestandInput.accept = ".json,application/json";
+
+    bestandInput.addEventListener("change", async function () {
+        const bestand = bestandInput.files[0];
+
+        if (!bestand) {
+            return;
+        }
+
+        try {
+            const inhoud = await bestand.text();
+            const backup = JSON.parse(inhoud);
+
+            if (
+                backup.app !== "Saldootje" ||
+                backup.versie !== 1 ||
+                !backup.gegevens
+            ) {
+                throw new Error("Ongeldig backupbestand.");
+            }
+
+            const gegevens = backup.gegevens;
+            const rekeningenBackup = JSON.parse(
+                gegevens.mijnVermogenRekeningen
+            );
+            const historieBackup = JSON.parse(
+                gegevens.mijnVermogenHistorie
+            );
+
+            const doelBackup = String(
+                gegevens.mijnVermogenDoel
+            );
+            const historieTonenBackup = String(
+                gegevens.mijnVermogenHistorieTonen
+            );
+
+            if (
+                !Array.isArray(rekeningenBackup) ||
+                !Array.isArray(historieBackup) ||
+                doelBackup.trim() === "" ||
+                !Number.isFinite(Number(doelBackup)) ||
+                Number(doelBackup) < 0 ||
+                !["true", "false"].includes(historieTonenBackup)
+            ) {
+                throw new Error("Ongeldige gegevens.");
+            }
+
+            if (!confirm(
+                "Weet je zeker dat je deze backup wilt terugzetten?\n\n" +
+                "Je huidige gegevens worden vervangen."
+            )) {
+                return;
+            }
+
+            localStorage.setItem(
+                "mijnVermogenRekeningen",
+                gegevens.mijnVermogenRekeningen
+            );
+            localStorage.setItem(
+                "mijnVermogenHistorie",
+                gegevens.mijnVermogenHistorie
+            );
+            localStorage.setItem(
+                "mijnVermogenDoel",
+                doelBackup
+            );
+            localStorage.setItem(
+                "mijnVermogenHistorieTonen",
+                historieTonenBackup
+            );
+
+            alert("Backup teruggezet! Saldootje wordt opnieuw geladen.");
+            location.reload();
+
+        } catch (fout) {
+            console.error(fout);
+            alert(
+                "De backup kon niet worden teruggezet. " +
+                "Je gegevens zijn niet aangepast als de fout ontstond " +
+                "tijdens het controleren van het bestand."
+            );
+        }
+    });
+
+    bestandInput.click();
+}
+
 function slaRekeningenOp() {
 
     localStorage.setItem(
@@ -410,7 +525,6 @@ function slaRekeningenOp() {
     );
 
 }
-
 
 function slaHistorieOp() {
 
