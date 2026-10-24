@@ -61,6 +61,20 @@ body {
  * ==========================================
  */
 
+
+.header-merk {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.saldootje-logo {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+}
+
+
 .header {
     position: relative;
     display: flex;
