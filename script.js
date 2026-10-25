@@ -2905,6 +2905,7 @@ function maakTijdAsLabels(
      */
 
     const datums = [];
+let laatsteLabelDatum = null;
 
 
     if (dagen <= 45) {
@@ -2955,12 +2956,14 @@ function maakTijdAsLabels(
 
         }
 
+const laatste =
+    new Date(maxDatum);
 
-        const laatste =
-            new Date(maxDatum);
+laatste.setDate(1);
+laatsteLabelDatum = laatste;
 
-
-        laatste.setDate(1);
+// Gebruik voor het laatste label de positie
+// van het daadwerkelijke laatste meetpunt.
 
 
         const beschikbareMaanden =
@@ -3072,23 +3075,20 @@ function maakTijdAsLabels(
     datums.forEach(
         function(datum) {
 
-            const verhouding =
-                (
-                    datum -
-                    minDatum
-                ) /
-                verschilMs;
+            
+const isLaatsteLabel =
+    laatsteLabelDatum !== null &&
+    datum.getTime() === laatsteLabelDatum.getTime();
 
+const verhouding =
+    (isLaatsteLabel
+        ? (maxDatum - minDatum) / verschilMs
+        : (datum - minDatum) / verschilMs);
 
-            const x =
-                xStart +
-                (
-                    verhouding *
-                    (
-                        xEinde -
-                        xStart
-                    )
-                );
+const x =
+    xStart +
+    (verhouding * (xEinde - xStart));
+
 
 
             /*
