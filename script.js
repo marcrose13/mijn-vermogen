@@ -3033,6 +3033,7 @@ function maakTijdAsLabels(
             }
 
         }
+ }
 
 
     /*
