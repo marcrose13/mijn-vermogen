@@ -2994,54 +2994,45 @@ function maakTijdAsLabels(
 
             }
 
+        
         } else {
 
             const maandStap =
                 Math.ceil(
-                    (
-                        beschikbareMaanden - 1
-                    ) /
-                    (
-                        aantalLabels - 1
-                    )
+                    (beschikbareMaanden - 1) /
+                    (aantalLabels - 1)
                 );
-
 
             for (
                 let i = 0;
-                i < aantalLabels;
+                i < aantalLabels - 1;
                 i++
             ) {
 
                 const datum =
                     new Date(eerste);
 
-
                 datum.setMonth(
                     datum.getMonth() +
-                    (
-                        i *
-                        maandStap
-                    )
+                    i * maandStap
                 );
 
-
-                if (
-                    datum <=
-                    laatste
-                ) {
-
-                    datums.push(
-                        datum
-                    );
-
+                if (datum <= laatste) {
+                    datums.push(datum);
                 }
 
             }
 
-        }
+            // De laatste maand altijd tonen.
+            if (
+                datums.length === 0 ||
+                datums[datums.length - 1].getTime() !==
+                    laatste.getTime()
+            ) {
+                datums.push(laatste);
+            }
 
-    }
+        }
 
 
     /*
