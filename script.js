@@ -2844,6 +2844,7 @@ function vindDichtstbijzijndePunt(event) {
  * ==========================================
  */
 
+
 function maakTijdAsLabels(
     ctx,
     minDatum,
@@ -2852,305 +2853,136 @@ function maakTijdAsLabels(
     xEinde,
     y
 ) {
-
-    const verschilMs =
-        maxDatum - minDatum;
-
+    const verschilMs = maxDatum - minDatum;
 
     if (verschilMs <= 0) {
-
         return;
-
     }
-
 
     const dagen =
-        verschilMs /
-        (
-            1000 *
-            60 *
-            60 *
-            24
-        );
+        verschilMs / (1000 * 60 * 60 * 24);
 
-
-    let aantalLabels;
-
-
-    if (dagen <= 45) {
-
-        aantalLabels = 4;
-
-    } else if (dagen <= 120) {
-
-        aantalLabels = 5;
-
-    } else if (dagen <= 400) {
-
-        aantalLabels = 5;
-
-    } else {
-
-        aantalLabels = 5;
-
-    }
-
-
-    /*
-     * Voor een korte periode gebruiken we
-     * dagen/weken.
-     *
-     * Voor langere periodes gebruiken we
-     * maanden.
-     */
-
+    const aantalLabels = dagen <= 45 ? 4 : 5;
     const datums = [];
-let laatsteLabelDatum = null;
-
 
     if (dagen <= 45) {
+        const stap = verschilMs / (aantalLabels - 1);
 
-        const stap =
-            verschilMs /
-            (aantalLabels - 1);
-
-
-        for (
-            let i = 0;
-            i < aantalLabels;
-            i++
-        ) {
-
+        for (let i = 0; i < aantalLabels; i++) {
             datums.push(
-                new Date(
-                    minDatum.getTime() +
-                    stap * i
-                )
+                new Date(minDatum.getTime() + stap * i)
             );
-
         }
-
     } else {
-
-        const eerste =
-            new Date(minDatum);
-
-
+        const eerste = new Date(minDatum);
         eerste.setDate(1);
 
-
-        /*
-         * Als het eerste label voor de
-         * gekozen periode ligt, schuiven
-         * we het door naar de volgende maand.
-         */
-
-        if (
-            eerste <
-            minDatum
-        ) {
-
-            eerste.setMonth(
-                eerste.getMonth() + 1
-            );
-
+        if (eerste < minDatum) {
+            eerste.setMonth(eerste.getMonth() + 1);
         }
 
-const laatste =
-    new Date(maxDatum);
-
-laatste.setDate(1);
-laatsteLabelDatum = laatste;
-
-// Gebruik voor het laatste label de positie
-// van het daadwerkelijke laatste meetpunt.
-
+        const laatsteMaand = new Date(maxDatum);
+        laatsteMaand.setDate(1);
 
         const beschikbareMaanden =
-            (
-                laatste.getFullYear() -
-                eerste.getFullYear()
-            ) * 12 +
-            (
-                laatste.getMonth() -
-                eerste.getMonth()
-            ) +
-            1;
+            (laatsteMaand.getFullYear() - eerste.getFullYear()) * 12 +
+            (laatsteMaand.getMonth() - eerste.getMonth()) + 1;
 
-
-        if (
-            beschikbareMaanden <=
-            aantalLabels
-        ) {
-
+        if (beschikbareMaanden <= aantalLabels) {
             for (
                 let datum = new Date(eerste);
-                datum <= laatste;
-                datum.setMonth(
-                    datum.getMonth() + 1
-                )
+                datum <= laatsteMaand;
+                datum.setMonth(datum.getMonth() + 1)
             ) {
+                const labelDatum = new Date(datum);
 
-                datums.push(
-                    new Date(datum)
-                );
-
+                // Het laatste label gebruikt de echte meetdatum.
+                if (
+                    labelDatum.getFullYear() === maxDatum.getFullYear() &&
+                    labelDatum.getMonth() === maxDatum.getMonth()
+                ) {
+                    datums.push(new Date(maxDatum));
+                } else {
+                    datums.push(labelDatum);
+                }
             }
-
-        
         } else {
+            const maandStap = Math.ceil(
+                (beschikbareMaanden - 1) / (aantalLabels - 1)
+            );
 
-            const maandStap =
-                Math.ceil(
-                    (beschikbareMaanden - 1) /
-                    (aantalLabels - 1)
-                );
-
-            for (
-                let i = 0;
-                i < aantalLabels - 1;
-                i++
-            ) {
-
-                const datum =
-                    new Date(eerste);
-
+            for (let i = 0; i < aantalLabels - 1; i++) {
+                const datum = new Date(eerste);
                 datum.setMonth(
-                    datum.getMonth() +
-                    i * maandStap
+                    datum.getMonth() + i * maandStap
                 );
 
-                if (datum <= laatste) {
+                if (datum < laatsteMaand) {
                     datums.push(datum);
                 }
-
             }
 
-            // De laatste maand altijd tonen.
-            if (
-                datums.length === 0 ||
-                datums[datums.length - 1].getTime() !==
-                    laatste.getTime()
-            ) {
-                datums.push(laatste);
-            }
-
+            // Voeg de echte datum van het laatste meetpunt toe.
+            datums.push(new Date(maxDatum));
         }
- }
-
-
-    /*
-     * Labels tekenen.
-     */
+    }
 
     ctx.save();
 
-
     ctx.fillStyle = getComputedStyle(document.documentElement)
-    .getPropertyValue("--color-text-secondary")
-    .trim();
-
+        .getPropertyValue("--color-text-secondary")
+        .trim();
 
     ctx.strokeStyle = getComputedStyle(document.documentElement)
-    .getPropertyValue("--color-border")
-    .trim();
+        .getPropertyValue("--color-border")
+        .trim();
 
-
-    ctx.lineWidth =
-        1;
-
-
+    ctx.lineWidth = 1;
     ctx.font =
         "11px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.textBaseline = "top";
 
+    datums.forEach(function(datum, index) {
+        const isLaatsteLabel = index === datums.length - 1;
 
-    ctx.textAlign =
-        "center";
+        const verhouding =
+            (datum - minDatum) / verschilMs;
 
+        const x =
+            xStart + verhouding * (xEinde - xStart);
 
-    ctx.textBaseline =
-        "top";
+        ctx.beginPath();
+        ctx.moveTo(x, y - 5);
+        ctx.lineTo(x, y + 1);
+        ctx.stroke();
 
+        let label;
 
-    datums.forEach(
-        function(datum) {
-
-            
-const isLaatsteLabel =
-    laatsteLabelDatum !== null &&
-    datum.getTime() === laatsteLabelDatum.getTime();
-
-const verhouding =
-    (isLaatsteLabel
-        ? (maxDatum - minDatum) / verschilMs
-        : (datum - minDatum) / verschilMs);
-
-const x =
-    xStart +
-    (verhouding * (xEinde - xStart));
-
-
-
-            /*
-             * Verticale hulplijn.
-             */
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                x,
-                y - 5
-            );
-
-            ctx.lineTo(
-                x,
-                y + 1
-            );
-
-            ctx.stroke();
-
-
-            let label;
-
-
-            if (dagen <= 45) {
-
-                label =
-                    datum.toLocaleDateString(
-                        "nl-NL",
-                        {
-                            day: "numeric",
-                            month: "short"
-                        }
-                    );
-
-            } else {
-
-                label =
-                    datum.toLocaleDateString(
-                        "nl-NL",
-                        {
-                            month: "short",
-                            year: "numeric"
-                        }
-                    );
-
-            }
-
-
-            ctx.fillText(
-                label,
-                x,
-                y + 7
-            );
-
+        if (dagen <= 45) {
+            label = datum.toLocaleDateString("nl-NL", {
+                day: "numeric",
+                month: "short"
+            });
+        } else {
+            label = datum.toLocaleDateString("nl-NL", {
+                month: "short",
+                year: "numeric"
+            });
         }
-    );
 
+        // Houd het laatste label binnen de grafiek.
+        ctx.textAlign = isLaatsteLabel ? "right" : "center";
+
+        ctx.fillText(
+            label,
+            x,
+            y + 7
+        );
+    });
 
     ctx.restore();
-
 }
+
 
 
 /*
