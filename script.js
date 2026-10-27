@@ -2927,6 +2927,34 @@ function maakTijdAsLabels(
         }
     }
 
+
+    // Houd voldoende ruimte tussen de laatste labels.
+    if (dagen > 45 && datums.length >= 2) {
+        while (datums.length > 2) {
+            const laatsteDatum = datums[datums.length - 1];
+            const vorigeDatum = datums[datums.length - 2];
+
+            const laatsteX =
+                xStart +
+                ((laatsteDatum - minDatum) / verschilMs) *
+                (xEinde - xStart);
+
+            const vorigeX =
+                xStart +
+                ((vorigeDatum - minDatum) / verschilMs) *
+                (xEinde - xStart);
+
+            if (laatsteX - vorigeX >= 100) {
+                break;
+            }
+
+            // Verwijder alleen het voorlaatste label,
+            // zodat het laatste meetpunt behouden blijft.
+            datums.splice(datums.length - 2, 1);
+        }
+    }
+
+
     ctx.save();
 
     ctx.fillStyle = getComputedStyle(document.documentElement)
