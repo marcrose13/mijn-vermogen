@@ -2862,17 +2862,22 @@ function maakTijdAsLabels(
     const dagen =
         verschilMs / (1000 * 60 * 60 * 24);
 
-    const aantalLabels = dagen <= 45 ? 4 : 5;
+    
+    const aantalLabels = dagen <= 45 ? 4 : 4;
     const datums = [];
 
-    if (dagen <= 45) {
-        const stap = verschilMs / (aantalLabels - 1);
+    // Verdeel de labels gelijkmatig over de tijdlijn.
+    for (let i = 0; i < aantalLabels; i++) {
+        const verhouding = i / (aantalLabels - 1);
 
-        for (let i = 0; i < aantalLabels; i++) {
-            datums.push(
-                new Date(minDatum.getTime() + stap * i)
-            );
-        }
+        datums.push(
+            new Date(
+                minDatum.getTime() + verschilMs * verhouding
+            )
+        );
+    }
+
+    
     } else {
         const eerste = new Date(minDatum);
         eerste.setDate(1);
