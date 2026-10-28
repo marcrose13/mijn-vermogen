@@ -3573,32 +3573,21 @@ ctx.fillStyle =
                     )
                 ];
 
-            // Houd de controlepunten binnen dit segment
-// om teruglussen te voorkomen.
-const controle1X =
-    huidig.x + (volgend.x - huidig.x) / 3;
+            const controle1X =
+                huidig.x +
+                (volgend.x - vorig.x) / 6;
 
-const controle2X =
-    volgend.x - (volgend.x - huidig.x) / 3;
+            const controle1Y =
+                huidig.y +
+                (volgend.y - vorig.y) / 8;
 
-const minimumY = Math.min(huidig.y, volgend.y);
-const maximumY = Math.max(huidig.y, volgend.y);
+            const controle2X =
+                volgend.x -
+                (volgendVolgend.x - huidig.x) / 6;
 
-const controle1Y = Math.max(
-    minimumY,
-    Math.min(
-        maximumY,
-        huidig.y + (volgend.y - vorig.y) / 8
-    )
-);
-
-const controle2Y = Math.max(
-    minimumY,
-    Math.min(
-        maximumY,
-        volgend.y - (volgendVolgend.y - huidig.y) / 8
-    )
-);
+            const controle2Y =
+                volgend.y -
+                (volgendVolgend.y - huidig.y) / 8;
 
             ctx.bezierCurveTo(
                 controle1X,
