@@ -2859,14 +2859,11 @@ function maakTijdAsLabels(
         return;
     }
 
-    const dagen =
-        verschilMs / (1000 * 60 * 60 * 24);
-
-    
+    const dagen = verschilMs / (1000 * 60 * 60 * 24);
     const aantalLabels = dagen <= 45 ? 4 : 4;
     const datums = [];
 
-    // Verdeel de labels gelijkmatig over de tijdlijn.
+    // Verdeel de datums gelijkmatig over de periode.
     for (let i = 0; i < aantalLabels; i++) {
         const verhouding = i / (aantalLabels - 1);
 
@@ -2876,89 +2873,6 @@ function maakTijdAsLabels(
             )
         );
     }
-
-    
-    } else {
-        const eerste = new Date(minDatum);
-        eerste.setDate(1);
-
-        if (eerste < minDatum) {
-            eerste.setMonth(eerste.getMonth() + 1);
-        }
-
-        const laatsteMaand = new Date(maxDatum);
-        laatsteMaand.setDate(1);
-
-        const beschikbareMaanden =
-            (laatsteMaand.getFullYear() - eerste.getFullYear()) * 12 +
-            (laatsteMaand.getMonth() - eerste.getMonth()) + 1;
-
-        if (beschikbareMaanden <= aantalLabels) {
-            for (
-                let datum = new Date(eerste);
-                datum <= laatsteMaand;
-                datum.setMonth(datum.getMonth() + 1)
-            ) {
-                const labelDatum = new Date(datum);
-
-                // Het laatste label gebruikt de echte meetdatum.
-                if (
-                    labelDatum.getFullYear() === maxDatum.getFullYear() &&
-                    labelDatum.getMonth() === maxDatum.getMonth()
-                ) {
-                    datums.push(new Date(maxDatum));
-                } else {
-                    datums.push(labelDatum);
-                }
-            }
-        } else {
-            const maandStap = Math.ceil(
-                (beschikbareMaanden - 1) / (aantalLabels - 1)
-            );
-
-            for (let i = 0; i < aantalLabels - 1; i++) {
-                const datum = new Date(eerste);
-                datum.setMonth(
-                    datum.getMonth() + i * maandStap
-                );
-
-                if (datum < laatsteMaand) {
-                    datums.push(datum);
-                }
-            }
-
-            // Voeg de echte datum van het laatste meetpunt toe.
-            datums.push(new Date(maxDatum));
-        }
-    }
-
-
-    // Houd voldoende ruimte tussen de laatste labels.
-    if (dagen > 45 && datums.length >= 2) {
-        while (datums.length > 2) {
-            const laatsteDatum = datums[datums.length - 1];
-            const vorigeDatum = datums[datums.length - 2];
-
-            const laatsteX =
-                xStart +
-                ((laatsteDatum - minDatum) / verschilMs) *
-                (xEinde - xStart);
-
-            const vorigeX =
-                xStart +
-                ((vorigeDatum - minDatum) / verschilMs) *
-                (xEinde - xStart);
-
-            if (laatsteX - vorigeX >= 100) {
-                break;
-            }
-
-            // Verwijder alleen het voorlaatste label,
-            // zodat het laatste meetpunt behouden blijft.
-            datums.splice(datums.length - 2, 1);
-        }
-    }
-
 
     ctx.save();
 
@@ -2976,45 +2890,36 @@ function maakTijdAsLabels(
     ctx.textBaseline = "top";
 
     datums.forEach(function(datum, index) {
-        const isLaatsteLabel = index === datums.length - 1;
-
-        const verhouding =
-            (datum - minDatum) / verschilMs;
-
-        const x =
-            xStart + verhouding * (xEinde - xStart);
+        const verhouding = index / (datums.length - 1);
+        const x = xStart + verhouding * (xEinde - xStart);
 
         ctx.beginPath();
         ctx.moveTo(x, y - 5);
         ctx.lineTo(x, y + 1);
         ctx.stroke();
 
-        let label;
-
-        if (dagen <= 45) {
-            label = datum.toLocaleDateString("nl-NL", {
+        const label = dagen <= 45
+            ? datum.toLocaleDateString("nl-NL", {
                 day: "numeric",
                 month: "short"
-            });
-        } else {
-            label = datum.toLocaleDateString("nl-NL", {
+            })
+            : datum.toLocaleDateString("nl-NL", {
                 month: "short",
                 year: "numeric"
             });
-        }
 
-        // Houd het laatste label binnen de grafiek.
-        ctx.textAlign = isLaatsteLabel ? "right" : "center";
+        ctx.textAlign = index === datums.length - 1
+            ? "right"
+            : index === 0
+                ? "left"
+                : "center";
 
-        ctx.fillText(
-            label,
-            x,
-            y + 7
-        );
+        ctx.fillText(label, x, y + 7);
     });
 
     ctx.restore();
 }
+
 
 
 
