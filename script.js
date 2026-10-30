@@ -1448,14 +1448,34 @@ if (!Array.isArray(rekening.saldoHistorie)) {
 const saldoHistorieGroep = document.createElement("div");
 saldoHistorieGroep.className = "formulier-groep";
 
-const saldoHistorieTitel = document.createElement("div");
-saldoHistorieTitel.className = "formulier-label";
-saldoHistorieTitel.textContent = "Saldoverloop";
+// Inklapbare kop Saldoverloop
+const saldoHistorieKop = document.createElement("button");
+saldoHistorieKop.type = "button";
+saldoHistorieKop.className = "saldo-historie-kop";
 
-const saldoHistorieUitleg = document.createElement("div");
-saldoHistorieUitleg.className = "rekening-popup-subtitel";
-saldoHistorieUitleg.textContent =
-    "Voeg eerdere maandstanden toe om je saldoontwikkeling te bekijken.";
+const saldoHistorieKopTekst = document.createElement("span");
+saldoHistorieKopTekst.textContent = "Saldoverloop";
+
+const saldoHistoriePijl = document.createElement("span");
+saldoHistoriePijl.textContent = "↓";
+
+saldoHistorieKop.appendChild(saldoHistorieKopTekst);
+saldoHistorieKop.appendChild(saldoHistoriePijl);
+
+const saldoHistorieSamenvatting = document.createElement("div");
+saldoHistorieSamenvatting.className = "saldo-historie-samenvatting";
+
+// Alle invoervelden en standen komen in deze container
+const saldoHistorieInhoud = document.createElement("div");
+saldoHistorieInhoud.className = "saldo-historie-inhoud";
+saldoHistorieInhoud.style.display = "none";
+
+saldoHistorieKop.onclick = function() {
+    const geopend = saldoHistorieInhoud.style.display === "none";
+
+    saldoHistorieInhoud.style.display = geopend ? "block" : "none";
+    saldoHistoriePijl.textContent = geopend ? "↑" : "↓";
+};
 
 const vandaag = new Date();
 
@@ -1538,6 +1558,29 @@ function toonSaldoHistorieLijst() {
         .sort(function(a, b) {
             return b.maand.localeCompare(a.maand);
         });
+        
+        if (standen.length > 0) {
+    const laatsteStand = standen[0];
+    const datum = new Date(laatsteStand.maand + "-01T00:00:00");
+
+    const maandTekst = datum.toLocaleDateString("nl-NL", {
+        month: "long",
+        year: "numeric"
+    });
+
+    saldoHistorieSamenvatting.textContent =
+        "Laatste stand: " +
+        maandTekst +
+        " · " +
+        formatteerBedrag(laatsteStand.bedrag) +
+        " · " +
+        standen.length +
+        (standen.length === 1 ? " stand" : " standen");
+
+} else {
+    saldoHistorieSamenvatting.textContent =
+        "Nog geen historische standen";
+}
 
     if (standen.length === 0) {
 
@@ -1679,14 +1722,16 @@ if (!bedragTekst || isNaN(bedrag)) {
     historischSaldoInput.value = "";
 };
 
-saldoHistorieGroep.appendChild(saldoHistorieTitel);
-saldoHistorieGroep.appendChild(saldoHistorieUitleg);
-saldoHistorieGroep.appendChild(maandLabel);
-saldoHistorieGroep.appendChild(maandKeuzeGroep);
-saldoHistorieGroep.appendChild(saldoLabel);
-saldoHistorieGroep.appendChild(historischSaldoInput);
-saldoHistorieGroep.appendChild(saldoToevoegenButton);
-saldoHistorieGroep.appendChild(saldoHistorieLijst);
+saldoHistorieInhoud.appendChild(maandLabel);
+saldoHistorieInhoud.appendChild(maandKeuzeGroep);
+saldoHistorieInhoud.appendChild(saldoLabel);
+saldoHistorieInhoud.appendChild(historischSaldoInput);
+saldoHistorieInhoud.appendChild(saldoToevoegenButton);
+saldoHistorieInhoud.appendChild(saldoHistorieLijst);
+
+saldoHistorieGroep.appendChild(saldoHistorieKop);
+saldoHistorieGroep.appendChild(saldoHistorieSamenvatting);
+saldoHistorieGroep.appendChild(saldoHistorieInhoud);
 
 toonSaldoHistorieLijst();
 
