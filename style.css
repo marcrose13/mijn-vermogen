@@ -1486,5 +1486,39 @@ h2 {
 
 }
 
+/* Compacte maandelijkse saldoverandering */
+.rekening-verschil {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+
+    margin-top: 6px;
+
+    font-size: 11px;
+    font-weight: 550;
+    letter-spacing: 0;
+    line-height: 1.3;
+
+    white-space: nowrap;
+}
+
+.rekening-verschil.positief {
+    color: #15966A;
+}
+
+.rekening-verschil.negatief {
+    color: #D05B5B;
+}
+
+.rekening-verschil.gelijk {
+    color: var(--color-text-secondary);
+}
+
+.rekening-verschil-pijl {
+    font-size: 13px;
+    font-weight: 700;
+}
+
 
     
