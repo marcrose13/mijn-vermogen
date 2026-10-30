@@ -1457,28 +1457,51 @@ saldoHistorieUitleg.className = "rekening-popup-subtitel";
 saldoHistorieUitleg.textContent =
     "Voeg eerdere maandstanden toe om je saldoontwikkeling te bekijken.";
 
+// Maand en jaar kiezen
+const maandKeuzeGroep = document.createElement("div");
+maandKeuzeGroep.className = "saldo-maand-keuze";
+
 const maandLabel = document.createElement("label");
 maandLabel.className = "formulier-label";
 maandLabel.textContent = "Maand";
 
-const maandInput = document.createElement("input");
-maandInput.className = "formulier-input";
-maandInput.type = "month";
+const maandSelect = document.createElement("select");
+maandSelect.className = "formulier-select";
 
-const vandaag = new Date();
-const vorigeMaand = new Date(
-    vandaag.getFullYear(),
-    vandaag.getMonth() - 1,
-    1
-);
+const maanden = [
+    "Januari", "Februari", "Maart", "April",
+    "Mei", "Juni", "Juli", "Augustus",
+    "September", "Oktober", "November", "December"
+];
 
-const vorigeMaandSleutel =
-    vorigeMaand.getFullYear() +
-    "-" +
-    String(vorigeMaand.getMonth() + 1).padStart(2, "0");
+maanden.forEach(function(naam, index) {
+    const optie = document.createElement("option");
+    optie.value = String(index + 1).padStart(2, "0");
+    optie.textContent = naam;
+    maandSelect.appendChild(optie);
+});
 
-maandInput.value = vorigeMaandSleutel;
-maandInput.max = vorigeMaandSleutel;
+const jaarSelect = document.createElement("select");
+jaarSelect.className = "formulier-select";
+
+const huidigJaar = vandaag.getFullYear();
+
+for (let jaar = huidigJaar; jaar >= 2000; jaar--) {
+    const optie = document.createElement("option");
+    optie.value = jaar;
+    optie.textContent = jaar;
+    jaarSelect.appendChild(optie);
+}
+
+// Standaard de vorige maand selecteren
+maandSelect.value = String(
+    vorigeMaand.getMonth() + 1
+).padStart(2, "0");
+
+jaarSelect.value = String(vorigeMaand.getFullYear());
+
+maandKeuzeGroep.appendChild(maandSelect);
+maandKeuzeGroep.appendChild(jaarSelect);
 
 const saldoLabel = document.createElement("label");
 saldoLabel.className = "formulier-label";
@@ -1560,7 +1583,8 @@ function toonSaldoHistorieLijst() {
 
 saldoToevoegenButton.onclick = function() {
 
-    const maand = maandInput.value;
+    const maand =
+    jaarSelect.value + "-" + maandSelect.value;
 
     const bedragTekst = historischSaldoInput.value
     .trim()
@@ -1578,7 +1602,7 @@ const huidigeMaandSleutel =
 
 if (!maand || maand >= huidigeMaandSleutel) {
     alert("Kies een maand die vóór de huidige maand ligt.");
-    maandInput.focus();
+    maandSelect.focus();
     return;
 }
 
@@ -1611,7 +1635,7 @@ if (!bedragTekst || isNaN(bedrag)) {
 saldoHistorieGroep.appendChild(saldoHistorieTitel);
 saldoHistorieGroep.appendChild(saldoHistorieUitleg);
 saldoHistorieGroep.appendChild(maandLabel);
-saldoHistorieGroep.appendChild(maandInput);
+saldoHistorieGroep.appendChild(maandKeuzeGroep);
 saldoHistorieGroep.appendChild(saldoLabel);
 saldoHistorieGroep.appendChild(historischSaldoInput);
 saldoHistorieGroep.appendChild(saldoToevoegenButton);
