@@ -408,7 +408,7 @@ h2 {
 .grafiek-wrapper {
     position: relative;
     width: 100%;
-    height: 270px;
+    height: 310px;
     touch-action: pan-y;
 }
 
@@ -1333,6 +1333,66 @@ h2 {
     box-sizing: border-box;
 }
 
+/* ==========================================
+   SALDOVERLOOP IN REKENING-POPUP
+   ========================================== */
 
+.saldo-maand-keuze {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.saldo-maand-keuze select {
+    min-width: 0;
+}
+
+.rekening-saldohistorie-lijst {
+    display: flex;
+    flex-direction: column;
+    margin-top: 14px;
+}
+
+.rekening-saldohistorie-regel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.rekening-saldohistorie-regel span {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    color: var(--color-text);
+}
+
+.rekening-saldohistorie-regel button {
+    width: auto;
+    flex-shrink: 0;
+    padding: 7px 11px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+.saldo-historie-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.saldo-historie-maand {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.saldo-historie-bedrag {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
 
     
