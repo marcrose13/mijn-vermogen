@@ -1432,4 +1432,24 @@ h2 {
     padding-top: 10px;
 }
 
+
+/* Mobiele rekening-popup: inhoud scrollbaar maken */
+.rekening-popup-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+.rekening-popup {
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    flex-shrink: 0;
+}
+
+
     
