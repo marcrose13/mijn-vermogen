@@ -1451,5 +1451,40 @@ h2 {
     flex-shrink: 0;
 }
 
+/* Mobiele opmaak rekeningoverzicht */
+@media (max-width: 600px) {
+
+    .rekening {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto 38px;
+        align-items: center;
+        column-gap: 10px;
+    }
+
+    .rekening-info {
+        min-width: 0;
+    }
+
+    .rekening-bedrag {
+        min-width: 0;
+        max-width: 145px;
+        text-align: right;
+        white-space: normal;
+    }
+
+    .rekening-verschil {
+        margin-top: 5px;
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
+    .rekening-acties {
+        justify-content: flex-end;
+    }
+
+}
+
 
     
