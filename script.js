@@ -1548,29 +1548,31 @@ function toonSaldoHistorieLijst() {
         return;
     }
 
-    standen.forEach(function(moment) {
+    const oudereStanden = [];
+
+    standen.forEach(function(moment, index) {
 
         const regel = document.createElement("div");
         regel.className = "rekening-saldohistorie-regel";
 
         const omschrijving = document.createElement("div");
-omschrijving.className = "saldo-historie-info";
+        omschrijving.className = "saldo-historie-info";
 
-const datum = new Date(moment.maand + "-01T00:00:00");
+        const datum = new Date(moment.maand + "-01T00:00:00");
 
-const maandTekst = document.createElement("div");
-maandTekst.className = "saldo-historie-maand";
-maandTekst.textContent = datum.toLocaleDateString("nl-NL", {
-    month: "long",
-    year: "numeric"
-});
+        const maandTekst = document.createElement("div");
+        maandTekst.className = "saldo-historie-maand";
+        maandTekst.textContent = datum.toLocaleDateString("nl-NL", {
+            month: "long",
+            year: "numeric"
+        });
 
-const bedragTekst = document.createElement("div");
-bedragTekst.className = "saldo-historie-bedrag";
-bedragTekst.textContent = formatteerBedrag(moment.bedrag);
+        const bedragTekst = document.createElement("div");
+        bedragTekst.className = "saldo-historie-bedrag";
+        bedragTekst.textContent = formatteerBedrag(moment.bedrag);
 
-omschrijving.appendChild(maandTekst);
-omschrijving.appendChild(bedragTekst);
+        omschrijving.appendChild(maandTekst);
+        omschrijving.appendChild(bedragTekst);
 
         const verwijderen = document.createElement("button");
         verwijderen.type = "button";
@@ -1592,8 +1594,38 @@ omschrijving.appendChild(bedragTekst);
         regel.appendChild(omschrijving);
         regel.appendChild(verwijderen);
 
+        if (index > 0) {
+            regel.style.display = "none";
+            oudereStanden.push(regel);
+        }
+
         saldoHistorieLijst.appendChild(regel);
     });
+
+    if (oudereStanden.length > 0) {
+
+        const knop = document.createElement("button");
+        knop.type = "button";
+        knop.className = "historie-meer-knop";
+        knop.textContent = "Toon oudere standen ↓";
+
+        let geopend = false;
+
+        knop.onclick = function() {
+
+            geopend = !geopend;
+
+            oudereStanden.forEach(function(item) {
+                item.style.display = geopend ? "flex" : "none";
+            });
+
+            knop.textContent = geopend
+                ? "Verberg oudere standen ↑"
+                : "Toon oudere standen ↓";
+        };
+
+        saldoHistorieLijst.appendChild(knop);
+    }
 }
 
 saldoToevoegenButton.onclick = function() {
