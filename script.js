@@ -752,15 +752,18 @@ function toonRekeningen() {
             const teken = verschil > 0 ? "+" : verschil < 0 ? "−" : "";
 
             verschilHTML = `
-                <div class="rekening-verschil ${richting}">
-                    ${teken}${formatteerBedrag(Math.abs(verschil))}
-                    ${percentage !== null
-                        ? `(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)`
-                        : ""}
-                    <span>t.o.v. vorige maand</span>
-                </div>
-            `;
-        }
+    <div class="rekening-verschil ${richting}">
+        <span class="rekening-verschil-pijl">
+            ${verschil > 0 ? "↑" : verschil < 0 ? "↓" : "–"}
+        </span>
+        <span>
+            ${teken}${formatteerBedrag(Math.abs(verschil))}
+        </span>
+        ${percentage !== null
+            ? `<span>(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)</span>`
+            : ""}
+    </div>
+`;
 
 
         div.innerHTML = `
