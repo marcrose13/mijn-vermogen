@@ -1457,6 +1457,14 @@ saldoHistorieUitleg.className = "rekening-popup-subtitel";
 saldoHistorieUitleg.textContent =
     "Voeg eerdere maandstanden toe om je saldoontwikkeling te bekijken.";
 
+const vandaag = new Date();
+
+const vorigeMaand = new Date(
+    vandaag.getFullYear(),
+    vandaag.getMonth() - 1,
+    1
+);
+
 // Maand en jaar kiezen
 const maandKeuzeGroep = document.createElement("div");
 maandKeuzeGroep.className = "saldo-maand-keuze";
