@@ -1520,5 +1520,14 @@ h2 {
     font-weight: 700;
 }
 
+/* Compactere ruimte in rekening-popup */
+.rekening-popup .formulier-groep {
+    margin-bottom: 10px;
+}
+
+.rekening-popup .formulier-input,
+.rekening-popup .formulier-select {
+    margin-bottom: 0;
+}
 
     
