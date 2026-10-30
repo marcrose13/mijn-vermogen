@@ -765,6 +765,7 @@ function toonRekeningen() {
     </div>
 `;
 
+}
 
         div.innerHTML = `
 
