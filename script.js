@@ -1545,17 +1545,24 @@ function toonSaldoHistorieLijst() {
         const regel = document.createElement("div");
         regel.className = "rekening-saldohistorie-regel";
 
-        const omschrijving = document.createElement("span");
+        const omschrijving = document.createElement("div");
+omschrijving.className = "saldo-historie-info";
 
-        const datum = new Date(moment.maand + "-01T00:00:00");
+const datum = new Date(moment.maand + "-01T00:00:00");
 
-        omschrijving.textContent =
-            datum.toLocaleDateString("nl-NL", {
-                month: "long",
-                year: "numeric"
-            }) +
-            " — " +
-            formatteerBedrag(moment.bedrag);
+const maandTekst = document.createElement("div");
+maandTekst.className = "saldo-historie-maand";
+maandTekst.textContent = datum.toLocaleDateString("nl-NL", {
+    month: "long",
+    year: "numeric"
+});
+
+const bedragTekst = document.createElement("div");
+bedragTekst.className = "saldo-historie-bedrag";
+bedragTekst.textContent = formatteerBedrag(moment.bedrag);
+
+omschrijving.appendChild(maandTekst);
+omschrijving.appendChild(bedragTekst);
 
         const verwijderen = document.createElement("button");
         verwijderen.type = "button";
