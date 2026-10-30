@@ -718,6 +718,51 @@ function toonRekeningen() {
         div.className = "rekening";
 
 
+        // Verschil ten opzichte van vorige maand berekenen
+        const vandaag = new Date();
+        const vorigeMaandDatum = new Date(
+            vandaag.getFullYear(),
+            vandaag.getMonth() - 1,
+            1
+        );
+
+        const vorigeMaandSleutel =
+            vorigeMaandDatum.getFullYear() +
+            "-" +
+            String(vorigeMaandDatum.getMonth() + 1).padStart(2, "0");
+
+        const vorigeSaldo = Array.isArray(rekening.saldoHistorie)
+            ? rekening.saldoHistorie.find(function(moment) {
+                return moment.maand === vorigeMaandSleutel;
+            })
+            : null;
+
+        let verschilHTML = "";
+
+        if (vorigeSaldo) {
+            const huidigSaldo = Number(rekening.bedrag) || 0;
+            const verschil = huidigSaldo - Number(vorigeSaldo.bedrag);
+            const percentage = Number(vorigeSaldo.bedrag) !== 0
+                ? (verschil / Number(vorigeSaldo.bedrag)) * 100
+                : null;
+
+            const richting = verschil > 0 ? "positief" :
+                verschil < 0 ? "negatief" : "gelijk";
+
+            const teken = verschil > 0 ? "+" : verschil < 0 ? "−" : "";
+
+            verschilHTML = `
+                <div class="rekening-verschil ${richting}">
+                    ${teken}${formatteerBedrag(Math.abs(verschil))}
+                    ${percentage !== null
+                        ? `(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)`
+                        : ""}
+                    <span>t.o.v. vorige maand</span>
+                </div>
+            `;
+        }
+
+
         div.innerHTML = `
 
             <div class="rekening-info">
@@ -743,11 +788,10 @@ function toonRekeningen() {
 
             </div>
 
-
-            <div class="rekening-bedrag">
-                ${formatteerBedrag(rekening.bedrag)}
-            </div>
-
+<div class="rekening-bedrag">
+    ${formatteerBedrag(rekening.bedrag)}
+    ${verschilHTML}
+</div>
 
             <div class="rekening-acties">
 
