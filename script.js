@@ -1679,6 +1679,7 @@ vermogensMomentAutomatischBijwerken();
  * ==========================================
  */
 
+
 function vermogensMomentAutomatischBijwerken() {
 
     let totaal = 0;
@@ -1689,6 +1690,38 @@ function vermogensMomentAutomatischBijwerken() {
 
     const vandaag = new Date();
 
+    // Maand vastleggen als YYYY-MM
+    const maandSleutel =
+        vandaag.getFullYear() +
+        "-" +
+        String(vandaag.getMonth() + 1).padStart(2, "0");
+
+    // Per rekening het saldo van deze maand bewaren
+    rekeningen.forEach(function(rekening) {
+
+        if (!Array.isArray(rekening.saldoHistorie)) {
+            rekening.saldoHistorie = [];
+        }
+
+        const bestaandSaldo = rekening.saldoHistorie.find(
+            function(moment) {
+                return moment.maand === maandSleutel;
+            }
+        );
+
+        if (bestaandSaldo) {
+            bestaandSaldo.bedrag =
+                Number(rekening.bedrag) || 0;
+        } else {
+            rekening.saldoHistorie.push({
+                maand: maandSleutel,
+                bedrag: Number(rekening.bedrag) || 0
+            });
+        }
+
+    });
+
+    // Bestaande totale vermogenshistorie behouden
     const bestaandMoment = historie.find(function(moment) {
 
         const datumMoment = new Date(moment.datum);
@@ -1714,7 +1747,10 @@ function vermogensMomentAutomatischBijwerken() {
 
     }
 
+    // Beide gegevens opslaan
+    slaRekeningenOp();
     slaHistorieOp();
+
     toonHistorie();
     tekenGrafiek();
 
