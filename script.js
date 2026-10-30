@@ -1563,25 +1563,30 @@ saldoToevoegenButton.onclick = function() {
     const maand = maandInput.value;
 
     const bedragTekst = historischSaldoInput.value
-        .trim()
-        .replace("€", "")
-        .replace(/\s/g, "")
-        .replace(/\./g, "")
-        .replace(",", ".");
+    .trim()
+    .replace("€", "")
+    .replace(/\s/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
 
-    const bedrag = parseFloat(bedragTekst);
+const bedrag = parseFloat(bedragTekst);
 
-    if (!maand || maand >= vorigeMaandSleutel) {
-        alert("Kies een maand die vóór de huidige maand ligt.");
-        maandInput.focus();
-        return;
-    }
+const huidigeMaandSleutel =
+    vandaag.getFullYear() +
+    "-" +
+    String(vandaag.getMonth() + 1).padStart(2, "0");
 
-    if (!bedragTekst || isNaN(bedrag)) {
-        alert("Vul een geldig saldo in.");
-        historischSaldoInput.focus();
-        return;
-    }
+if (!maand || maand >= huidigeMaandSleutel) {
+    alert("Kies een maand die vóór de huidige maand ligt.");
+    maandInput.focus();
+    return;
+}
+
+if (!bedragTekst || isNaN(bedrag)) {
+    alert("Vul een geldig saldo in.");
+    historischSaldoInput.focus();
+    return;
+}
 
     const bestaandeStand = rekening.saldoHistorie.find(function(moment) {
         return moment.maand === maand;
