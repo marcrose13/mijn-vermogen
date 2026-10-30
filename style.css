@@ -1395,4 +1395,41 @@ h2 {
     color: var(--color-text-secondary);
 }
 
+/* ==========================================
+   INKLAPBAAR SALDOVERLOOP
+   ========================================== */
+
+.saldo-historie-kop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.saldo-historie-kop span:last-child {
+    color: var(--color-text-secondary);
+    font-size: 17px;
+}
+
+.saldo-historie-samenvatting {
+    margin: 0 0 8px;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.saldo-historie-inhoud {
+    padding-top: 10px;
+}
+
     
