@@ -4095,7 +4095,7 @@ ctx.fillStyle =
             ctx.arc(
                 punt.x,
                 punt.y,
-                3,
+                2,
                 0,
                 Math.PI * 2
             );
