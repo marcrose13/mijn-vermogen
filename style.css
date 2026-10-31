@@ -1555,21 +1555,6 @@ h2 {
     position: relative;
 }
 
-.vermogen-overzicht .total-card::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 24px;
-    background: linear-gradient(
-        to bottom,
-        rgba(43, 82, 118, 0),
-        rgba(43, 82, 118, 0.18)
-    );
-    pointer-events: none;
-}
-
     border: none;
     border-radius: 0;
     box-shadow: none;
