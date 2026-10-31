@@ -1569,7 +1569,7 @@ h2 {
 /* Lichte grafiekzone, verbonden met de samenvatting */
 .vermogen-overzicht .grafiek-card {
     margin: 0;
-    padding: 24px 30px 26px;
+    padding: 24px 30px 12px;
 
     background: #F7F9FC;
 
@@ -1620,7 +1620,7 @@ h2 {
     }
 
     .vermogen-overzicht .grafiek-card {
-        padding: 20px 16px 18px;
+        padding: 20px 16px 8px;
     }
 
     .vermogen-overzicht .grafiek-card h2 {
