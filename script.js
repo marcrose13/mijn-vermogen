@@ -3909,7 +3909,7 @@ const grafiekGradient =
 
 grafiekGradient.addColorStop(
     0,
-    accentKleur
+    "rgba(59, 130, 246, 0.18)"
 );
 
 grafiekGradient.addColorStop(
@@ -4070,12 +4070,9 @@ ctx.fillStyle =
 
     }
 
-    ctx.strokeStyle =
-        getComputedStyle(document.documentElement)
-            .getPropertyValue("--color-accent")
-            .trim();
+    ctx.strokeStyle = "#6595D8";
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2.5;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
 
@@ -4098,7 +4095,7 @@ ctx.fillStyle =
             ctx.arc(
                 punt.x,
                 punt.y,
-                4,
+                3,
                 0,
                 Math.PI * 2
             );
