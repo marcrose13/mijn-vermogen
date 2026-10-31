@@ -1540,6 +1540,15 @@ h2 {
    NIEUW VERMOGENSOVERZICHT
    ========================================== */
 
+.vermogen-overzicht {
+    overflow: hidden;
+    border-radius: 26px;
+    border: 1px solid #DCE5ED;
+    background: #F7F9FC;
+    box-shadow: 0 8px 28px rgba(23, 42, 70, 0.07);
+    margin-bottom: 28px;
+}
+
 /* Donkere samenvatting bovenaan */
 .vermogen-overzicht .total-card {
     margin: 0;
