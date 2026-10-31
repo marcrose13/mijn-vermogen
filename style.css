@@ -1545,16 +1545,11 @@ h2 {
     margin: 0;
     padding: 30px 30px 26px;
     text-align: left;
-
     background: linear-gradient(
         145deg,
         #172A46 0%,
         #21466B 100%
     );
-
-    position: relative;
-}
-
     border: none;
     border-radius: 0;
     box-shadow: none;
