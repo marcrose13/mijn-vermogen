@@ -3340,7 +3340,7 @@ function tekenGrafiek() {
 
 
     const hoogte =
-        290;
+    canvas.clientHeight;
 
 
     if (
