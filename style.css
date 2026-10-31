@@ -1536,4 +1536,102 @@ h2 {
     margin-bottom: 0;
 }
 
+/* ==========================================
+   NIEUW VERMOGENSOVERZICHT
+   ========================================== */
+
+.vermogen-overzicht {
+    overflow: hidden;
+    border-radius: 26px;
+    border: 1px solid #DCE5ED;
+    background: #F7F9FC;
+    box-shadow: 0 8px 28px rgba(23, 42, 70, 0.07);
+    margin-bottom: 28px;
+}
+
+/* Donkere samenvatting bovenaan */
+.vermogen-overzicht .total-card {
+    margin: 0;
+    padding: 30px 30px 26px;
+    text-align: left;
+
+    background: linear-gradient(
+        145deg,
+        #172A46 0%,
+        #21466B 100%
+    );
+
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Lichte grafiekzone, verbonden met de samenvatting */
+.vermogen-overzicht .grafiek-card {
+    margin: 0;
+    padding: 24px 30px 26px;
+
+    background: #F7F9FC;
+
+    border: none;
+    border-top: 1px solid #DCE5ED;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Titel en groei-informatie leesbaar op lichte achtergrond */
+.vermogen-overzicht .grafiek-card h2 {
+    margin: 0 0 18px;
+    color: #172A46;
+}
+
+.vermogen-overzicht .groei-info {
+    color: #64748B;
+    margin: 12px 0 10px;
+}
+
+/* Periodeknoppen iets rustiger */
+.vermogen-overzicht .periode-buttons {
+    margin-bottom: 10px;
+}
+
+.vermogen-overzicht .periode-buttons button {
+    min-height: 40px;
+}
+
+/* Grafiek compacter, zodat hij minder domineert */
+.vermogen-overzicht .grafiek-wrapper {
+    height: 230px;
+}
+
+.vermogen-overzicht .grafiek-wrapper canvas {
+    height: 230px;
+}
+
+/* Mobiel: compactere marges en grafiek */
+@media (max-width: 600px) {
+    .vermogen-overzicht {
+        border-radius: 20px;
+        margin-bottom: 22px;
+    }
+
+    .vermogen-overzicht .total-card {
+        padding: 24px 20px 22px;
+    }
+
+    .vermogen-overzicht .grafiek-card {
+        padding: 20px 16px 18px;
+    }
+
+    .vermogen-overzicht .grafiek-card h2 {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+
+    .vermogen-overzicht .grafiek-wrapper,
+    .vermogen-overzicht .grafiek-wrapper canvas {
+        height: 175px;
+    }
+}
+
     
