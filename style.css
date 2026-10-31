@@ -255,10 +255,12 @@ h2 {
     margin-top: 0;
     padding: 18px 26px 22px;
     background: linear-gradient(
-        180deg,
-        var(--color-total-end) 0%,
-        #F5F7FA 100%
-    );
+    180deg,
+    #294B6D 0%,
+    #365775 35%,
+    #526F89 70%,
+    #71869A 100%
+);
     border: 1px solid var(--color-total-border);
     border-top: none;
     border-radius: 0 0 22px 22px;
