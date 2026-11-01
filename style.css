@@ -1571,13 +1571,13 @@ h2 {
 .vermogen-overzicht .total-card::after {
     content: "";
     position: absolute;
-    top: 20px;
-    right: -120px;
-    width: 360px;
-    height: 240px;
-    background: rgba(76, 130, 184, 0.12);
+    top: -35px;
+    right: -190px;
+    width: 520px;
+    height: 300px;
+    background: rgba(76, 130, 184, 0.14);
     border-radius: 50%;
-    transform: rotate(-30deg);
+    transform: rotate(-32deg);
     pointer-events: none;
     z-index: -1;
 }
