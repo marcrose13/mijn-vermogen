@@ -1564,14 +1564,16 @@ h2 {
     box-shadow: none;
     position: relative;
     isolation: isolate;
+    overflow: hidden;
 }
 
+/* Subtiele diagonale structuur, begrensd binnen het blauwe vak */
 .vermogen-overzicht .total-card::after {
     content: "";
     position: absolute;
     top: 20px;
     right: -120px;
-    width: 420px;
+    width: 360px;
     height: 240px;
     background: rgba(76, 130, 184, 0.12);
     border-radius: 50%;
@@ -1580,13 +1582,17 @@ h2 {
     z-index: -1;
 }
 
+/* Inhoud boven de decoratieve vorm houden */
+.vermogen-overzicht .total-card > * {
+    position: relative;
+    z-index: 1;
+}
+
 /* Lichte grafiekzone, verbonden met de samenvatting */
 .vermogen-overzicht .grafiek-card {
     margin: 0;
     padding: 24px 30px 12px;
-
     background: #F7F9FC;
-
     border: none;
     border-top: 1px solid #DCE5ED;
     border-radius: 0;
