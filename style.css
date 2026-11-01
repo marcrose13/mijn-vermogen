@@ -1,23 +1,23 @@
 :root {
-    --app-background: #F5F7FA;
+    --app-background: #EEF5FC;
 
-    --color-primary: #172A46;
-    --color-primary-hover: #102238;
-    
-    --color-total-start: #172A46;
-    --color-total-end: #21466B;
-    
+    --color-primary: #173456;
+    --color-primary-hover: #102A46;
+
+    --color-total-start: #173456;
+    --color-total-end: #214B73;
+
     --color-total-border: #294C70;
-    --color-total-shadow: rgba(23, 42, 70, 0.18);
+    --color-total-shadow: rgba(23, 52, 86, 0.18);
 
-    --color-accent: #3B82F6;
+    --color-accent: #2678F3;
 
-    --color-text: #182230;
-    --color-text-secondary: #718096;
+    --color-text: #172A46;
+    --color-text-secondary: #647D9D;
 
-    --color-surface-light: #FFFFFF;
-    --color-border: #E2E8F0;
-    --color-muted: #F1F5F9;
+    --color-surface-light: #F4F8FD;
+    --color-border: #D7E5F4;
+    --color-muted: #E7F0FA;
 
     --color-success: #10B981;
     --color-info: #DBEAFE;
