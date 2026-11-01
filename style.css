@@ -4,11 +4,10 @@
     --color-primary: #173456;
     --color-primary-hover: #102A46;
 
-    --color-total-start: #173456;
-    --color-total-end: #214B73;
-
-    --color-total-border: #294C70;
-    --color-total-shadow: rgba(23, 52, 86, 0.18);
+    --color-total-start: #163251;
+    --color-total-end: #1D4267;
+    --color-total-border: #254766;
+    --color-total-shadow: rgba(18, 39, 63, 0.20);
 
     --color-accent: #2678F3;
 
@@ -1555,10 +1554,10 @@ h2 {
     padding: 30px 30px 26px;
     text-align: left;
     background: linear-gradient(
-        145deg,
-        #172A46 0%,
-        #21466B 100%
-    );
+    145deg,
+    #163251 0%,
+    #1D4267 100%
+);
     border: none;
     border-radius: 0;
     box-shadow: none;
