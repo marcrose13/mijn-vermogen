@@ -1574,8 +1574,8 @@ h2 {
     background:
         radial-gradient(
             ellipse 105% 145% at 115% 85%,
-            rgba(76, 130, 184, 0.30) 0%,
-            rgba(76, 130, 184, 0.20) 48%,
+            rgba(55, 119, 183, 0.48) 0%,
+            rgba(55, 119, 183, 0.32) 48%,
             transparent 49%
         );
     pointer-events: none;
