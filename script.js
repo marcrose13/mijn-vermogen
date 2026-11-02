@@ -3644,7 +3644,7 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
 
 
     const paddingOnder =
-        55;
+        20;
 
 
     const grafiekBreedte =
