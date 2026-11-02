@@ -3296,8 +3296,7 @@ function maakTijdAsLabels(
             : index === 0
                 ? "left"
                 : "center";
-
-        ctx.fillText(label, x, y + 7);
+                
     });
 
     ctx.restore();
