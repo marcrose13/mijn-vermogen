@@ -756,12 +756,16 @@ function toonRekeningen() {
         <span class="rekening-verschil-pijl">
             ${verschil > 0 ? "↑" : verschil < 0 ? "↓" : "–"}
         </span>
+
         <span>
             ${teken}${formatteerBedrag(Math.abs(verschil))}
         </span>
+
         ${percentage !== null
             ? `<span>(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)</span>`
             : ""}
+
+        <span>deze maand</span>
     </div>
 `;
 
