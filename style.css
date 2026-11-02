@@ -1663,4 +1663,10 @@ h2 {
     text-align: left;
 }
 
+/* Rekeningbedragen netjes uitlijnen */
+.rekening-bedrag {
+    min-width: 175px;
+    text-align: right;
+}
+
     
