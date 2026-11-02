@@ -3801,20 +3801,13 @@ ctx.fillStyle = getComputedStyle(document.documentElement)
                 );
 
 
-            const tijdVerhouding =
-                (
-                    datum -
-                    minDatum
-                ) /
-                tijdsduur;
-
-
             const x =
-                paddingLinks +
-                (
-                    tijdVerhouding *
-                    grafiekBreedte
-                );
+    paddingLinks +
+    (
+        index /
+        Math.max(1, gegevens.length - 1)
+    ) *
+    grafiekBreedte;
 
 
             const waarde =
