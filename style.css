@@ -1566,6 +1566,22 @@ h2 {
     overflow: hidden;
 }
 
+/* SVG-structuur in de totaalcard */
+.vermogen-overzicht .total-card-decoration {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Inhoud boven de SVG houden */
+.vermogen-overzicht .total-card > *:not(.total-card-decoration) {
+    position: relative;
+    z-index: 1;
+}
+
 /* Inhoud boven eventuele achtergronddecoratie houden */
 .vermogen-overzicht .total-card > * {
     position: relative;
