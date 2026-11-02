@@ -1656,4 +1656,11 @@ h2 {
     }
 }
 
+.rekening-verschil-voetnoot {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    text-align: left;
+}
+
     
