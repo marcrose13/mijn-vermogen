@@ -765,7 +765,7 @@ function toonRekeningen() {
             ? `<span>(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)</span>`
             : ""}
 
-        <span>deze maand</span>
+        <span>*</span>
     </div>
 `;
 
@@ -830,6 +830,11 @@ function toonRekeningen() {
         container.appendChild(div);
 
     });
+    
+    const voetnoot = document.createElement("div");
+voetnoot.className = "rekening-verschil-voetnoot";
+voetnoot.textContent = "* Verschil ten opzichte van stand vorige maand";
+container.appendChild(voetnoot);
 
 }
 
