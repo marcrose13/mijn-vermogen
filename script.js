@@ -3463,84 +3463,100 @@ function tekenGrafiek() {
     }
 
 
-    /*
-     * Per kalendermaand alleen het laatste
-     * vermogensmoment in de grafiek gebruiken.
-     * De originele historie blijft ongewijzigd.
-     */
+/*
+ * Per maand het laatste bekende vermogensmoment gebruiken.
+ * Ontbrekende maanden vullen we aan met de laatst bekende stand.
+ * De opgeslagen historie blijft ongewijzigd.
+ */
 
-    const laatsteMomentPerMaand = new Map();
+const laatsteMomentPerMaand = new Map();
 
+// Gebruik de volledige historie, zodat ook eerdere standen
+// beschikbaar zijn om ontbrekende maanden aan te vullen.
+const volledigeHistorie = [...historie].sort(function(a, b) {
+    return new Date(a.datum) - new Date(b.datum);
+});
 
-    gegevens.forEach(function(item, index) {
+// Laatste bekende stand per kalendermaand verzamelen.
+volledigeHistorie.forEach(function(item) {
+    const datum = new Date(item.datum);
 
-        const datum =
-            new Date(item.datum);
+    const sleutel =
+        datum.getFullYear() + "-" +
+        String(datum.getMonth() + 1).padStart(2, "0");
 
+    laatsteMomentPerMaand.set(sleutel, item);
+});
+
+const maandPunten = [];
+
+if (laatsteMomentPerMaand.size > 0) {
+    const sleutels = [...laatsteMomentPerMaand.keys()].sort();
+
+    const eersteMaand = sleutels[0].split("-").map(Number);
+    const laatsteDatum = new Date();
+
+    let jaar = eersteMaand[0];
+    let maand = eersteMaand[1] - 1;
+
+    let laatstBekendBedrag = null;
+
+    while (
+        jaar < laatsteDatum.getFullYear() ||
+        (
+            jaar === laatsteDatum.getFullYear() &&
+            maand <= laatsteDatum.getMonth()
+        )
+    ) {
         const sleutel =
-            datum.getFullYear() + "-" +
-            String(
-                datum.getMonth() + 1
-            ).padStart(2, "0");
+            jaar + "-" +
+            String(maand + 1).padStart(2, "0");
 
+        const bestaandMoment =
+            laatsteMomentPerMaand.get(sleutel);
 
-        const bestaand =
-            laatsteMomentPerMaand.get(
-                sleutel
-            );
-
-
-        if (
-            !bestaand ||
-            datum >
-            new Date(
-                bestaand.item.datum
-            ) ||
-            (
-                datum.getTime() ===
-                new Date(
-                    bestaand.item.datum
-                ).getTime() &&
-                index >
-                bestaand.index
-            )
-        ) {
-
-            laatsteMomentPerMaand.set(
-                sleutel,
-                {
-                    item: item,
-                    index: index
-                }
-            );
-
+        if (bestaandMoment) {
+            laatstBekendBedrag =
+                Number(bestaandMoment.bedrag) || 0;
         }
 
+        // Alleen maanden vanaf het eerste bekende moment opnemen.
+        if (laatstBekendBedrag !== null) {
+            maandPunten.push({
+                datum: sleutel + "-01T12:00:00",
+                bedrag: laatstBekendBedrag
+            });
+        }
+
+        maand++;
+
+        if (maand > 11) {
+            maand = 0;
+            jaar++;
+        }
+    }
+}
+
+// Periodefilter toepassen op de maandpunten.
+gegevens = maandPunten;
+
+if (huidigePeriode === "3m") {
+    const grens = new Date();
+    grens.setMonth(grens.getMonth() - 3);
+
+    gegevens = gegevens.filter(function(item) {
+        return new Date(item.datum) >= grens;
     });
+}
 
+if (huidigePeriode === "1j") {
+    const grens = new Date();
+    grens.setFullYear(grens.getFullYear() - 1);
 
-    gegevens =
-        Array.from(
-            laatsteMomentPerMaand.values()
-        )
-        .map(function(entry) {
-
-            return entry.item;
-
-        })
-        .sort(function(a, b) {
-
-            return (
-                new Date(a.datum) -
-                new Date(b.datum)
-            );
-
-        });
-
-
-    updateGroeiInfo(
-        gegevens
-    );
+    gegevens = gegevens.filter(function(item) {
+        return new Date(item.datum) >= grens;
+    });
+}
 
 
     if (
