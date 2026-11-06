@@ -190,6 +190,62 @@ popup.appendChild(
 
 /*
  * ==========================================
+ * GRAFIEK TONEN
+ * ==========================================
+ */
+
+const grafiekLabel = document.createElement("label");
+
+grafiekLabel.className = "historie-instelling";
+grafiekLabel.style.display = "flex";
+grafiekLabel.style.alignItems = "center";
+grafiekLabel.style.justifyContent = "space-between";
+grafiekLabel.style.gap = "16px";
+grafiekLabel.style.marginBottom = "20px";
+
+grafiekLabel.textContent = "Grafiek tonen";
+
+const grafiekToggle = document.createElement("button");
+
+grafiekToggle.type = "button";
+grafiekToggle.id = "grafiek-toggle";
+grafiekToggle.className = "schuifje";
+
+grafiekToggle.setAttribute("role", "switch");
+grafiekToggle.setAttribute("aria-label", "Grafiek tonen");
+
+const grafiekTonen =
+    localStorage.getItem("mijnVermogenGrafiekTonen") === "true";
+
+grafiekToggle.setAttribute("aria-checked", String(grafiekTonen));
+grafiekToggle.setAttribute("data-aan", String(grafiekTonen));
+
+grafiekToggle.innerHTML =
+    '<span class="schuifje-knop"></span>';
+
+grafiekLabel.appendChild(grafiekToggle);
+
+grafiekToggle.addEventListener("click", function() {
+
+    const grafiekContainer =
+        document.querySelector(".grafiek-card");
+
+    const tonen =
+        grafiekToggle.getAttribute("data-aan") !== "true";
+
+    grafiekToggle.setAttribute("data-aan", String(tonen));
+    grafiekToggle.setAttribute("aria-checked", String(tonen));
+
+    if (grafiekContainer) {
+        grafiekContainer.style.display = tonen ? "" : "none";
+    }
+
+    localStorage.setItem("mijnVermogenGrafiekTonen", tonen);
+
+});
+
+/*
+ * ==========================================
  * HISTORIE TONEN
  * ==========================================
  */
@@ -303,6 +359,7 @@ historieToggle.addEventListener(
 );
 
 
+popup.appendChild(grafiekLabel);
 
 popup.appendChild(historieLabel);
 
@@ -4259,6 +4316,20 @@ const historieTonen =
 if (historieContainer) {
     historieContainer.style.display =
         historieTonen ? "" : "none";
+}
+
+// Opgeslagen voorkeur voor de grafiek toepassen
+const grafiekContainer =
+    document.querySelector(".grafiek-card");
+
+const grafiekTonen =
+    localStorage.getItem(
+        "mijnVermogenGrafiekTonen"
+    ) === "true";
+
+if (grafiekContainer) {
+    grafiekContainer.style.display =
+        grafiekTonen ? "" : "none";
 }
 
 zetPeriode("alles");
