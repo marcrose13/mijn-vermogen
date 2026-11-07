@@ -796,33 +796,6 @@ h2 {
     -webkit-appearance: none;
 }
 
-/* Subtiele knop Rekening toevoegen */
-#rekeningen + .primary-button {
-    margin-top: 18px;
-
-    background: #DBEAFE;
-    color: #244B70;
-
-    border: 1px solid #D5E2EF;
-    border-radius: 14px;
-
-    box-shadow: none;
-
-    font-weight: 600;
-
-    transition:
-        background 0.15s ease,
-        transform 0.15s ease;
-}
-
-#rekeningen + .primary-button:hover {
-    background: #CFE2F7;
-}
-
-#rekeningen + .primary-button:active {
-    transform: scale(0.99);
-}
-
 /*
  * ==========================================
  * HISTORIE
@@ -1703,6 +1676,47 @@ h2 {
         text-align: right;
     }
 
+}
+
+/* Subtiele knop rekening toevoegen */
+.rekening-toevoegen-knop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    margin: 16px 0 0 auto;
+    padding: 0;
+
+    border: 1px solid #D5E2EF;
+    border-radius: 50%;
+
+    background: #DBEAFE;
+    color: #244B70;
+
+    font-family: inherit;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.rekening-toevoegen-knop:hover {
+    background: #CFE2F7;
+}
+
+.rekening-toevoegen-knop:active {
+    transform: scale(0.94);
 }
 
     
