@@ -1651,44 +1651,19 @@ h2 {
     }
 }
 
-/* Subtiele toelichting bij rekeningverschil */
-.rekening-verschil-voetnoot {
-    margin-top: 8px;
-
-    color: var(--color-text-secondary);
-    font-size: 11px;
-    font-weight: 400;
-    line-height: 1.4;
-}
-
-/* Desktop: bedragen netjes onder elkaar uitlijnen */
-@media (min-width: 601px) {
-
-    .rekening {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 200px 38px;
-        align-items: center;
-        column-gap: 12px;
-    }
-
-    .rekening-bedrag {
-        min-width: 0;
-        text-align: right;
-    }
-
-}
-
 /* Subtiele knop rekening toevoegen */
 .rekening-toevoegen-knop {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
 
-    margin: 16px 0 0 auto;
-    padding: 0;
+    margin: 8px 0 0 auto;
+    padding: 0 0 2px 0;
+
+    box-sizing: border-box;
 
     border: 1px solid #D5E2EF;
     border-radius: 50%;
@@ -1697,7 +1672,7 @@ h2 {
     color: #244B70;
 
     font-family: inherit;
-    font-size: 25px;
+    font-size: 23px;
     font-weight: 400;
     line-height: 1;
 
@@ -1718,5 +1693,4 @@ h2 {
 .rekening-toevoegen-knop:active {
     transform: scale(0.94);
 }
-
     
