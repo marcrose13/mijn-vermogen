@@ -886,11 +886,6 @@ function toonRekeningen() {
         container.appendChild(div);
 
     });
-    
-    const voetnoot = document.createElement("div");
-voetnoot.className = "rekening-verschil-voetnoot";
-voetnoot.textContent = "* Verschil ten opzichte van stand vorige maand";
-container.appendChild(voetnoot);
 
 }
 
@@ -1531,6 +1526,16 @@ saldoHistoriePijl.textContent = "↓";
 saldoHistorieKop.appendChild(saldoHistorieKopTekst);
 saldoHistorieKop.appendChild(saldoHistoriePijl);
 
+// Uitleg bij het verschil in het rekeningoverzicht
+const saldoHistorieUitleg = document.createElement("div");
+saldoHistorieUitleg.className = "saldo-historie-uitleg";
+saldoHistorieUitleg.textContent =
+    "Het verschil in het rekeningoverzicht is ten opzichte van de opgeslagen stand van vorige maand.";
+saldoHistorieUitleg.style.margin = "0 0 10px";
+saldoHistorieUitleg.style.color = "var(--color-text-secondary)";
+saldoHistorieUitleg.style.fontSize = "12px";
+saldoHistorieUitleg.style.lineHeight = "1.5";
+
 const saldoHistorieSamenvatting = document.createElement("div");
 saldoHistorieSamenvatting.className = "saldo-historie-samenvatting";
 
@@ -1799,6 +1804,7 @@ saldoHistorieInhoud.appendChild(saldoToevoegenButton);
 saldoHistorieInhoud.appendChild(saldoHistorieLijst);
 
 saldoHistorieGroep.appendChild(saldoHistorieKop);
+saldoHistorieGroep.appendChild(saldoHistorieUitleg);
 saldoHistorieGroep.appendChild(saldoHistorieSamenvatting);
 saldoHistorieGroep.appendChild(saldoHistorieInhoud);
 
