@@ -1678,4 +1678,14 @@ h2 {
     }
 }
 
+/* Subtiele toelichting bij rekeningverschil */
+.rekening-verschil-voetnoot {
+    margin-top: 8px;
+
+    color: var(--color-text-secondary);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
     
