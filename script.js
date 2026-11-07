@@ -822,7 +822,6 @@ function toonRekeningen() {
             ? `<span>(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)</span>`
             : ""}
 
-        <span>*</span>
     </div>
 `;
 
