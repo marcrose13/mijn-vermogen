@@ -968,7 +968,7 @@ function initialiseerRekeningVolgordeMenu(container) {
         rekeningVolgordeModus ? "Volgorde opslaan" : "Rekeningopties"
     );
 
-    menu.hidden = rekeningVolgordeModus;
+    menu.hidden = true;
 
 }
 
