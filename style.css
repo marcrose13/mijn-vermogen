@@ -1708,4 +1708,106 @@ h2 {
     font-weight: 400;
     line-height: 1.4;
 }
+
+
+/* ==========================================
+   REKENINGEN – VOLGORDE AANPASSEN
+   ========================================== */
+
+.rekening-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.rekening-header h2 {
+    margin: 0;
+}
+
+.rekening-menu-wrapper {
+    position: relative;
+}
+
+.rekening-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.rekening-menu-button:hover {
+    background: var(--color-muted);
+}
+
+.rekening-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 20;
+    min-width: 190px;
+    padding: 6px;
+    background: var(--color-surface-light);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(20, 40, 60, 0.12);
+}
+
+.rekening-menu[hidden] {
+    display: none;
+}
+
+.rekening-menu-item {
+    width: 100%;
+    padding: 11px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.rekening-menu-item:hover {
+    background: var(--color-muted);
+}
+
+/* Sleepbediening verschijnt alleen in bewerkingsmodus */
+
+.rekening-sleep-hendel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    padding: 4px 0;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 23px;
+    cursor: grab;
+    touch-action: none;
+}
+
+.rekening-sleep-hendel:active {
+    cursor: grabbing;
+}
+
+.rekening-wordt-versleept {
+    opacity: 0.45;
+}
+
     
