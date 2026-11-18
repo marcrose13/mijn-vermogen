@@ -825,23 +825,49 @@ function toonRekeningen() {
         div.className = "rekening";
 
 
-        // Verschil ten opzichte van vorige maand berekenen
+        // Verschil ten opzichte van de vorige financiële maand berekenen.
         const vandaag = new Date();
-        const vorigeMaandDatum = new Date(
+        const startHuidigeFinancieleMaand = new Date(
             vandaag.getFullYear(),
-            vandaag.getMonth() - 1,
-            1
+            vandaag.getMonth(),
+            startFinancieleMaand
         );
 
-        const vorigeMaandSleutel =
-            vorigeMaandDatum.getFullYear() +
-            "-" +
-            String(vorigeMaandDatum.getMonth() + 1).padStart(2, "0");
+        if (vandaag.getDate() < startFinancieleMaand) {
+            startHuidigeFinancieleMaand.setMonth(
+                startHuidigeFinancieleMaand.getMonth() - 1
+            );
+        }
+
+        const eindeVorigeFinancieleMaand = new Date(
+            startHuidigeFinancieleMaand.getTime()
+        );
+        eindeVorigeFinancieleMaand.setDate(
+            eindeVorigeFinancieleMaand.getDate() - 1
+        );
+
+        const startVorigeFinancieleMaand = new Date(
+            startHuidigeFinancieleMaand.getFullYear(),
+            startHuidigeFinancieleMaand.getMonth() - 1,
+            startFinancieleMaand
+        );
+
+        const datumNaarSleutel = function(datum) {
+            return datum.getFullYear() + "-" +
+                String(datum.getMonth() + 1).padStart(2, "0") + "-" +
+                String(datum.getDate()).padStart(2, "0");
+        };
 
         const vorigeSaldo = Array.isArray(rekening.saldoHistorie)
-            ? rekening.saldoHistorie.find(function(moment) {
-                return moment.maand === vorigeMaandSleutel;
-            })
+            ? rekening.saldoHistorie
+                .filter(function(moment) {
+                    return moment.datum &&
+                        moment.datum >= datumNaarSleutel(startVorigeFinancieleMaand) &&
+                        moment.datum <= datumNaarSleutel(eindeVorigeFinancieleMaand);
+                })
+                .sort(function(a, b) {
+                    return b.datum.localeCompare(a.datum);
+                })[0] || null
             : null;
 
         let verschilHTML = "";
@@ -1592,58 +1618,31 @@ saldoHistorieKop.onclick = function() {
 };
 
 const vandaag = new Date();
+const vandaagSleutel = vandaag.getFullYear() + "-" +
+    String(vandaag.getMonth() + 1).padStart(2, "0") + "-" +
+    String(vandaag.getDate()).padStart(2, "0");
 
-const vorigeMaand = new Date(
-    vandaag.getFullYear(),
-    vandaag.getMonth() - 1,
-    1
+// Een exacte datum kiezen voor een historische stand.
+const datumKeuzeGroep = document.createElement("div");
+datumKeuzeGroep.className = "saldo-maand-keuze";
+
+const datumLabel = document.createElement("label");
+datumLabel.className = "formulier-label";
+datumLabel.textContent = "Datum van de stand";
+
+const datumInput = document.createElement("input");
+datumInput.className = "formulier-input";
+datumInput.type = "date";
+datumInput.max = vandaagSleutel;
+
+const vorigeMaandDatum = new Date(
+    vandaag.getFullYear(), vandaag.getMonth() - 1, 1
 );
+datumInput.value = vorigeMaandDatum.getFullYear() + "-" +
+    String(vorigeMaandDatum.getMonth() + 1).padStart(2, "0") + "-" +
+    String(vorigeMaandDatum.getDate()).padStart(2, "0");
 
-// Maand en jaar kiezen
-const maandKeuzeGroep = document.createElement("div");
-maandKeuzeGroep.className = "saldo-maand-keuze";
-
-const maandLabel = document.createElement("label");
-maandLabel.className = "formulier-label";
-maandLabel.textContent = "Maand";
-
-const maandSelect = document.createElement("select");
-maandSelect.className = "formulier-select";
-
-const maanden = [
-    "Januari", "Februari", "Maart", "April",
-    "Mei", "Juni", "Juli", "Augustus",
-    "September", "Oktober", "November", "December"
-];
-
-maanden.forEach(function(naam, index) {
-    const optie = document.createElement("option");
-    optie.value = String(index + 1).padStart(2, "0");
-    optie.textContent = naam;
-    maandSelect.appendChild(optie);
-});
-
-const jaarSelect = document.createElement("select");
-jaarSelect.className = "formulier-select";
-
-const huidigJaar = vandaag.getFullYear();
-
-for (let jaar = huidigJaar; jaar >= 2000; jaar--) {
-    const optie = document.createElement("option");
-    optie.value = jaar;
-    optie.textContent = jaar;
-    jaarSelect.appendChild(optie);
-}
-
-// Standaard de vorige maand selecteren
-maandSelect.value = String(
-    vorigeMaand.getMonth() + 1
-).padStart(2, "0");
-
-jaarSelect.value = String(vorigeMaand.getFullYear());
-
-maandKeuzeGroep.appendChild(maandSelect);
-maandKeuzeGroep.appendChild(jaarSelect);
+datumKeuzeGroep.appendChild(datumInput);
 
 const saldoLabel = document.createElement("label");
 saldoLabel.className = "formulier-label";
@@ -1663,66 +1662,63 @@ saldoToevoegenButton.textContent = "Stand toevoegen";
 const saldoHistorieLijst = document.createElement("div");
 saldoHistorieLijst.className = "rekening-saldohistorie-lijst";
 
-function toonSaldoHistorieLijst() {
-
-    saldoHistorieLijst.innerHTML = "";
-
-    const standen = rekening.saldoHistorie
-        .slice()
-        .sort(function(a, b) {
-            return b.maand.localeCompare(a.maand);
-        });
-        
-        if (standen.length > 0) {
-    const laatsteStand = standen[0];
-    const datum = new Date(laatsteStand.maand + "-01T00:00:00");
-
-    const maandTekst = datum.toLocaleDateString("nl-NL", {
-        month: "long",
-        year: "numeric"
-    });
-
-    saldoHistorieSamenvatting.textContent =
-        "Laatste stand: " +
-        maandTekst +
-        " · " +
-        formatteerBedrag(laatsteStand.bedrag) +
-        " · " +
-        standen.length +
-        (standen.length === 1 ? " stand" : " standen");
-
-} else {
-    saldoHistorieSamenvatting.textContent =
-        "Nog geen historische standen";
+function datumVanStand(moment) {
+    if (moment.datum) return moment.datum;
+    return null;
 }
 
-    if (standen.length === 0) {
+function toonSaldoHistorieLijst() {
+    saldoHistorieLijst.innerHTML = "";
 
+    const standen = rekening.saldoHistorie.slice().sort(function(a, b) {
+        const datumA = datumVanStand(a) || (a.maand + "-01");
+        const datumB = datumVanStand(b) || (b.maand + "-01");
+        return datumB.localeCompare(datumA);
+    });
+
+    if (standen.length > 0) {
+        const laatsteStand = standen[0];
+        const datumLabelTekst = laatsteStand.datum
+            ? new Date(laatsteStand.datum + "T12:00:00").toLocaleDateString("nl-NL", {
+                day: "numeric", month: "long", year: "numeric"
+            })
+            : new Date(laatsteStand.maand + "-01T12:00:00").toLocaleDateString("nl-NL", {
+                month: "long", year: "numeric"
+            }) + " (datum niet ingesteld)";
+
+        saldoHistorieSamenvatting.textContent =
+            "Laatste stand: " + datumLabelTekst + " · " +
+            formatteerBedrag(laatsteStand.bedrag) + " · " + standen.length +
+            (standen.length === 1 ? " stand" : " standen");
+    } else {
+        saldoHistorieSamenvatting.textContent = "Nog geen historische standen";
+    }
+
+    if (standen.length === 0) {
         const leeg = document.createElement("div");
         leeg.textContent = "Nog geen historische standen ingevoerd.";
         saldoHistorieLijst.appendChild(leeg);
-
         return;
     }
 
     const oudereStanden = [];
 
     standen.forEach(function(moment, index) {
-
         const regel = document.createElement("div");
         regel.className = "rekening-saldohistorie-regel";
 
         const omschrijving = document.createElement("div");
         omschrijving.className = "saldo-historie-info";
 
-        const datum = new Date(moment.maand + "-01T00:00:00");
-
         const maandTekst = document.createElement("div");
         maandTekst.className = "saldo-historie-maand";
-        maandTekst.textContent = datum.toLocaleDateString("nl-NL", {
-            month: "long",
-            year: "numeric"
-        });
+        maandTekst.textContent = moment.datum
+            ? new Date(moment.datum + "T12:00:00").toLocaleDateString("nl-NL", {
+                day: "numeric", month: "long", year: "numeric"
+            })
+            : new Date(moment.maand + "-01T12:00:00").toLocaleDateString("nl-NL", {
+                month: "long", year: "numeric"
+            }) + " · datum instellen";
 
         const bedragTekst = document.createElement("div");
         bedragTekst.className = "saldo-historie-bedrag";
@@ -1731,100 +1727,156 @@ function toonSaldoHistorieLijst() {
         omschrijving.appendChild(maandTekst);
         omschrijving.appendChild(bedragTekst);
 
+        const acties = document.createElement("div");
+        acties.style.display = "flex";
+        acties.style.gap = "6px";
+
+        const bewerken = document.createElement("button");
+        bewerken.type = "button";
+        bewerken.className = "secondary-button";
+        bewerken.textContent = "Bewerk";
+
+        bewerken.onclick = function() {
+            const bewerkRegel = document.createElement("div");
+            bewerkRegel.style.display = "flex";
+            bewerkRegel.style.flexDirection = "column";
+            bewerkRegel.style.gap = "6px";
+            bewerkRegel.style.width = "100%";
+
+            const bewerkDatum = document.createElement("input");
+            bewerkDatum.type = "date";
+            bewerkDatum.className = "formulier-input";
+            bewerkDatum.max = vandaagSleutel;
+            bewerkDatum.value = moment.datum || "";
+
+            const bewerkBedrag = document.createElement("input");
+            bewerkBedrag.type = "text";
+            bewerkBedrag.inputMode = "decimal";
+            bewerkBedrag.className = "formulier-input";
+            bewerkBedrag.value = String(moment.bedrag).replace(".", ",");
+
+            const opslaan = document.createElement("button");
+            opslaan.type = "button";
+            opslaan.className = "secondary-button";
+            opslaan.textContent = "Opslaan";
+
+            const annuleren = document.createElement("button");
+            annuleren.type = "button";
+            annuleren.className = "secondary-button";
+            annuleren.textContent = "Annuleren";
+
+            opslaan.onclick = function() {
+                const bedragTekst = bewerkBedrag.value.trim()
+                    .replace("€", "").replace(/\s/g, "")
+                    .replace(/\./g, "").replace(",", ".");
+                const bedrag = parseFloat(bedragTekst);
+
+                if (!bewerkDatum.value || bewerkDatum.value > vandaagSleutel) {
+                    alert("Kies een geldige datum, vandaag of eerder.");
+                    bewerkDatum.focus();
+                    return;
+                }
+                if (!bedragTekst || !Number.isFinite(bedrag)) {
+                    alert("Vul een geldig saldo in.");
+                    bewerkBedrag.focus();
+                    return;
+                }
+
+                const nieuweMaand = bewerkDatum.value.slice(0, 7);
+                const dubbeleStand = rekening.saldoHistorie.find(function(item) {
+                    return item !== moment && item.datum === bewerkDatum.value;
+                });
+                if (dubbeleStand) {
+                    alert("Er bestaat al een stand op deze datum.");
+                    return;
+                }
+
+                moment.datum = bewerkDatum.value;
+                moment.maand = nieuweMaand;
+                moment.bedrag = bedrag;
+                slaRekeningenOp();
+                toonSaldoHistorieLijst();
+                toonRekeningen();
+            };
+
+            annuleren.onclick = toonSaldoHistorieLijst;
+            bewerkRegel.appendChild(bewerkDatum);
+            bewerkRegel.appendChild(bewerkBedrag);
+            bewerkRegel.appendChild(opslaan);
+            bewerkRegel.appendChild(annuleren);
+            regel.innerHTML = "";
+            regel.appendChild(bewerkRegel);
+        };
+
         const verwijderen = document.createElement("button");
         verwijderen.type = "button";
         verwijderen.className = "secondary-button";
         verwijderen.textContent = "Verwijder";
-
         verwijderen.onclick = function() {
-
-            rekening.saldoHistorie =
-                rekening.saldoHistorie.filter(function(item) {
-                    return item.maand !== moment.maand;
-                });
-
+            rekening.saldoHistorie = rekening.saldoHistorie.filter(function(item) {
+                return item !== moment;
+            });
             slaRekeningenOp();
             toonSaldoHistorieLijst();
             toonRekeningen();
         };
 
+        acties.appendChild(bewerken);
+        acties.appendChild(verwijderen);
         regel.appendChild(omschrijving);
-        regel.appendChild(verwijderen);
+        regel.appendChild(acties);
 
         if (index > 0) {
             regel.style.display = "none";
             oudereStanden.push(regel);
         }
-
         saldoHistorieLijst.appendChild(regel);
     });
 
     if (oudereStanden.length > 0) {
-
         const knop = document.createElement("button");
         knop.type = "button";
         knop.className = "historie-meer-knop";
         knop.textContent = "Toon oudere standen ↓";
-
         let geopend = false;
-
         knop.onclick = function() {
-
             geopend = !geopend;
-
             oudereStanden.forEach(function(item) {
                 item.style.display = geopend ? "flex" : "none";
             });
-
-            knop.textContent = geopend
-                ? "Verberg oudere standen ↑"
-                : "Toon oudere standen ↓";
+            knop.textContent = geopend ? "Verberg oudere standen ↑" : "Toon oudere standen ↓";
         };
-
         saldoHistorieLijst.appendChild(knop);
     }
 }
 
 saldoToevoegenButton.onclick = function() {
+    const datum = datumInput.value;
+    const bedragTekst = historischSaldoInput.value.trim()
+        .replace("€", "").replace(/\s/g, "")
+        .replace(/\./g, "").replace(",", ".");
+    const bedrag = parseFloat(bedragTekst);
 
-    const maand =
-    jaarSelect.value + "-" + maandSelect.value;
-
-    const bedragTekst = historischSaldoInput.value
-    .trim()
-    .replace("€", "")
-    .replace(/\s/g, "")
-    .replace(/\./g, "")
-    .replace(",", ".");
-
-const bedrag = parseFloat(bedragTekst);
-
-const huidigeMaandSleutel =
-    vandaag.getFullYear() +
-    "-" +
-    String(vandaag.getMonth() + 1).padStart(2, "0");
-
-if (!maand || maand >= huidigeMaandSleutel) {
-    alert("Kies een maand die vóór de huidige maand ligt.");
-    maandSelect.focus();
-    return;
-}
-
-if (!bedragTekst || isNaN(bedrag)) {
-    alert("Vul een geldig saldo in.");
-    historischSaldoInput.focus();
-    return;
-}
+    if (!datum || datum >= vandaagSleutel) {
+        alert("Kies een datum die vóór vandaag ligt.");
+        datumInput.focus();
+        return;
+    }
+    if (!bedragTekst || !Number.isFinite(bedrag)) {
+        alert("Vul een geldig saldo in.");
+        historischSaldoInput.focus();
+        return;
+    }
 
     const bestaandeStand = rekening.saldoHistorie.find(function(moment) {
-        return moment.maand === maand;
+        return moment.datum === datum;
     });
-
     if (bestaandeStand) {
         bestaandeStand.bedrag = bedrag;
     } else {
         rekening.saldoHistorie.push({
-            maand: maand,
+            maand: datum.slice(0, 7),
+            datum: datum,
             bedrag: bedrag
         });
     }
@@ -1832,12 +1884,12 @@ if (!bedragTekst || isNaN(bedrag)) {
     slaRekeningenOp();
     toonSaldoHistorieLijst();
     toonRekeningen();
-
     historischSaldoInput.value = "";
 };
 
-saldoHistorieInhoud.appendChild(maandLabel);
-saldoHistorieInhoud.appendChild(maandKeuzeGroep);
+
+saldoHistorieInhoud.appendChild(datumLabel);
+saldoHistorieInhoud.appendChild(datumKeuzeGroep);
 saldoHistorieInhoud.appendChild(saldoLabel);
 saldoHistorieInhoud.appendChild(historischSaldoInput);
 saldoHistorieInhoud.appendChild(saldoToevoegenButton);
@@ -2163,17 +2215,27 @@ function vermogensMomentAutomatischBijwerken() {
 
         const bestaandSaldo = rekening.saldoHistorie.find(
             function(moment) {
-                return moment.maand === maandSleutel;
+                return moment.automatisch === true ||
+                    (!moment.datum && moment.maand === maandSleutel);
             }
         );
 
         if (bestaandSaldo) {
             bestaandSaldo.bedrag =
                 Number(rekening.bedrag) || 0;
+            bestaandSaldo.datum =
+                vandaag.getFullYear() + "-" +
+                String(vandaag.getMonth() + 1).padStart(2, "0") + "-" +
+                String(vandaag.getDate()).padStart(2, "0");
+            bestaandSaldo.automatisch = true;
         } else {
             rekening.saldoHistorie.push({
                 maand: maandSleutel,
-                bedrag: Number(rekening.bedrag) || 0
+                datum: vandaag.getFullYear() + "-" +
+                    String(vandaag.getMonth() + 1).padStart(2, "0") + "-" +
+                    String(vandaag.getDate()).padStart(2, "0"),
+                bedrag: Number(rekening.bedrag) || 0,
+                automatisch: true
             });
         }
 
