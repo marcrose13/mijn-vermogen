@@ -15,6 +15,19 @@ let historie = JSON.parse(
 
 let huidigePeriode = "alles";
 
+// Startdag van de financiële maand (standaard de 1e van de maand).
+let startFinancieleMaand = Number(
+    localStorage.getItem("mijnVermogenStartFinancieleMaand")
+);
+
+if (
+    !Number.isInteger(startFinancieleMaand) ||
+    startFinancieleMaand < 1 ||
+    startFinancieleMaand > 28
+) {
+    startFinancieleMaand = 1;
+}
+
 let vermogensDoel =
     Number(
         localStorage.getItem(
@@ -186,6 +199,43 @@ popup.appendChild(
 popup.appendChild(
     doelInput
 );
+
+
+/*
+ * ==========================================
+ * START FINANCIËLE MAAND
+ * ==========================================
+ */
+
+const startMaandLabel = document.createElement("div");
+startMaandLabel.className = "instellingen-label";
+startMaandLabel.textContent = "Start financiële maand";
+
+const startMaandSelect = document.createElement("select");
+startMaandSelect.className = "formulier-select";
+startMaandSelect.style.marginBottom = "20px";
+startMaandSelect.setAttribute("aria-label", "Start financiële maand");
+
+for (let dag = 1; dag <= 28; dag++) {
+    const optie = document.createElement("option");
+    optie.value = String(dag);
+    optie.textContent = `Dag ${dag}`;
+    startMaandSelect.appendChild(optie);
+}
+
+startMaandSelect.value = String(startFinancieleMaand);
+
+startMaandSelect.addEventListener("change", function() {
+    startFinancieleMaand = Number(startMaandSelect.value);
+
+    localStorage.setItem(
+        "mijnVermogenStartFinancieleMaand",
+        String(startFinancieleMaand)
+    );
+});
+
+popup.appendChild(startMaandLabel);
+popup.appendChild(startMaandSelect);
 
 
 /*
@@ -1526,16 +1576,6 @@ saldoHistoriePijl.textContent = "↓";
 saldoHistorieKop.appendChild(saldoHistorieKopTekst);
 saldoHistorieKop.appendChild(saldoHistoriePijl);
 
-// Uitleg bij het verschil in het rekeningoverzicht
-const saldoHistorieUitleg = document.createElement("div");
-saldoHistorieUitleg.className = "saldo-historie-uitleg";
-saldoHistorieUitleg.textContent =
-    "Het verschil in het rekeningoverzicht is ten opzichte van de opgeslagen stand van vorige maand.";
-saldoHistorieUitleg.style.margin = "0 0 10px";
-saldoHistorieUitleg.style.color = "var(--color-text-secondary)";
-saldoHistorieUitleg.style.fontSize = "12px";
-saldoHistorieUitleg.style.lineHeight = "1.5";
-
 const saldoHistorieSamenvatting = document.createElement("div");
 saldoHistorieSamenvatting.className = "saldo-historie-samenvatting";
 
@@ -1804,7 +1844,6 @@ saldoHistorieInhoud.appendChild(saldoToevoegenButton);
 saldoHistorieInhoud.appendChild(saldoHistorieLijst);
 
 saldoHistorieGroep.appendChild(saldoHistorieKop);
-saldoHistorieGroep.appendChild(saldoHistorieUitleg);
 saldoHistorieGroep.appendChild(saldoHistorieSamenvatting);
 saldoHistorieGroep.appendChild(saldoHistorieInhoud);
 
