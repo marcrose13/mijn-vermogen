@@ -278,14 +278,14 @@ percentageLabel.style.alignItems = "center";
 percentageLabel.style.justifyContent = "space-between";
 percentageLabel.style.gap = "16px";
 percentageLabel.style.marginBottom = "20px";
-percentageLabel.textContent = "Percentuele verschillen tonen";
+percentageLabel.textContent = "Saldoontwikkeling tonen";
 
 const percentageToggle = document.createElement("button");
 percentageToggle.type = "button";
 percentageToggle.id = "percentage-verschillen-toggle";
 percentageToggle.className = "schuifje";
 percentageToggle.setAttribute("role", "switch");
-percentageToggle.setAttribute("aria-label", "Percentuele verschillen tonen");
+percentageToggle.setAttribute("aria-label", "Saldoontwikkeling tonen");
 percentageToggle.setAttribute("aria-checked", String(percentageVerschillenTonen));
 percentageToggle.setAttribute("data-aan", String(percentageVerschillenTonen));
 percentageToggle.innerHTML = '<span class="schuifje-knop"></span>';
@@ -968,7 +968,7 @@ function toonRekeningen() {
 
             const teken = verschil > 0 ? "+" : verschil < 0 ? "−" : "";
 
-            verschilHTML = `
+            verschilHTML = percentageVerschillenTonen ? `
     <div class="rekening-verschil ${richting}">
         <span class="rekening-verschil-pijl">
             ${verschil > 0 ? "↑" : verschil < 0 ? "↓" : "–"}
@@ -978,12 +978,12 @@ function toonRekeningen() {
             ${teken}${formatteerBedrag(Math.abs(verschil))}
         </span>
 
-        ${percentageVerschillenTonen && percentage !== null
+        ${percentage !== null
             ? `<span>(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)</span>`
             : ""}
 
     </div>
-`;
+` : "";
 
 }
 
