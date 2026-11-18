@@ -15,6 +15,10 @@ let historie = JSON.parse(
 
 let huidigePeriode = "alles";
 
+// Percentuele verschillen tonen (standaard aan).
+let percentageVerschillenTonen =
+    localStorage.getItem("mijnVermogenPercentageVerschillenTonen") !== "false";
+
 // Startdag van de financiële maand (standaard de 1e van de maand).
 let startFinancieleMaand = Number(
     localStorage.getItem("mijnVermogenStartFinancieleMaand")
@@ -260,6 +264,50 @@ startMaandSelect.addEventListener("change", function() {
 popup.appendChild(startMaandLabel);
 popup.appendChild(startMaandSelect);
 popup.appendChild(startMaandUitleg);
+
+/*
+ * ==========================================
+ * PERCENTUELE VERSCHILLEN TONEN
+ * ==========================================
+ */
+
+const percentageLabel = document.createElement("label");
+percentageLabel.className = "historie-instelling";
+percentageLabel.style.display = "flex";
+percentageLabel.style.alignItems = "center";
+percentageLabel.style.justifyContent = "space-between";
+percentageLabel.style.gap = "16px";
+percentageLabel.style.marginBottom = "20px";
+percentageLabel.textContent = "Percentuele verschillen tonen";
+
+const percentageToggle = document.createElement("button");
+percentageToggle.type = "button";
+percentageToggle.id = "percentage-verschillen-toggle";
+percentageToggle.className = "schuifje";
+percentageToggle.setAttribute("role", "switch");
+percentageToggle.setAttribute("aria-label", "Percentuele verschillen tonen");
+percentageToggle.setAttribute("aria-checked", String(percentageVerschillenTonen));
+percentageToggle.setAttribute("data-aan", String(percentageVerschillenTonen));
+percentageToggle.innerHTML = '<span class="schuifje-knop"></span>';
+
+percentageLabel.appendChild(percentageToggle);
+
+percentageToggle.addEventListener("click", function() {
+    percentageVerschillenTonen =
+        percentageToggle.getAttribute("data-aan") !== "true";
+
+    percentageToggle.setAttribute("data-aan", String(percentageVerschillenTonen));
+    percentageToggle.setAttribute("aria-checked", String(percentageVerschillenTonen));
+
+    localStorage.setItem(
+        "mijnVermogenPercentageVerschillenTonen",
+        String(percentageVerschillenTonen)
+    );
+
+    toonRekeningen();
+});
+
+popup.appendChild(percentageLabel);
 
 
 /*
@@ -523,7 +571,10 @@ function backupDownloaden() {
                 localStorage.getItem("mijnVermogenDoel") || "0",
 
             mijnVermogenHistorieTonen:
-                localStorage.getItem("mijnVermogenHistorieTonen") || "false"
+                localStorage.getItem("mijnVermogenHistorieTonen") || "false",
+
+            mijnVermogenPercentageVerschillenTonen:
+                localStorage.getItem("mijnVermogenPercentageVerschillenTonen") || "true"
         }
     };
 
@@ -597,6 +648,10 @@ function backupTerugzetten() {
             const historieTonenBackup = String(
                 gegevens.mijnVermogenHistorieTonen
             );
+            const percentageVerschillenTonenBackup =
+                gegevens.mijnVermogenPercentageVerschillenTonen === undefined
+                    ? "true"
+                    : String(gegevens.mijnVermogenPercentageVerschillenTonen);
 
             if (
                 !Array.isArray(rekeningenBackup) ||
@@ -604,7 +659,8 @@ function backupTerugzetten() {
                 doelBackup.trim() === "" ||
                 !Number.isFinite(Number(doelBackup)) ||
                 Number(doelBackup) < 0 ||
-                !["true", "false"].includes(historieTonenBackup)
+                !["true", "false"].includes(historieTonenBackup) ||
+                !["true", "false"].includes(percentageVerschillenTonenBackup)
             ) {
                 throw new Error("Ongeldige gegevens.");
             }
@@ -631,6 +687,10 @@ function backupTerugzetten() {
             localStorage.setItem(
                 "mijnVermogenHistorieTonen",
                 historieTonenBackup
+            );
+            localStorage.setItem(
+                "mijnVermogenPercentageVerschillenTonen",
+                percentageVerschillenTonenBackup
             );
 
             alert(
@@ -918,7 +978,7 @@ function toonRekeningen() {
             ${teken}${formatteerBedrag(Math.abs(verschil))}
         </span>
 
-        ${percentage !== null
+        ${percentageVerschillenTonen && percentage !== null
             ? `<span>(${teken}${Math.abs(percentage).toFixed(1).replace(".", ",")}%)</span>`
             : ""}
 
