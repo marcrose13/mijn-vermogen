@@ -359,10 +359,16 @@ grafiekToggle.addEventListener("click", function() {
     grafiekToggle.setAttribute("aria-checked", String(tonen));
 
     if (grafiekContainer) {
-        grafiekContainer.style.display = tonen ? "" : "none";
-    }
+    grafiekContainer.style.display = tonen ? "" : "none";
 
-    localStorage.setItem("mijnVermogenGrafiekTonen", tonen);
+    if (tonen) {
+        requestAnimationFrame(function() {
+            tekenGrafiek();
+        });
+    }
+}
+
+localStorage.setItem("mijnVermogenGrafiekTonen", tonen);
 
 });
 
