@@ -225,6 +225,27 @@ for (let dag = 1; dag <= 28; dag++) {
 
 startMaandSelect.value = String(startFinancieleMaand);
 
+// Korte uitleg die direct meeverandert met de gekozen startdag.
+const startMaandUitleg = document.createElement("div");
+startMaandUitleg.style.fontSize = "12px";
+startMaandUitleg.style.lineHeight = "1.5";
+startMaandUitleg.style.color = "var(--color-text-secondary)";
+startMaandUitleg.style.marginTop = "-12px";
+startMaandUitleg.style.marginBottom = "20px";
+
+function updateStartMaandUitleg() {
+    if (startFinancieleMaand === 1) {
+        startMaandUitleg.textContent =
+            "Je financiële maand loopt van de 1e tot en met de laatste dag van de kalendermaand.";
+    } else {
+        const vorigeDag = startFinancieleMaand - 1;
+        startMaandUitleg.textContent =
+            `Je financiële maand loopt van dag ${startFinancieleMaand} tot en met dag ${vorigeDag} van de volgende maand.`;
+    }
+}
+
+updateStartMaandUitleg();
+
 startMaandSelect.addEventListener("change", function() {
     startFinancieleMaand = Number(startMaandSelect.value);
 
@@ -232,10 +253,13 @@ startMaandSelect.addEventListener("change", function() {
         "mijnVermogenStartFinancieleMaand",
         String(startFinancieleMaand)
     );
+
+    updateStartMaandUitleg();
 });
 
 popup.appendChild(startMaandLabel);
 popup.appendChild(startMaandSelect);
+popup.appendChild(startMaandUitleg);
 
 
 /*
