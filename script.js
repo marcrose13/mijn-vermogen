@@ -14,6 +14,7 @@ let historie = JSON.parse(
 ) || [];
 
 let huidigePeriode = "alles";
+let rekeningVolgordeModus = false;
 
 // Percentuele verschillen tonen (standaard aan).
 let percentageVerschillenTonen =
@@ -889,6 +890,179 @@ doelTekst.classList.remove("succes");
  * ==========================================
  */
 
+
+function initialiseerRekeningVolgordeMenu(container) {
+
+    const section = container.closest(".section");
+    const titel = section?.querySelector("h2");
+
+    if (!section || !titel) return;
+
+    let header = section.querySelector(".rekening-header");
+
+    if (!header) {
+
+        header = document.createElement("div");
+        header.className = "rekening-header";
+
+        titel.parentNode.insertBefore(header, titel);
+        header.appendChild(titel);
+
+        const menuWrapper = document.createElement("div");
+        menuWrapper.className = "rekening-menu-wrapper";
+
+        const menuKnop = document.createElement("button");
+        menuKnop.type = "button";
+        menuKnop.className = "rekening-menu-button";
+        menuKnop.setAttribute("aria-label", "Rekeningopties");
+
+        const menu = document.createElement("div");
+        menu.className = "rekening-menu";
+        menu.hidden = true;
+
+        const volgordeKnop = document.createElement("button");
+        volgordeKnop.type = "button";
+        volgordeKnop.className = "rekening-menu-item";
+        volgordeKnop.textContent = "Volgorde aanpassen";
+
+        volgordeKnop.onclick = function() {
+
+            rekeningVolgordeModus = true;
+            menu.hidden = true;
+
+            toonRekeningen();
+
+        };
+
+        menuKnop.onclick = function() {
+
+            if (rekeningVolgordeModus) {
+
+                rekeningVolgordeModus = false;
+
+                slaRekeningenOp();
+                toonRekeningen();
+
+            } else {
+
+                menu.hidden = !menu.hidden;
+
+            }
+
+        };
+
+        menu.appendChild(volgordeKnop);
+        menuWrapper.appendChild(menuKnop);
+        menuWrapper.appendChild(menu);
+        header.appendChild(menuWrapper);
+
+    }
+
+    const menuKnop = header.querySelector(".rekening-menu-button");
+    const menu = header.querySelector(".rekening-menu");
+
+    menuKnop.textContent = rekeningVolgordeModus ? "Gereed" : "⋯";
+
+    menuKnop.setAttribute(
+        "aria-label",
+        rekeningVolgordeModus ? "Volgorde opslaan" : "Rekeningopties"
+    );
+
+    menu.hidden = rekeningVolgordeModus;
+
+}
+
+
+function rekeningVolgordeStarten(event, hendel) {
+
+    if (!rekeningVolgordeModus || event.button !== 0) return;
+
+    event.preventDefault();
+
+    const item = hendel.closest(".rekening");
+    const container = document.getElementById("rekeningen");
+
+    if (!item || !container) return;
+
+    const pointerId = event.pointerId;
+
+    hendel.setPointerCapture(pointerId);
+
+    item.classList.add("rekening-wordt-versleept");
+
+    function verplaatsen(e) {
+
+        if (e.pointerId !== pointerId) return;
+
+        const element = document.elementFromPoint(
+            e.clientX,
+            e.clientY
+        );
+
+        const doel = element?.closest(".rekening");
+
+        if (!doel || doel === item || doel.parentElement !== container) {
+            return;
+        }
+
+        const positie = doel.getBoundingClientRect();
+
+        if (e.clientY < positie.top + positie.height / 2) {
+
+            container.insertBefore(item, doel);
+
+        } else {
+
+            container.insertBefore(item, doel.nextElementSibling);
+
+        }
+
+    }
+
+    function afronden(e) {
+
+        if (e.pointerId !== pointerId) return;
+
+        hendel.removeEventListener("pointermove", verplaatsen);
+        hendel.removeEventListener("pointerup", afronden);
+        hendel.removeEventListener("pointercancel", afronden);
+
+        item.classList.remove("rekening-wordt-versleept");
+
+        const ids = Array.from(
+            container.querySelectorAll(".rekening")
+        ).map(function(rekeningElement) {
+            return rekeningElement.dataset.rekeningId;
+        });
+
+        const rekeningMap = new Map(
+            rekeningen.map(function(rekening) {
+                return [String(rekening.id), rekening];
+            })
+        );
+
+        const nieuweVolgorde = ids.map(function(id) {
+            return rekeningMap.get(id);
+        }).filter(Boolean);
+
+        if (nieuweVolgorde.length === rekeningen.length) {
+
+            rekeningen = nieuweVolgorde;
+
+            slaRekeningenOp();
+
+        }
+
+        toonRekeningen();
+
+    }
+
+    hendel.addEventListener("pointermove", verplaatsen);
+    hendel.addEventListener("pointerup", afronden);
+    hendel.addEventListener("pointercancel", afronden);
+
+}
+
 function toonRekeningen() {
 
     const container =
@@ -896,6 +1070,7 @@ function toonRekeningen() {
 
     container.innerHTML = "";
 
+initialiseerRekeningVolgordeMenu(container);
 
     if (rekeningen.length === 0) {
 
@@ -913,7 +1088,7 @@ function toonRekeningen() {
             document.createElement("div");
 
         div.className = "rekening";
-
+div.dataset.rekeningId = String(rekening.id);
 
         // Verschil ten opzichte van de vorige financiële maand berekenen.
         const vandaag = new Date();
@@ -995,7 +1170,16 @@ function toonRekeningen() {
 
         div.innerHTML = `
 
-            <div class="rekening-info">
+            ${rekeningVolgordeModus ? `
+    <button
+        type="button"
+        class="rekening-sleep-hendel"
+        aria-label="Rekening verslepen"
+        title="Versleep rekening"
+    >⠿</button>
+` : ""}
+
+<div class="rekening-info">
 
                 <div class="rekening-naam">
                     ${rekening.naam}
@@ -1050,6 +1234,17 @@ function toonRekeningen() {
         `;
 
         container.appendChild(div);
+const sleepHendel = div.querySelector(".rekening-sleep-hendel");
+
+if (sleepHendel) {
+
+    sleepHendel.addEventListener("pointerdown", function(event) {
+
+        rekeningVolgordeStarten(event, sleepHendel);
+
+    });
+
+}
 
     });
 
