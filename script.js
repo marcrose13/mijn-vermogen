@@ -973,6 +973,7 @@ function initialiseerRekeningVolgordeMenu(container) {
 }
 
 
+
 function rekeningVolgordeStarten(event, hendel) {
 
     if (!rekeningVolgordeModus || event.button !== 0) return;
@@ -985,8 +986,6 @@ function rekeningVolgordeStarten(event, hendel) {
     if (!item || !container) return;
 
     const pointerId = event.pointerId;
-
-    hendel.setPointerCapture(pointerId);
 
     item.classList.add("rekening-wordt-versleept");
 
@@ -1008,24 +1007,19 @@ function rekeningVolgordeStarten(event, hendel) {
         const positie = doel.getBoundingClientRect();
 
         if (e.clientY < positie.top + positie.height / 2) {
-
             container.insertBefore(item, doel);
-
         } else {
-
             container.insertBefore(item, doel.nextElementSibling);
-
         }
-
     }
 
     function afronden(e) {
 
         if (e.pointerId !== pointerId) return;
 
-        hendel.removeEventListener("pointermove", verplaatsen);
-        hendel.removeEventListener("pointerup", afronden);
-        hendel.removeEventListener("pointercancel", afronden);
+        document.removeEventListener("pointermove", verplaatsen);
+        document.removeEventListener("pointerup", afronden);
+        document.removeEventListener("pointercancel", afronden);
 
         item.classList.remove("rekening-wordt-versleept");
 
@@ -1046,22 +1040,18 @@ function rekeningVolgordeStarten(event, hendel) {
         }).filter(Boolean);
 
         if (nieuweVolgorde.length === rekeningen.length) {
-
             rekeningen = nieuweVolgorde;
-
             slaRekeningenOp();
-
         }
 
         toonRekeningen();
-
     }
 
-    hendel.addEventListener("pointermove", verplaatsen);
-    hendel.addEventListener("pointerup", afronden);
-    hendel.addEventListener("pointercancel", afronden);
-
+    document.addEventListener("pointermove", verplaatsen);
+    document.addEventListener("pointerup", afronden);
+    document.addEventListener("pointercancel", afronden);
 }
+
 
 function toonRekeningen() {
 
