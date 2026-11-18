@@ -3353,10 +3353,9 @@ function maakTijdAsLabels(
     }
 
     const dagen = verschilMs / (1000 * 60 * 60 * 24);
-    const aantalLabels = dagen <= 45 ? 4 : 4;
+    const aantalLabels = 4;
     const datums = [];
 
-    // Verdeel de datums gelijkmatig over de periode.
     for (let i = 0; i < aantalLabels; i++) {
         const verhouding = i / (aantalLabels - 1);
 
@@ -3391,14 +3390,15 @@ function maakTijdAsLabels(
         ctx.lineTo(x, y + 1);
         ctx.stroke();
 
-        const label = dagen <= 45
+        const label = dagen > 365
             ? datum.toLocaleDateString("nl-NL", {
                 day: "numeric",
-                month: "short"
+                month: "short",
+                year: "2-digit"
             })
             : datum.toLocaleDateString("nl-NL", {
-                month: "short",
-                year: "numeric"
+                day: "numeric",
+                month: "short"
             });
 
         ctx.textAlign = index === datums.length - 1
@@ -3406,13 +3406,12 @@ function maakTijdAsLabels(
             : index === 0
                 ? "left"
                 : "center";
-                
+
+        ctx.fillText(label, x, y + 5);
     });
 
     ctx.restore();
 }
-
-
 
 
 /*
@@ -3574,78 +3573,113 @@ function tekenGrafiek() {
 
 
 /*
- * Per maand het laatste bekende vermogensmoment gebruiken.
- * Ontbrekende maanden vullen we aan met de laatst bekende stand.
- * De opgeslagen historie blijft ongewijzigd.
+ * Financiële maanden opbouwen.
+ * Een financiële maand loopt vanaf de ingestelde startdag
+ * tot en met de dag vóór de startdag van de volgende maand.
+ * De oorspronkelijke historie blijft ongewijzigd.
  */
 
-const laatsteMomentPerMaand = new Map();
+const laatsteMomentPerFinancieleMaand = new Map();
 
-// Gebruik de volledige historie, zodat ook eerdere standen
-// beschikbaar zijn om ontbrekende maanden aan te vullen.
 const volledigeHistorie = [...historie].sort(function(a, b) {
     return new Date(a.datum) - new Date(b.datum);
 });
 
-// Laatste bekende stand per kalendermaand verzamelen.
+// Koppel ieder historisch moment aan de financiële maand waarin
+// het valt. Het laatste moment binnen die periode is leidend.
 volledigeHistorie.forEach(function(item) {
     const datum = new Date(item.datum);
 
-    const sleutel =
-        datum.getFullYear() + "-" +
-        String(datum.getMonth() + 1).padStart(2, "0");
+    let periodeStart;
+    if (datum.getDate() < startFinancieleMaand) {
+        periodeStart = new Date(
+            datum.getFullYear(),
+            datum.getMonth() - 1,
+            startFinancieleMaand,
+            12
+        );
+    } else {
+        periodeStart = new Date(
+            datum.getFullYear(),
+            datum.getMonth(),
+            startFinancieleMaand,
+            12
+        );
+    }
 
-    laatsteMomentPerMaand.set(sleutel, item);
+    const sleutel =
+        periodeStart.getFullYear() + "-" +
+        String(periodeStart.getMonth() + 1).padStart(2, "0");
+
+    laatsteMomentPerFinancieleMaand.set(sleutel, {
+        datum: periodeStart.toISOString(),
+        bedrag: Number(item.bedrag) || 0
+    });
 });
 
 const maandPunten = [];
 
-if (laatsteMomentPerMaand.size > 0) {
-    const sleutels = [...laatsteMomentPerMaand.keys()].sort();
+if (laatsteMomentPerFinancieleMaand.size > 0) {
+    const sleutels = [...laatsteMomentPerFinancieleMaand.keys()].sort();
+    const eersteSleutel = sleutels[0].split("-").map(Number);
 
-    const eersteMaand = sleutels[0].split("-").map(Number);
-    const laatsteDatum = new Date();
+    const vandaag = new Date();
+    let huidigePeriodeStart;
 
-    let jaar = eersteMaand[0];
-    let maand = eersteMaand[1] - 1;
+    if (vandaag.getDate() < startFinancieleMaand) {
+        huidigePeriodeStart = new Date(
+            vandaag.getFullYear(),
+            vandaag.getMonth() - 1,
+            startFinancieleMaand,
+            12
+        );
+    } else {
+        huidigePeriodeStart = new Date(
+            vandaag.getFullYear(),
+            vandaag.getMonth(),
+            startFinancieleMaand,
+            12
+        );
+    }
+
+    let periodeStart = new Date(
+        eersteSleutel[0],
+        eersteSleutel[1] - 1,
+        startFinancieleMaand,
+        12
+    );
 
     let laatstBekendBedrag = null;
 
-    while (
-        jaar < laatsteDatum.getFullYear() ||
-        (
-            jaar === laatsteDatum.getFullYear() &&
-            maand <= laatsteDatum.getMonth()
-        )
-    ) {
+    while (periodeStart <= huidigePeriodeStart) {
         const sleutel =
-            jaar + "-" +
-            String(maand + 1).padStart(2, "0");
+            periodeStart.getFullYear() + "-" +
+            String(periodeStart.getMonth() + 1).padStart(2, "0");
 
         const bestaandMoment =
-            laatsteMomentPerMaand.get(sleutel);
+            laatsteMomentPerFinancieleMaand.get(sleutel);
 
         if (bestaandMoment) {
-            laatstBekendBedrag =
-                Number(bestaandMoment.bedrag) || 0;
+            laatstBekendBedrag = bestaandMoment.bedrag;
         }
 
-        // Alleen maanden vanaf het eerste bekende moment opnemen.
         if (laatstBekendBedrag !== null) {
             maandPunten.push({
-                datum: sleutel + "-01T12:00:00",
+                datum: periodeStart.toISOString(),
                 bedrag: laatstBekendBedrag
             });
         }
 
-        maand++;
-
-        if (maand > 11) {
-            maand = 0;
-            jaar++;
-        }
+        periodeStart = new Date(
+            periodeStart.getFullYear(),
+            periodeStart.getMonth() + 1,
+            startFinancieleMaand,
+            12
+        );
     }
 }
+
+gegevens = maandPunten;
 
 // Periodefilter toepassen op de maandpunten.
 gegevens = maandPunten;
