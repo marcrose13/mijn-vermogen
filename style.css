@@ -1659,31 +1659,76 @@ h2 {
     height: 230px;
 }
 
-/* Mobiel: compactere marges en grafiek */
+
+/* Mobiele opmaak rekeningoverzicht */
 @media (max-width: 600px) {
-    .vermogen-overzicht {
-        border-radius: 20px;
-        margin-bottom: 22px;
+
+    .rekening {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, auto) 38px;
+        align-items: center;
+        column-gap: 8px;
     }
 
-    .vermogen-overzicht .total-card {
-        padding: 24px 20px 22px;
+    .rekening-info {
+        grid-column: 1;
+        min-width: 0;
     }
 
-    .vermogen-overzicht .grafiek-card {
-        padding: 20px 16px 8px;
+    .rekening-naam {
+        overflow-wrap: anywhere;
     }
 
-    .vermogen-overzicht .grafiek-card h2 {
-        font-size: 20px;
-        margin-bottom: 14px;
+    .rekening-bedrag {
+        grid-column: 2;
+        min-width: 0;
+        max-width: 150px;
+        white-space: normal;
+        text-align: right;
     }
 
-    .vermogen-overzicht .grafiek-wrapper,
-    .vermogen-overzicht .grafiek-wrapper canvas {
-        height: 175px;
+    .rekening-verschil {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 11px;
     }
+
+    .rekening-acties {
+        grid-column: 3;
+        justify-content: flex-end;
+    }
+
+    /* Extra kolom uitsluitend tijdens sleepmodus */
+    .rekening:has(.rekening-sleep-hendel) {
+        grid-template-columns: 28px minmax(0, 1fr) minmax(0, auto) 38px;
+        column-gap: 7px;
+    }
+
+    .rekening-sleep-hendel {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .rekening:has(.rekening-sleep-hendel) .rekening-info {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .rekening:has(.rekening-sleep-hendel) .rekening-bedrag {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .rekening:has(.rekening-sleep-hendel) .rekening-acties {
+        grid-column: 4;
+        grid-row: 1;
+    }
+
 }
+
 
 /* Subtiele knop rekening toevoegen */
 .rekening-toevoegen-knop {
