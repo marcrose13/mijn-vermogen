@@ -1810,4 +1810,35 @@ h2 {
     opacity: 0.45;
 }
 
+
+/* Mobiele rekeningindeling tijdens volgorde aanpassen */
+@media (max-width: 600px) {
+
+    .rekening:has(.rekening-sleep-hendel) {
+        grid-template-columns: 28px minmax(0, 1fr) auto 38px;
+        column-gap: 10px;
+    }
+
+    .rekening-sleep-hendel {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .rekening-info {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .rekening-bedrag {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .rekening-acties {
+        grid-column: 4;
+        grid-row: 1;
+    }
+
+}
+
     
